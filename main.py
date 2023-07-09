@@ -191,6 +191,7 @@ class Enemies:
             if self.horde_y[12] > -50:
                 self.ship_placement(self.horde[12], self.horde_x[12], self.horde_y[12])
             self.platform_placement(200, 300, 90, 5)
+            self.platform_placement(650, 300, 90, 5)
             pygame.display.update()
         if self.level == 2:
             print("Good job")
@@ -205,7 +206,7 @@ class Game:
         self.state = "none"
         self.background = pygame.image.load("Space invaders stuff/Background.png")
         pygame.mixer.music.load("Space invaders stuff/Music.mp3")
-        pygame.mixer.music.set_volume(0.2)
+        pygame.mixer.music.set_volume(0.35)
         pygame.mixer.music.play(-1)
         self.col = False
         self.direction = "right"
@@ -251,6 +252,11 @@ class Game:
             if y1  <= y2 <= y1 + 5:
                 return True
         return False
+    def blue_light_collision(self, x1, y1, x2, y2, extension):
+        if x1 - 25 <= x2 <=  x1 + extension:
+            if y1  <= y2 <= y1 + 5:
+                return True
+        return False
 
 
 
@@ -276,7 +282,7 @@ class Game:
              green = (0, 255, 0)
              font1 = pygame.font.SysFont("Typeface Mario World Pixel Filled", 100, bold=False, italic=False)
              line = font1.render("Space Invaders", False, (0, 255, 0))
-             line1 = font1.render("Start", False, (255, 255, 255))
+             line1 = font1.render("Start", False, (green))
              red = pygame.image.load("Space invaders stuff/title1.jpg")
              mouse_x, mouse_y = pygame.mouse.get_pos()
              if 350 <= mouse_x <= 350 + 200 and 330 <= mouse_y <= 430:
@@ -362,16 +368,8 @@ class Game:
             self.enemies.laserx13 = 50 + 27.5
             self.enemies.laserx14 = 50 + 27.5
         self.player.x = 435
-        self.projectile.y = -25
-        self.projectile.y1 = -25
-        self.projectile.y2 = -25
-        self.projectile.y3 = -25
-        self.projectile.y4 = -25
-        self.projectile.y5 = -25
-        self.projectile.y6 = -25
-        self.projectile.y7 = -25
-        self.projectile.y8 = -25
-        self.projectile.y9 = -25
+        self.projectile.ys[self.projectile.num] = -25
+
         self.enemies.status = [True, True, True, True, True, True, True, True, True, True, True, True, True, True, True]
         count = 0
 
@@ -389,10 +387,14 @@ class Game:
             a = random.randint(1, 100)
             l = 70
             if a ==2:
+
+
                 if self.enemies.laserx - l <= self.player.x <= self.enemies.laserx + l:
                     self.enemies.down = True
 
             if self.enemies.down:
+                if self.laser_y == self.enemies.horde_y[0] + 30:
+                    pygame.mixer.Sound.play(pygame.mixer.Sound("Space invaders stuff/enemy laser.wav"))
                 if self.laser_y >= 625:
 
                     self.enemies.down = False
@@ -402,24 +404,30 @@ class Game:
                         self.enemies.down1 = True
 
             if self.enemies.down1:
+                if self.laser_y1 == self.enemies.horde_y[1] + 30:
+                    pygame.mixer.Sound.play(pygame.mixer.Sound("Space invaders stuff/enemy laser.wav"))
                 if self.laser_y1 >= 625:
 
                     self.enemies.down1 = False
             if a ==3:
 
                 if self.enemies.laserx2 - l <= self.player.x <= self.enemies.laserx2 + l:
-                        self.enemies.down2 = True
 
+                    self.enemies.down2 = True
             if self.enemies.down2:
+                if self.laser_y2 == self.enemies.horde_y[2] + 30:
+                    pygame.mixer.Sound.play(pygame.mixer.Sound("Space invaders stuff/enemy laser.wav"))
                 if self.laser_y2 >= 625:
 
                     self.enemies.down2 = False
             if a ==4:
 
                 if self.enemies.laserx3 - l <= self.player.x <= self.enemies.laserx3 + l:
-                        self.enemies.down3 = True
+                    self.enemies.down3 = True
 
             if self.enemies.down3:
+                if self.laser_y3 == self.enemies.horde_y[3] + 30:
+                    pygame.mixer.Sound.play(pygame.mixer.Sound("Space invaders stuff/enemy laser.wav"))
                 if self.laser_y3 >= 625:
 
                     self.enemies.down3 = False
@@ -429,6 +437,8 @@ class Game:
                         self.enemies.down4 = True
 
             if self.enemies.down4:
+                if self.laser_y4 == self.enemies.horde_y[4] + 30:
+                    pygame.mixer.Sound.play(pygame.mixer.Sound("Space invaders stuff/enemy laser.wav"))
                 if self.laser_y4 >= 625:
 
                     self.enemies.down4 = False
@@ -437,7 +447,10 @@ class Game:
                 if self.enemies.laserx5 - l <= self.player.x <= self.enemies.laserx5 + l:
                         self.enemies.down5 = True
 
+
             if self.enemies.down5:
+                if self.laser_y5 == self.enemies.horde_y[5] + 30:
+                    pygame.mixer.Sound.play(pygame.mixer.Sound("Space invaders stuff/enemy laser.wav"))
                 if self.laser_y5 >= 625:
 
                     self.enemies.down5 = False
@@ -446,7 +459,10 @@ class Game:
                 if self.enemies.laserx6 - l <= self.player.x <= self.enemies.laserx6 + l:
                         self.enemies.down6 = True
 
+
             if self.enemies.down6:
+                if self.laser_y6 == self.enemies.horde_y[6] + 30:
+                    pygame.mixer.Sound.play(pygame.mixer.Sound("Space invaders stuff/enemy laser.wav"))
                 if self.laser_y6 >= 625:
 
                     self.enemies.down6 = False
@@ -454,8 +470,9 @@ class Game:
 
                 if self.enemies.laserx7 - l <= self.player.x <= self.enemies.laserx7 + l:
                         self.enemies.down7 = True
-
             if self.enemies.down7:
+                if self.laser_y7 == self.enemies.horde_y[7] + 30:
+                    pygame.mixer.Sound.play(pygame.mixer.Sound("Space invaders stuff/enemy laser.wav"))
                 if self.laser_y7 >= 625:
 
                     self.enemies.down7 = False
@@ -465,8 +482,9 @@ class Game:
                         self.enemies.down8 = True
 
             if self.enemies.down8:
+                if self.laser_y8 == self.enemies.horde_y[8] + 30:
+                    pygame.mixer.Sound.play(pygame.mixer.Sound("Space invaders stuff/enemy laser.wav"))
                 if self.laser_y8 >= 625:
-
                     self.enemies.down8 = False
             if a ==10:
 
@@ -474,6 +492,8 @@ class Game:
                         self.enemies.down10 = True
 
             if self.enemies.down10:
+                if self.laser_y10 == self.enemies.horde_y[10] + 30:
+                    pygame.mixer.Sound.play(pygame.mixer.Sound("Space invaders stuff/enemy laser.wav"))
                 if self.laser_y10 >= 625:
 
                     self.enemies.down10 = False
@@ -483,6 +503,8 @@ class Game:
                         self.enemies.down11 = True
 
             if self.enemies.down11:
+                if self.laser_y11 == self.enemies.horde_y[11] + 30:
+                    pygame.mixer.Sound.play(pygame.mixer.Sound("Space invaders stuff/enemy laser.wav"))
                 if self.laser_y11 >= 625:
 
                     self.enemies.down11 = False
@@ -492,6 +514,8 @@ class Game:
                         self.enemies.down12 = True
 
             if self.enemies.down12:
+                if self.laser_y12 == self.enemies.horde_y[12] + 30:
+                    pygame.mixer.Sound.play(pygame.mixer.Sound("Space invaders stuff/enemy laser.wav"))
                 if self.laser_y12 >= 625:
 
                     self.enemies.down12 = False
@@ -500,76 +524,76 @@ class Game:
             if self.enemies.down:
                 self.screen.blit(self.blast, (self.enemies.laserx, self.laser_y))
             if not self.enemies.down:
-                self.laser_y = self.enemies.horde_y[0] + 10
+                self.laser_y = self.enemies.horde_y[0] + 30
                 self.enemies.laserx = self.enemies.horde_x[0] + 22.5
 
 
             if self.enemies.down1:
                 self.screen.blit(self.blast, (self.enemies.laserx1, self.laser_y1))
             if not self.enemies.down1:
-                self.laser_y1 = self.enemies.horde_y[1] + 10
+                self.laser_y1 = self.enemies.horde_y[1] + 30
                 self.enemies.laserx1 = self.enemies.horde_x[1] + 22.5
 
 
             if self.enemies.down2:
                 self.screen.blit(self.blast, (self.enemies.laserx2, self.laser_y2))
             if not self.enemies.down2:
-                self.laser_y2 = self.enemies.horde_y[2] + 10
+                self.laser_y2 = self.enemies.horde_y[2] + 30
                 self.enemies.laserx2 = self.enemies.horde_x[2] + 22.5
 
             if self.enemies.down3:
                 self.screen.blit(self.blast, (self.enemies.laserx3, self.laser_y3))
             if not self.enemies.down3:
-                self.laser_y3 = self.enemies.horde_y[3] + 10
+                self.laser_y3 = self.enemies.horde_y[3] + 30
                 self.enemies.laserx3 = self.enemies.horde_x[3] + 22.5
 
 
             if self.enemies.down4:
                 self.screen.blit(self.blast, (self.enemies.laserx4, self.laser_y4))
             if not self.enemies.down4:
-                self.laser_y2 = self.enemies.horde_y[4] + 10
-                self.enemies.laserx2 = self.enemies.horde_x[4] + 22.5
+                self.laser_y4 = self.enemies.horde_y[4] + 30
+                self.enemies.laserx4 = self.enemies.horde_x[4] + 22.5
 
             if self.enemies.down5:
                 self.screen.blit(self.blast, (self.enemies.laserx5, self.laser_y5))
             if not self.enemies.down5:
-                self.laser_y5 = self.enemies.horde_y[5] + 10
+                self.laser_y5 = self.enemies.horde_y[5] + 30
                 self.enemies.laserx5 = self.enemies.horde_x[5] + 22.5
 
             if self.enemies.down6:
                 self.screen.blit(self.blast, (self.enemies.laserx6, self.laser_y6))
             if not self.enemies.down6:
-                self.laser_y6 = self.enemies.horde_y[6] + 10
+                self.laser_y6 = self.enemies.horde_y[6] + 30
                 self.enemies.laserx6 = self.enemies.horde_x[6] + 22.5
 
             if self.enemies.down7:
                 self.screen.blit(self.blast, (self.enemies.laserx7, self.laser_y7))
             if not self.enemies.down7:
-                self.laser_y7 = self.enemies.horde_y[7] + 10
+                self.laser_y7 = self.enemies.horde_y[7] + 30
                 self.enemies.laserx7 = self.enemies.horde_x[7] + 22.5
 
             if self.enemies.down8:
                 self.screen.blit(self.blast, (self.enemies.laserx8, self.laser_y8))
             if not self.enemies.down8:
-                self.laser_y8 = self.enemies.horde_y[8] + 10
+                self.laser_y8 = self.enemies.horde_y[8] + 30
                 self.enemies.laserx8 = self.enemies.horde_x[8] + 22.5
 
             if self.enemies.down10:
                 self.screen.blit(self.blast, (self.enemies.laserx10, self.laser_y10))
             if not self.enemies.down10:
-                self.laser_y10 = self.enemies.horde_y[10] + 10
+                self.laser_y10 = self.enemies.horde_y[10] + 30
                 self.enemies.laserx10 = self.enemies.horde_x[10] + 22.5
 
             if self.enemies.down11:
                 self.screen.blit(self.blast, (self.enemies.laserx11, self.laser_y11))
             if not self.enemies.down11:
-                self.laser_y11 = self.enemies.horde_y[11] + 10
+                self.laser_y11 = self.enemies.horde_y[11] + 30
                 self.enemies.laserx11 = self.enemies.horde_x[11] + 22.5
 
             if self.enemies.down12:
                 self.screen.blit(self.blast, (self.enemies.laserx12, self.laser_y12))
             if not self.enemies.down12:
-                self.laser_y12 = self.enemies.horde_y[12] + 10
+                self.laser_y12 = self.enemies.horde_y[12] + 30
                 self.enemies.laserx12 = self.enemies.horde_x[12] + 22.5
 
 
@@ -598,79 +622,155 @@ class Game:
                     self.player.health -= 1
                     self.col = False
                     self.laser_y = 625
+                    pygame.mixer.Sound.play(pygame.mixer.Sound("Space invaders stuff/hit.wav"))
                 if self.red_laser_collision(self.player.x, self.player.y, self.enemies.laserx1, self.laser_y1):
                     self.player.health -= 1
                     self.col = False
                     self.laser_y1 = 625
+                    pygame.mixer.Sound.play(pygame.mixer.Sound("Space invaders stuff/hit.wav"))
                 if self.red_laser_collision(self.player.x, self.player.y, self.enemies.laserx2, self.laser_y2):
                     self.player.health -= 1
                     self.col = False
                     self.laser_y2 = 625
+                    pygame.mixer.Sound.play(pygame.mixer.Sound("Space invaders stuff/hit.wav"))
                 if self.red_laser_collision(self.player.x, self.player.y, self.enemies.laserx3, self.laser_y3):
                     self.player.health -= 1
                     self.col = False
                     self.laser_y3 = 625
+                    pygame.mixer.Sound.play(pygame.mixer.Sound("Space invaders stuff/hit.wav"))
                 if self.red_laser_collision(self.player.x, self.player.y, self.enemies.laserx4, self.laser_y4):
                     self.player.health -= 1
                     self.col = False
                     self.laser_y4 = 625
+                    pygame.mixer.Sound.play(pygame.mixer.Sound("Space invaders stuff/hit.wav"))
                 if self.red_laser_collision(self.player.x, self.player.y, self.enemies.laserx5, self.laser_y5):
                     self.player.health -= 1
                     self.col = False
                     self.laser_y5 = 625
+                    pygame.mixer.Sound.play(pygame.mixer.Sound("Space invaders stuff/hit.wav"))
                 if self.red_laser_collision(self.player.x, self.player.y, self.enemies.laserx6, self.laser_y6):
                     self.player.health -= 1
                     self.col = False
                     self.laser_y6 = 625
+                    pygame.mixer.Sound.play(pygame.mixer.Sound("Space invaders stuff/hit.wav"))
                 if self.red_laser_collision(self.player.x, self.player.y, self.enemies.laserx7, self.laser_y7):
                     self.player.health -= 1
                     self.col = False
                     self.laser_y7 = 625
+                    pygame.mixer.Sound.play(pygame.mixer.Sound("Space invaders stuff/hit.wav"))
                 if self.red_laser_collision(self.player.x, self.player.y, self.enemies.laserx8, self.laser_y8):
                     self.player.health -= 1
                     self.col = False
                     self.laser_y8 = 625
+                    pygame.mixer.Sound.play(pygame.mixer.Sound("Space invaders stuff/hit.wav"))
                 if self.red_laser_collision(self.player.x, self.player.y, self.enemies.laserx10, self.laser_y10):
                     self.player.health -= 1
                     self.col = False
                     self.laser_y10 = 625
+                    pygame.mixer.Sound.play(pygame.mixer.Sound("Space invaders stuff/hit.wav"))
                 if self.red_laser_collision(self.player.x, self.player.y, self.enemies.laserx11, self.laser_y11):
                     self.player.health -= 1
                     self.col = False
                     self.laser_y11 = 625
+                    pygame.mixer.Sound.play(pygame.mixer.Sound("Space invaders stuff/hit.wav"))
                 if self.red_laser_collision(self.player.x, self.player.y, self.enemies.laserx12, self.laser_y12):
                     self.player.health -= 1
                     self.col = False
                     self.laser_y12 = 625
+                    pygame.mixer.Sound.play(pygame.mixer.Sound("Space invaders stuff/hit.wav"))
 
                 pygame.display.update()
 
-                #Level 1 Player fire on enemy hitboxes
+
         if self.enemies.level == 1:
+
+                #Enemy fire on barrier collision
                 if self.red_white_collision(200, 300, self.enemies.laserx, self.laser_y, 90):
                     self.laser_y = 625
+                    pygame.mixer.Sound.play(pygame.mixer.Sound("Space invaders stuff/white barrier.wav"))
                 if self.red_white_collision(200, 300, self.enemies.laserx1, self.laser_y1, 90):
                     self.laser_y1 = 625
+                    pygame.mixer.Sound.play(pygame.mixer.Sound("Space invaders stuff/white barrier.wav"))
                 if self.red_white_collision(200, 300, self.enemies.laserx2, self.laser_y2, 90):
                     self.laser_y2 = 625
+                    pygame.mixer.Sound.play(pygame.mixer.Sound("Space invaders stuff/white barrier.wav"))
                 if self.red_white_collision(200, 300, self.enemies.laserx3, self.laser_y3, 90):
                     self.laser_y3 = 625
+                    pygame.mixer.Sound.play(pygame.mixer.Sound("Space invaders stuff/white barrier.wav"))
                 if self.red_white_collision(200, 300, self.enemies.laserx4, self.laser_y4, 90):
                     self.laser_y4 = 625
+                    pygame.mixer.Sound.play(pygame.mixer.Sound("Space invaders stuff/white barrier.wav"))
                 if self.red_white_collision(200, 300, self.enemies.laserx5, self.laser_y5, 90):
                     self.laser_y5 = 625
+                    pygame.mixer.Sound.play(pygame.mixer.Sound("Space invaders stuff/white barrier.wav"))
                 if self.red_white_collision(200, 300, self.enemies.laserx6, self.laser_y6, 90):
                     self.laser_y6 = 625
+                    pygame.mixer.Sound.play(pygame.mixer.Sound("Space invaders stuff/white barrier.wav"))
                 if self.red_white_collision(200, 300, self.enemies.laserx7, self.laser_y7, 90):
                     self.laser_y7 = 625
+                    pygame.mixer.Sound.play(pygame.mixer.Sound("Space invaders stuff/white barrier.wav"))
                 if self.red_white_collision(200, 300, self.enemies.laserx8, self.laser_y8, 90):
                     self.laser_y8 = 625
+                    pygame.mixer.Sound.play(pygame.mixer.Sound("Space invaders stuff/white barrier.wav"))
                 if self.red_white_collision(200, 300, self.enemies.laserx10, self.laser_y10, 90):
                     self.laser_y10 = 625
+                    pygame.mixer.Sound.play(pygame.mixer.Sound("Space invaders stuff/white barrier.wav"))
                 if self.red_white_collision(200, 300, self.enemies.laserx11, self.laser_y11, 90):
                     self.laser_y11 = 625
+                    pygame.mixer.Sound.play(pygame.mixer.Sound("Space invaders stuff/white barrier.wav"))
                 if self.red_white_collision(200, 300, self.enemies.laserx12, self.laser_y12, 90):
                     self.laser_y12 = 625
+                    pygame.mixer.Sound.play(pygame.mixer.Sound("Space invaders stuff/white barrier.wav"))
+                if self.red_white_collision(650, 300, self.enemies.laserx, self.laser_y, 90):
+                    self.laser_y = 625
+                    pygame.mixer.Sound.play(pygame.mixer.Sound("Space invaders stuff/white barrier.wav"))
+                if self.red_white_collision(650, 300, self.enemies.laserx1, self.laser_y1, 90):
+                    self.laser_y1 = 625
+                    pygame.mixer.Sound.play(pygame.mixer.Sound("Space invaders stuff/white barrier.wav"))
+                if self.red_white_collision(650, 300, self.enemies.laserx2, self.laser_y2, 90):
+                    self.laser_y2 = 625
+                    pygame.mixer.Sound.play(pygame.mixer.Sound("Space invaders stuff/white barrier.wav"))
+                if self.red_white_collision(650, 300, self.enemies.laserx3, self.laser_y3, 90):
+                    self.laser_y3 = 625
+                    pygame.mixer.Sound.play(pygame.mixer.Sound("Space invaders stuff/white barrier.wav"))
+                if self.red_white_collision(650, 300, self.enemies.laserx4, self.laser_y4, 90):
+                    self.laser_y4 = 625
+                    pygame.mixer.Sound.play(pygame.mixer.Sound("Space invaders stuff/white barrier.wav"))
+                if self.red_white_collision(650, 300, self.enemies.laserx5, self.laser_y5, 90):
+                    self.laser_y5 = 625
+                    pygame.mixer.Sound.play(pygame.mixer.Sound("Space invaders stuff/white barrier.wav"))
+                if self.red_white_collision(650, 300, self.enemies.laserx6, self.laser_y6, 90):
+                    self.laser_y6 = 625
+                    pygame.mixer.Sound.play(pygame.mixer.Sound("Space invaders stuff/white barrier.wav"))
+                if self.red_white_collision(650, 300, self.enemies.laserx7, self.laser_y7, 90):
+                    self.laser_y7 = 625
+                    pygame.mixer.Sound.play(pygame.mixer.Sound("Space invaders stuff/white barrier.wav"))
+                if self.red_white_collision(650, 300, self.enemies.laserx8, self.laser_y8, 90):
+                    self.laser_y8 = 625
+                    pygame.mixer.Sound.play(pygame.mixer.Sound("Space invaders stuff/white barrier.wav"))
+                if self.red_white_collision(650, 300, self.enemies.laserx10, self.laser_y10, 90):
+                    self.laser_y10 = 625
+                    pygame.mixer.Sound.play(pygame.mixer.Sound("Space invaders stuff/white barrier.wav"))
+                if self.red_white_collision(650, 300, self.enemies.laserx11, self.laser_y11, 90):
+                    self.laser_y11 = 625
+                    pygame.mixer.Sound.play(pygame.mixer.Sound("Space invaders stuff/white barrier.wav"))
+                if self.red_white_collision(650, 300, self.enemies.laserx12, self.laser_y12, 90):
+                    self.laser_y12 = 625
+                    pygame.mixer.Sound.play(pygame.mixer.Sound("Space invaders stuff/white barrier.wav"))
+
+                #Player fire on barrier collision
+                if self.blue_light_collision(200, 300, 435 + self.projectile.difference, self.projectile.ys[self.projectile.num], 90):
+                    self.projectile.ys[self.projectile.num] = -25
+                    pygame.mixer.Sound.play(pygame.mixer.Sound("Space invaders stuff/white barrier.wav"))
+                if self.blue_light_collision(650, 300, 435 + self.projectile.difference, self.projectile.ys[self.projectile.num], 90):
+                    self.projectile.ys[self.projectile.num] = -25
+                    pygame.mixer.Sound.play(pygame.mixer.Sound("Space invaders stuff/white barrier.wav"))
+
+
+
+
+
+                #Level 1 Player fire on enemy hitboxes
                 if self.alien_laser_collision(435 + self.projectile.difference, self.projectile.ys[self.projectile.num], self.enemies.horde_x[0], self.enemies.horde_y[0]):
                     self.enemies.horde_y[0] = -100
                     self.enemies.horde_x[0] = -3999
@@ -796,9 +896,9 @@ class Game:
 
     def run(self):
         run = True
+        pause = False
         while run:
-            print(self.enemies.horde_x[0])
-            print(self.enemies.horde_y[0])
+
             if self.enemies.down:
                         if self.laser_y < 625:
 
@@ -1167,6 +1267,26 @@ class Game:
                             pygame.mixer.Sound.play(laser)
                             self.projectile.difference = self.player.x - self.projectile.four + 25
                         self.up = True
+                if event.type == KEYUP:
+
+                    if event.key == K_ESCAPE:
+                        pygame.key.set_repeat(1, 1)
+                        pause = True
+            while pause:
+                font1 = pygame.font.SysFont("Typeface Mario World Pixel Filled", 70, bold=False, italic=False)
+                line = font1.render("Paused", False, (255, 255, 255))
+                self.screen.blit(line, (700, 10))
+                pygame.display.update()
+                for event in pygame.event.get():
+                        pygame.key.set_repeat(1, 1)
+                        if event.type == KEYUP:
+                            if event.key == K_ESCAPE:
+                                pause = False
+                        if event.type == QUIT:
+                            pygame.quit()
+                            sys.exit()
+
+
 
 
 
