@@ -294,8 +294,10 @@ class Enemies:
                 green = (173,216, 230)
                 if pygame.mouse.get_rel():
                     if pygame.mouse.get_pressed() == (1, 0, 0):
+                        Game().reset()
                         self.level = 2
-                        self.shot = False
+                        Game.reset()
+                        
 
             font2 = pygame.font.SysFont("Typeface Mario World Pixel Filled", 75, bold=False, italic=False)
             line2 = font2.render("Continue?", False, (0, 255, 0))
@@ -1081,7 +1083,7 @@ class Game:
 
                 if self.count == 12:
                     self.reset()
-                    self.enemies.level += 1
+                    self.enemies.level += 0.5
                     self.reset()
                     self.count = 0
                     self.player.health = 5
@@ -1286,8 +1288,8 @@ class Game:
         run = True
         pause = False
         while run:
-
-            f = 1
+            r = random.randint(3, 9)
+            f = r/3
             if self.enemies.down:
                         if self.laser_y < 625:
 
