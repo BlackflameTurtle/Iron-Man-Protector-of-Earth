@@ -10,6 +10,8 @@ explosion = pygame.mixer.Sound("Desktop\Github Void Key\Space-Invaders\Space inv
 laser1 = pygame.mixer.Sound("Desktop\Github Void Key\Space-Invaders\Space invaders stuff\enemy laser.wav")
 hurt = pygame.mixer.Sound("Desktop\Github Void Key\Space-Invaders\Space invaders stuff\hurt.wav")
 red = pygame.image.load(r"Desktop\Github Void Key\Space-Invaders\Space invaders stuff\red.png")
+class GameOver(Exception):
+    pass
 class Projectile:
     def __init__(self, screen,  y):
 
@@ -346,7 +348,7 @@ class Enemies:
                     if pygame.mouse.get_pressed() == (1, 0, 0):
                         Game().reset()
                         self.level = 2
-                        Game.reset()
+                        Game().reset()
                         
 
             font2 = pygame.font.SysFont("Typeface Mario World Pixel Filled", 75, bold=False, italic=False)
@@ -568,7 +570,7 @@ class Game:
             self.enemies.horde_y[6] = 50 + 30
             self.enemies.horde_y[7] = 20 + 110
             self.enemies.horde_y[8] = 20 + 110
-            self.enemies.horde_y[9] = - 4000000
+
             self.enemies.horde_y[10] = 50 + 30
             self.enemies.horde_y[11] = 80 + 50
             self.enemies.horde_y[12] = 80 + 50
@@ -583,11 +585,11 @@ class Game:
             self.enemies.horde_x[6] = 50 + 200
             self.enemies.horde_x[7] = 50 + 310
             self.enemies.horde_x[8] = 50 + 365
-            self.enemies.horde_x[9] = 50
+
             self.enemies.horde_x[10] = 475 + 50
             self.enemies.horde_x[11] = 250
             self.enemies.horde_x[12] = 525
-            self.enemies.horde_x[13] = 50
+
             self.enemies.horde_x[14] = 50
             self.enemies.laserx = 200 + 50 + 27.5
             self.enemies.laserx1 = 255 + 50 + 27.5
@@ -598,12 +600,13 @@ class Game:
             self.enemies.laserx6 = 50 + 200 + 27.5
             self.enemies.laserx7 = 50 + 310 + 27.5
             self.enemies.laserx8 = 50 + 365 + 27.5
-            self.enemies.laserx9 = 50 + 27.5
+
             self.enemies.laserx10 = 475 + 50 + 27.5
             self.enemies.laserx11 = 250 + 27.5
             self.enemies.laserx12 = 525 + 27.5
             self.enemies.laserx13 = 50 + 27.5
             self.enemies.laserx14 = 50 + 27.5
+            self.status = [True, True, True, True, True, True, True, True, True, False, True, True, True, False, True]  
         if 1.5 <= self.enemies.level <= 2:  
             self.status = [True, True, True, True, True, True, True, True, True, True, True, True, True, True, True]  
             self.shot = False
@@ -1008,7 +1011,7 @@ class Game:
 
         self.enemies.level1()
         if self.player.health == 0:
-            raise "Game over"
+            raise GameOver
         #Level 1 enemy blast on player collision
         if 1 == 1:
                 if self.red_laser_collision(self.player.x, self.player.y, self.enemies.laserx, self.laser_y):
@@ -2636,10 +2639,9 @@ class Game:
 
 
 
-# Press the green button in the gutter to run the script.
+
 if __name__ == '__main__':
     game = Game()
     game.title()
     game.run()
 
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
