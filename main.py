@@ -7,11 +7,21 @@ pygame.font.init()
 pygame.mixer.init()
 from PySide6.QtWidgets import QApplication, QPushButton  
 from SaveSystem import SaveandLoad
-laser = pygame.mixer.Sound("Player laser.wav")
-explosion = pygame.mixer.Sound("explosion.wav")
-laser1 = pygame.mixer.Sound("enemy laser.wav")
-hurt = pygame.mixer.Sound("hurt.wav")
-red = pygame.image.load(r"red.png")
+import os
+def resource_path(relative_path):
+    """ Get absolute path to resource, works for dev and for PyInstaller """
+    try:
+        # PyInstaller creates a temp folder and stores path in _MEIPASS
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.abspath(".")
+
+    return os.path.join(base_path, relative_path)
+laser = pygame.mixer.Sound(resource_path("Player laser.wav"))
+explosion = pygame.mixer.Sound(resource_path("explosion.wav"))
+laser1 = pygame.mixer.Sound(resource_path("enemy laser.wav"))
+hurt = pygame.mixer.Sound(resource_path("hurt.wav"))
+red = pygame.image.load(resource_path(r"red.png"))
 
 save = SaveandLoad(".level_data", "Space invaders stuff" )
 class GameOver(Exception):
@@ -35,7 +45,7 @@ class Projectile:
         self.y9 = y
         self.ys = [self.y, self.y1, self.y2, self.y3, self.y4, self.y5, self.y6, self.y7, self.y8, self.y9]
         self.screen = screen
-        self.laser_sideways = pygame.image.load("laser.png")
+        self.laser_sideways = pygame.image.load(resource_path("laser.png"))
         self.laser = pygame.transform.rotate(self.laser_sideways, 90)
         self.laser1 = pygame.transform.rotate(self.laser_sideways, 90)
         self.laser2 = pygame.transform.rotate(self.laser_sideways, 90)
@@ -55,10 +65,10 @@ class Projectile:
 
 class Player:
     def __init__(self, x, y, screen):
-        self.background =pygame.image.load("Background.png")
+        self.background =pygame.image.load(resource_path("Background.png"))
         self.health = 5
         self.screen = screen
-        self.shooter = pygame.image.load("Space-Invaders-Ship-PNG-Photo.png")
+        self.shooter = pygame.image.load(resource_path("Space-Invaders-Ship-PNG-Photo.png"))
         self.x = x
         self.y = y
     def draw_shooter(self):
@@ -104,21 +114,21 @@ class Enemies:
             self.level = 1
 
         self.screen = screen
-        self.ship = pygame.image.load("Alien.png")
-        self.ship1 = pygame.image.load("Alien.png")
-        self.ship2 = pygame.image.load("Alien.png")
-        self.ship3 = pygame.image.load("Alien.png")
-        self.ship4 = pygame.image.load("Alien.png")
-        self.ship5 = pygame.image.load("Alien.png")
-        self.ship6 = pygame.image.load("Alien.png")
-        self.ship7 = pygame.image.load("Alien.png")
-        self.ship8 = pygame.image.load("Alien.png")
-        self.ship9 = pygame.image.load("Alien.png")
-        self.ship10 = pygame.image.load("Alien.png")
-        self.ship11 = pygame.image.load("Alien.png")
-        self.ship12 = pygame.image.load("Alien.png")
-        self.ship13 = pygame.image.load("Alien.png")
-        self.ship14 = pygame.image.load("Alien.png")
+        self.ship = pygame.image.load(resource_path("Alien.png"))
+        self.ship1 = pygame.image.load(resource_path("Alien.png"))
+        self.ship2 = pygame.image.load(resource_path("Alien.png"))
+        self.ship3 = pygame.image.load(resource_path("Alien.png"))
+        self.ship4 = pygame.image.load(resource_path("Alien.png"))
+        self.ship5 = pygame.image.load(resource_path("Alien.png"))
+        self.ship6 = pygame.image.load(resource_path("Alien.png"))
+        self.ship7 = pygame.image.load(resource_path("Alien.png"))
+        self.ship8 = pygame.image.load(resource_path("Alien.png"))
+        self.ship9 = pygame.image.load(resource_path("Alien.png"))
+        self.ship10 = pygame.image.load(resource_path("Alien.png"))
+        self.ship11 = pygame.image.load(resource_path("Alien.png"))
+        self.ship12 = pygame.image.load(resource_path("Alien.png"))
+        self.ship13 = pygame.image.load(resource_path("Alien.png"))
+        self.ship14 = pygame.image.load(resource_path("Alien.png"))
         self.horde = [self.ship, self.ship1, self.ship2, self.ship3, self.ship4, self.ship5, self.ship6, self.ship7, self.ship8, self.ship9, self.ship10, self.ship11, self.ship12, self.ship13, self.ship14]
         self.y = 20
         self.y1 = 20
@@ -464,8 +474,8 @@ class Game:
         self.h8 = 3
         self.count = 0
         self.state = "none"
-        self.background = pygame.image.load("Background.png")
-        pygame.mixer.music.load("Music.mp3")
+        self.background = pygame.image.load(resource_path("Background.png"))
+        pygame.mixer.music.load(resource_path("Music.mp3"))
         pygame.mixer.music.set_volume(0.35)
         pygame.mixer.music.play(-1)
         self.col = False
@@ -473,7 +483,7 @@ class Game:
         self.direction1 = "right"
         self.direction2 = "right"
         self.direction3 = "right"
-        self.blastssss = pygame.image.load("red laser.png")
+        self.blastssss = pygame.image.load(resource_path("red laser.png"))
         self.blast = pygame.transform.rotate(self.blastssss, 270)
         self.explosion = False
         self.backup = 0
@@ -534,7 +544,7 @@ class Game:
              line = font1.render("Space Invaders", False, (0, 255, 0))
              line1 = font1.render("New Game", False, (green))
              line2 = font1.render("Continue", False, (green))
-             red = pygame.image.load("title1.jpg")
+             red = pygame.image.load(resource_path("title1.jpg"))
              mouse_x, mouse_y = pygame.mouse.get_pos()
 
  
@@ -789,7 +799,7 @@ class Game:
 
             if self.enemies.down:
                 if self.laser_y == self.enemies.horde_y[0] + 30:
-                    pygame.mixer.Sound.play(pygame.mixer.Sound("enemy laser.wav"))
+                    pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("enemy laser.wav")))
                 if self.laser_y >= 625:
 
                     self.enemies.down = False
@@ -800,7 +810,7 @@ class Game:
 
             if self.enemies.down1:
                 if self.laser_y1 == self.enemies.horde_y[1] + 30:
-                    pygame.mixer.Sound.play(pygame.mixer.Sound("enemy laser.wav"))
+                    pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("enemy laser.wav")))
                 if self.laser_y1 >= 625:
 
                     self.enemies.down1 = False
@@ -811,7 +821,7 @@ class Game:
                     self.enemies.down2 = True
             if self.enemies.down2:
                 if self.laser_y2 == self.enemies.horde_y[2] + 30:
-                    pygame.mixer.Sound.play(pygame.mixer.Sound("enemy laser.wav"))
+                    pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("enemy laser.wav")))
                 if self.laser_y2 >= 625:
 
                     self.enemies.down2 = False
@@ -822,7 +832,8 @@ class Game:
 
             if self.enemies.down3:
                 if self.laser_y3 == self.enemies.horde_y[3] + 30:
-                    pygame.mixer.Sound.play(pygame.mixer.Sound("enemy laser.wav"))
+
+                    pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("enemy laser.wav")))
                 if self.laser_y3 >= 625:
 
                     self.enemies.down3 = False
@@ -833,7 +844,8 @@ class Game:
 
             if self.enemies.down4:
                 if self.laser_y4 == self.enemies.horde_y[4] + 30:
-                    pygame.mixer.Sound.play(pygame.mixer.Sound("enemy laser.wav"))
+
+                    pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("enemy laser.wav")))
                 if self.laser_y4 >= 625:
 
                     self.enemies.down4 = False
@@ -845,7 +857,8 @@ class Game:
 
             if self.enemies.down5:
                 if self.laser_y5 == self.enemies.horde_y[5] + 30:
-                    pygame.mixer.Sound.play(pygame.mixer.Sound("enemy laser.wav"))
+
+                    pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("enemy laser.wav")))
                 if self.laser_y5 >= 625:
 
                     self.enemies.down5 = False
@@ -857,7 +870,8 @@ class Game:
 
             if self.enemies.down6:
                 if self.laser_y6 == self.enemies.horde_y[6] + 30:
-                    pygame.mixer.Sound.play(pygame.mixer.Sound("enemy laser.wav"))
+
+                    pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("enemy laser.wav")))
                 if self.laser_y6 >= 625:
 
                     self.enemies.down6 = False
@@ -867,7 +881,8 @@ class Game:
                         self.enemies.down7 = True
             if self.enemies.down7:
                 if self.laser_y7 == self.enemies.horde_y[7] + 30:
-                    pygame.mixer.Sound.play(pygame.mixer.Sound("enemy laser.wav"))
+
+                    pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("enemy laser.wav")))
                 if self.laser_y7 >= 625:
 
                     self.enemies.down7 = False
@@ -878,7 +893,8 @@ class Game:
 
             if self.enemies.down8:
                 if self.laser_y8 == self.enemies.horde_y[8] + 30:
-                    pygame.mixer.Sound.play(pygame.mixer.Sound("enemy laser.wav"))
+
+                    pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("enemy laser.wav")))
                 if self.laser_y8 >= 625:
                     self.enemies.down8 = False
             if a ==10:
@@ -888,7 +904,8 @@ class Game:
 
             if self.enemies.down10:
                 if self.laser_y10 == self.enemies.horde_y[10] + 30:
-                    pygame.mixer.Sound.play(pygame.mixer.Sound("enemy laser.wav"))
+
+                    pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("enemy laser.wav")))
                 if self.laser_y10 >= 625:
 
                     self.enemies.down10 = False
@@ -899,7 +916,8 @@ class Game:
 
             if self.enemies.down11:
                 if self.laser_y11 == self.enemies.horde_y[11] + 30:
-                    pygame.mixer.Sound.play(pygame.mixer.Sound("enemy laser.wav"))
+
+                    pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("enemy laser.wav")))
                 if self.laser_y11 >= 625:
 
                     self.enemies.down11 = False
@@ -910,7 +928,8 @@ class Game:
 
             if self.enemies.down12:
                 if self.laser_y12 == self.enemies.horde_y[12] + 30:
-                    pygame.mixer.Sound.play(pygame.mixer.Sound("enemy laser.wav"))
+
+                    pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("enemy laser.wav")))
                 if self.laser_y12 >= 625:
 
                     self.enemies.down12 = False
@@ -922,7 +941,8 @@ class Game:
 
             if self.enemies.down13:
                 if self.laser_y13 == self.enemies.horde_y[13] + 30:
-                    pygame.mixer.Sound.play(pygame.mixer.Sound("enemy laser.wav"))
+
+                    pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("enemy laser.wav")))
                 if self.laser_y13 >= 625:
                     self.enemies.down13 = False
 
@@ -933,7 +953,8 @@ class Game:
 
             if self.enemies.down9:
                 if self.laser_y9 == self.enemies.horde_y[9] + 30:
-                    pygame.mixer.Sound.play(pygame.mixer.Sound("enemy laser.wav"))
+
+                    pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("enemy laser.wav")))
                 if self.laser_y9 >= 625:
                     self.enemies.down9 = False
 
@@ -1052,62 +1073,74 @@ class Game:
                     self.player.health -= 1
                     self.col = False
                     self.laser_y = 625
-                    pygame.mixer.Sound.play(pygame.mixer.Sound("hit.wav"))
+                    pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("hit.wav")))
+
                 if self.red_laser_collision(self.player.x, self.player.y, self.enemies.laserx1, self.laser_y1):
                     self.player.health -= 1
                     self.col = False
                     self.laser_y1 = 625
-                    pygame.mixer.Sound.play(pygame.mixer.Sound("hit.wav"))
+                    pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("hit.wav")))
+
                 if self.red_laser_collision(self.player.x, self.player.y, self.enemies.laserx2, self.laser_y2):
                     self.player.health -= 1
                     self.col = False
                     self.laser_y2 = 625
-                    pygame.mixer.Sound.play(pygame.mixer.Sound("hit.wav"))
+                    pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("hit.wav")))
+
                 if self.red_laser_collision(self.player.x, self.player.y, self.enemies.laserx3, self.laser_y3):
                     self.player.health -= 1
                     self.col = False
                     self.laser_y3 = 625
-                    pygame.mixer.Sound.play(pygame.mixer.Sound("hit.wav"))
+                    pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("hit.wav")))
+
                 if self.red_laser_collision(self.player.x, self.player.y, self.enemies.laserx4, self.laser_y4):
                     self.player.health -= 1
                     self.col = False
                     self.laser_y4 = 625
-                    pygame.mixer.Sound.play(pygame.mixer.Sound("hit.wav"))
+                    pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("hit.wav")))
+
                 if self.red_laser_collision(self.player.x, self.player.y, self.enemies.laserx5, self.laser_y5):
                     self.player.health -= 1
                     self.col = False
                     self.laser_y5 = 625
-                    pygame.mixer.Sound.play(pygame.mixer.Sound("hit.wav"))
+                    pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("hit.wav")))
+
                 if self.red_laser_collision(self.player.x, self.player.y, self.enemies.laserx6, self.laser_y6):
                     self.player.health -= 1
                     self.col = False
                     self.laser_y6 = 625
-                    pygame.mixer.Sound.play(pygame.mixer.Sound("hit.wav"))
+                    pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("hit.wav")))
+
                 if self.red_laser_collision(self.player.x, self.player.y, self.enemies.laserx7, self.laser_y7):
                     self.player.health -= 1
                     self.col = False
                     self.laser_y7 = 625
-                    pygame.mixer.Sound.play(pygame.mixer.Sound("hit.wav"))
+                    pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("hit.wav")))
+
                 if self.red_laser_collision(self.player.x, self.player.y, self.enemies.laserx8, self.laser_y8):
                     self.player.health -= 1
                     self.col = False
                     self.laser_y8 = 625
-                    pygame.mixer.Sound.play(pygame.mixer.Sound("hit.wav"))
+                    pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("hit.wav")))
+
                 if self.red_laser_collision(self.player.x, self.player.y, self.enemies.laserx10, self.laser_y10):
                     self.player.health -= 1
                     self.col = False
                     self.laser_y10 = 625
-                    pygame.mixer.Sound.play(pygame.mixer.Sound("hit.wav"))
+                    pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("hit.wav")))
+
                 if self.red_laser_collision(self.player.x, self.player.y, self.enemies.laserx11, self.laser_y11):
                     self.player.health -= 1
                     self.col = False
                     self.laser_y11 = 625
-                    pygame.mixer.Sound.play(pygame.mixer.Sound("hit.wav"))
+                    pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("hit.wav")))
+
                 if self.red_laser_collision(self.player.x, self.player.y, self.enemies.laserx12, self.laser_y12):
                     self.player.health -= 1
                     self.col = False
                     self.laser_y12 = 625
-                    pygame.mixer.Sound.play(pygame.mixer.Sound("hit.wav"))
+                    pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("hit.wav")))
+
 
                 
 
@@ -1119,84 +1152,109 @@ class Game:
                 #Enemy fire on barrier collision
                 if self.red_white_collision(200, 300, self.enemies.laserx, self.laser_y, 90):
                     self.laser_y = 625
-                    pygame.mixer.Sound.play(pygame.mixer.Sound("white barrier.wav"))
+                    pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("white barrier.wav")))
+
                 if self.red_white_collision(200, 300, self.enemies.laserx1, self.laser_y1, 90):
                     self.laser_y1 = 625
-                    pygame.mixer.Sound.play(pygame.mixer.Sound("white barrier.wav"))
+                    pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("white barrier.wav")))
+
                 if self.red_white_collision(200, 300, self.enemies.laserx2, self.laser_y2, 90):
                     self.laser_y2 = 625
-                    pygame.mixer.Sound.play(pygame.mixer.Sound("white barrier.wav"))
+                    pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("white barrier.wav")))
+
                 if self.red_white_collision(200, 300, self.enemies.laserx3, self.laser_y3, 90):
                     self.laser_y3 = 625
-                    pygame.mixer.Sound.play(pygame.mixer.Sound("white barrier.wav"))
+                    pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("white barrier.wav")))
+
                 if self.red_white_collision(200, 300, self.enemies.laserx4, self.laser_y4, 90):
                     self.laser_y4 = 625
-                    pygame.mixer.Sound.play(pygame.mixer.Sound("white barrier.wav"))
+                    pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("white barrier.wav")))
+
                 if self.red_white_collision(200, 300, self.enemies.laserx5, self.laser_y5, 90):
                     self.laser_y5 = 625
-                    pygame.mixer.Sound.play(pygame.mixer.Sound("white barrier.wav"))
+                    pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("white barrier.wav")))
+
                 if self.red_white_collision(200, 300, self.enemies.laserx6, self.laser_y6, 90):
                     self.laser_y6 = 625
-                    pygame.mixer.Sound.play(pygame.mixer.Sound("white barrier.wav"))
+                    pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("white barrier.wav")))
+
                 if self.red_white_collision(200, 300, self.enemies.laserx7, self.laser_y7, 90):
                     self.laser_y7 = 625
-                    pygame.mixer.Sound.play(pygame.mixer.Sound("white barrier.wav"))
+                    pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("white barrier.wav")))
+
                 if self.red_white_collision(200, 300, self.enemies.laserx8, self.laser_y8, 90):
                     self.laser_y8 = 625
-                    pygame.mixer.Sound.play(pygame.mixer.Sound("white barrier.wav"))
+                    pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("white barrier.wav")))
+
                 if self.red_white_collision(200, 300, self.enemies.laserx10, self.laser_y10, 90):
                     self.laser_y10 = 625
-                    pygame.mixer.Sound.play(pygame.mixer.Sound("white barrier.wav"))
+                    pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("white barrier.wav")))
+
                 if self.red_white_collision(200, 300, self.enemies.laserx11, self.laser_y11, 90):
                     self.laser_y11 = 625
-                    pygame.mixer.Sound.play(pygame.mixer.Sound("white barrier.wav"))
+                    pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("white barrier.wav")))
+
                 if self.red_white_collision(200, 300, self.enemies.laserx12, self.laser_y12, 90):
                     self.laser_y12 = 625
-                    pygame.mixer.Sound.play(pygame.mixer.Sound("white barrier.wav"))
+                    pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("white barrier.wav")))
+
                 if self.red_white_collision(650, 300, self.enemies.laserx, self.laser_y, 90):
                     self.laser_y = 625
                     pygame.mixer.Sound.play(pygame.mixer.Sound("Space invaders stuff/white barrier.wav"))
                 if self.red_white_collision(650, 300, self.enemies.laserx1, self.laser_y1, 90):
                     self.laser_y1 = 625
-                    pygame.mixer.Sound.play(pygame.mixer.Sound("white barrier.wav"))
+                    pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("white barrier.wav")))
+
                 if self.red_white_collision(650, 300, self.enemies.laserx2, self.laser_y2, 90):
                     self.laser_y2 = 625
-                    pygame.mixer.Sound.play(pygame.mixer.Sound("white barrier.wav"))
+                    pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("white barrier.wav")))
+
                 if self.red_white_collision(650, 300, self.enemies.laserx3, self.laser_y3, 90):
                     self.laser_y3 = 625
-                    pygame.mixer.Sound.play(pygame.mixer.Sound("white barrier.wav"))
+                    pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("white barrier.wav")))
+
                 if self.red_white_collision(650, 300, self.enemies.laserx4, self.laser_y4, 90):
                     self.laser_y4 = 625
-                    pygame.mixer.Sound.play(pygame.mixer.Sound("white barrier.wav"))
+                    pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("white barrier.wav")))
+
                 if self.red_white_collision(650, 300, self.enemies.laserx5, self.laser_y5, 90):
                     self.laser_y5 = 625
-                    pygame.mixer.Sound.play(pygame.mixer.Sound("white barrier.wav"))
+                    pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("white barrier.wav")))
+
                 if self.red_white_collision(650, 300, self.enemies.laserx6, self.laser_y6, 90):
                     self.laser_y6 = 625
-                    pygame.mixer.Sound.play(pygame.mixer.Sound("white barrier.wav"))
+                    pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("white barrier.wav")))
+
                 if self.red_white_collision(650, 300, self.enemies.laserx7, self.laser_y7, 90):
                     self.laser_y7 = 625
-                    pygame.mixer.Sound.play(pygame.mixer.Sound("white barrier.wav"))
+                    pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("white barrier.wav")))
+
                 if self.red_white_collision(650, 300, self.enemies.laserx8, self.laser_y8, 90):
                     self.laser_y8 = 625
-                    pygame.mixer.Sound.play(pygame.mixer.Sound("white barrier.wav"))
+                    pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("white barrier.wav")))
+
                 if self.red_white_collision(650, 300, self.enemies.laserx10, self.laser_y10, 90):
                     self.laser_y10 = 625
-                    pygame.mixer.Sound.play(pygame.mixer.Sound("white barrier.wav"))
+                    pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("white barrier.wav")))
+
                 if self.red_white_collision(650, 300, self.enemies.laserx11, self.laser_y11, 90):
                     self.laser_y11 = 625
-                    pygame.mixer.Sound.play(pygame.mixer.Sound("white barrier.wav"))
+                    pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("white barrier.wav")))
+
                 if self.red_white_collision(650, 300, self.enemies.laserx12, self.laser_y12, 90):
                     self.laser_y12 = 625
-                    pygame.mixer.Sound.play(pygame.mixer.Sound("white barrier.wav"))
+                    pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("white barrier.wav")))
+
 
                 #Player fire on barrier collision
                 if self.blue_light_collision(200, 300, 435 + self.projectile.difference, self.projectile.ys[self.projectile.num], 90):
                     self.projectile.ys[self.projectile.num] = -25
-                    pygame.mixer.Sound.play(pygame.mixer.Sound("white barrier.wav"))
+                    pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("white barrier.wav")))
+
                 if self.blue_light_collision(650, 300, 435 + self.projectile.difference, self.projectile.ys[self.projectile.num], 90):
                     self.projectile.ys[self.projectile.num] = -25
-                    pygame.mixer.Sound.play(pygame.mixer.Sound("white barrier.wav"))
+                    pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("white barrier.wav")))
+
 
 
 
@@ -1298,44 +1356,57 @@ class Game:
                     pygame.mixer.Sound.play(pygame.mixer.Sound("Space invaders stuff/white barrier.wav"))
             if self.red_white_collision(550, 250, self.enemies.laserx1, self.laser_y1, 120):
                     self.laser_y1 = 625
-                    pygame.mixer.Sound.play(pygame.mixer.Sound("white barrier.wav"))
+                    pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("white barrier.wav")))
+
             if self.red_white_collision(550, 250, self.enemies.laserx2, self.laser_y2, 120):
                     self.laser_y2 = 625
-                    pygame.mixer.Sound.play(pygame.mixer.Sound("white barrier.wav"))
+                    pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("white barrier.wav")))
+
             if self.red_white_collision(550, 250, self.enemies.laserx3, self.laser_y3, 120):
                     self.laser_y3 = 625
-                    pygame.mixer.Sound.play(pygame.mixer.Sound("white barrier.wav"))
+                    pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("white barrier.wav")))
+
             if self.red_white_collision(550, 250, self.enemies.laserx4, self.laser_y4, 120):
                     self.laser_y4 = 625
-                    pygame.mixer.Sound.play(pygame.mixer.Sound("white barrier.wav"))
+                    pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("white barrier.wav")))
+
             if self.red_white_collision(550, 250, self.enemies.laserx5, self.laser_y5, 120):
                     self.laser_y5 = 625
-                    pygame.mixer.Sound.play(pygame.mixer.Sound("white barrier.wav"))
+                    pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("white barrier.wav")))
+
             if self.red_white_collision(550, 250, self.enemies.laserx6, self.laser_y6, 120):
                     self.laser_y6 = 625
-                    pygame.mixer.Sound.play(pygame.mixer.Sound("white barrier.wav"))
+                    pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("white barrier.wav")))
+
             if self.red_white_collision(550, 250, self.enemies.laserx7, self.laser_y7, 120):
                     self.laser_y7 = 625
-                    pygame.mixer.Sound.play(pygame.mixer.Sound("white barrier.wav"))                
+                    pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("white barrier.wav")))
+                
             if self.red_white_collision(550, 250, self.enemies.laserx8, self.laser_y8, 120):
                     self.laser_y8 = 625
-                    pygame.mixer.Sound.play(pygame.mixer.Sound("white barrier.wav"))
+                    pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("white barrier.wav")))
+
 
             if self.red_white_collision(550, 250, self.enemies.laserx9, self.laser_y9, 120):
                     self.laser_y9 = 625
-                    pygame.mixer.Sound.play(pygame.mixer.Sound("white barrier.wav"))
+                    pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("white barrier.wav")))
+
             if self.red_white_collision(550, 250, self.enemies.laserx10, self.laser_y10, 120):
                     self.laser_y10 = 625
-                    pygame.mixer.Sound.play(pygame.mixer.Sound("white barrier.wav"))
+                    pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("white barrier.wav")))
+
             if self.red_white_collision(550, 250, self.enemies.laserx11, self.laser_y11, 120):
                     self.laser_y11 = 625
-                    pygame.mixer.Sound.play(pygame.mixer.Sound("white barrier.wav"))
+                    pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("white barrier.wav")))
+
             if self.red_white_collision(550, 250, self.enemies.laserx12, self.laser_y12, 120):
                     self.laser_y12 = 625
-                    pygame.mixer.Sound.play(pygame.mixer.Sound("white barrier.wav"))
+                    pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("white barrier.wav")))
+
             if self.red_white_collision(550, 250, self.enemies.laserx13, self.laser_y13, 120):
                     self.laser_y13 = 625
-                    pygame.mixer.Sound.play(pygame.mixer.Sound("white barrier.wav"))
+                    pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("white barrier.wav")))
+
 
             if self.blue_light_collision(100, 250, 435 + self.projectile.difference,self.projectile.ys[self.projectile.num], 150 ):
                 self.projectile.ys[self.projectile.num] = -25
@@ -1345,12 +1416,12 @@ class Game:
                 self.player.health -= 1
                 self.col = False
                 self.laser_y9 = 625
-                pygame.mixer.Sound.play(pygame.mixer.Sound("hit.wav"))
+                pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("hit.wav")))
             if self.red_laser_collision(self.player.x, self.player.y, self.enemies.laserx13, self.laser_y13):
                 self.player.health -= 1
                 self.col = False
                 self.laser_y13 = 625
-                pygame.mixer.Sound.play(pygame.mixer.Sound("hit.wav"))
+                pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("hit.wav")))
             if self.alien_laser_collision(435 + self.projectile.difference, self.projectile.ys[self.projectile.num],
                                           self.enemies.horde_x[0], self.enemies.horde_y[0]):
                 if self.h0 == 1:
@@ -1501,21 +1572,23 @@ class Game:
         if self.enemies.level == 3:
             if self.blue_light_collision(0, 150, 435 + self.projectile.difference, self.projectile.ys[self.projectile.num], 200):
                     self.projectile.ys[self.projectile.num] = -25
-                    pygame.mixer.Sound.play(pygame.mixer.Sound("white barrier.wav"))
+                    pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("white barrier.wav")))
+
             if self.blue_light_collision(700, 150, 435 + self.projectile.difference, self.projectile.ys[self.projectile.num], 200):
                     self.projectile.ys[self.projectile.num] = -25
-                    pygame.mixer.Sound.play(pygame.mixer.Sound("white barrier.wav"))
+                    pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("white barrier.wav")))
+
 
             if self.red_laser_collision(self.player.x, self.player.y, self.enemies.laserx9, self.laser_y9):
                 self.player.health -= 1
                 self.col = False
                 self.laser_y9 = 625
-                pygame.mixer.Sound.play(pygame.mixer.Sound("hit.wav"))
+                pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("hit.wav")))
             if self.red_laser_collision(self.player.x, self.player.y, self.enemies.laserx13, self.laser_y13):
                 self.player.health -= 1
                 self.col = False
                 self.laser_y13 = 625
-                pygame.mixer.Sound.play(pygame.mixer.Sound("hit.wav"))
+                pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("hit.wav")))
             if self.alien_laser_collision(435 + self.projectile.difference, self.projectile.ys[self.projectile.num],
                                           self.enemies.horde_x[0], self.enemies.horde_y[0]):
                 if self.h0 == 1:
