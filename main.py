@@ -47,19 +47,10 @@ class Projectile:
         self.screen = screen
         self.laser_sideways = pygame.image.load(resource_path("laser.png"))
         self.laser = pygame.transform.rotate(self.laser_sideways, 90)
-        self.laser1 = pygame.transform.rotate(self.laser_sideways, 90)
-        self.laser2 = pygame.transform.rotate(self.laser_sideways, 90)
-        self.laser3 = pygame.transform.rotate(self.laser_sideways, 90)
-        self.laser4 = pygame.transform.rotate(self.laser_sideways, 90)
-        self.laser5 = pygame.transform.rotate(self.laser_sideways, 90)
-        self.laser6 = pygame.transform.rotate(self.laser_sideways, 90)
-        self.laser7 = pygame.transform.rotate(self.laser_sideways, 90)
-        self.laser8 = pygame.transform.rotate(self.laser_sideways, 90)
-        self.laser9 = pygame.transform.rotate(self.laser_sideways, 90)
-        self.laser_list = [self.laser, self.laser1, self.laser2, self.laser3, self.laser4, self.laser5, self.laser6, self.laser7, self.laser8, self.laser9]
+
 
     def draw_projectile(self):
-        self.screen.blit(self.laser_list[self.num], (self.four + self.difference, self.ys[self.num]))
+        self.screen.blit(self.laser, (self.four + self.difference, self.ys[self.num]))
 
 
 
@@ -106,12 +97,24 @@ class Enemies:
         self.down12 = False
         self.down13 = False
         self.down14 = False
+        self.down15 = False
+        self.down16 = False
+        self.down17= False
+        self.down18= False
+        self.down19 = False
+        self.down20= False
+        self.down21= False
+        self.down22 = False
+        self.down23 = False
+        self.down24 = False
+        self.down25 = False
+
         self.difference = 00
         self.direction = "right"
         if save.check_file("level"):
             self.level = save.load("level")
         else:
-            self.level = 1
+            self.level = 0
 
         self.screen = screen
         self.ship = pygame.image.load(resource_path("Alien.png"))
@@ -143,8 +146,19 @@ class Enemies:
         self.y10 = 50 + 30
         self.y11 = 80 + 50
         self.y12 = 80 + 50
-        self.y13 = 20
-        self.y14 = 20
+        self.y13 = 80
+        self.y14 = 80
+        self.y15 = 80
+        self.y16 = 80
+        self.y17 = 80
+        self.y18 = 80
+        self.y19 = 80
+        self.y20 = 80
+        self.y21 = 80
+        self.y22 = 80
+        self.y23 = 80
+        self.y24 = 80
+        self.y25 = 80
         self.x = 200 + 50
         self.x1 = 255 + 50
         self.x2 = 310 + 50
@@ -159,7 +173,19 @@ class Enemies:
         self.x11 = 250
         self.x12 = 525
         self.x13 = -400000000000
-        self.x14 = 50
+        self.x14 =  -400000000000000
+        self.x15 =  -400000000000000
+        self.x16 =  -400000000000000
+        self.x17 =  -400000000000000
+        self.x18 =  -400000000000000
+        self.x19 =  -400000000000000
+        self.x20 =  -400000000000000
+        self.x21 =  -400000000000000
+        self.x22 =  -400000000000000
+        self.x23 =  -400000000000000
+        self.x24 =  -400000000000000
+        self.x25 =  -400000000000000
+
         self.laserx = 200 + 50 + 27.5
         self.laserx1 = 255 + 50 + 27.5
         self.laserx2 = 310 + 50 + 27.5
@@ -173,40 +199,25 @@ class Enemies:
         self.laserx10 = 475 + 50 + 27.5
         self.laserx11 = 250 + 27.5
         self.laserx12 = 525 + 27.5
-        self.laserx13 = 50 + 27.5
-        self.laserx14 = 50 + 27.5
-        self.horde_y = [self.y, self.y1, self.y2, self.y3, self.y4 , self.y5, self.y6 , self.y7 ,self.y8, self.y9, self.y10,self.y11, self.y12, self.y13, self.y14]
-        self.horde_x = [self.x, self.x1, self.x2, self.x3, self.x4, self.x5, self.x6, self.x7, self.x8, self.x9,self.x10, self.x11, self.x12, self.x13, self.x14]
+        self.laserx13 = -40000000
+        self.laserx14 = -40000000
+        self.laserx15 = -40000000
+        self.laserx16 = -40000000
+        self.laserx17 = -40000000
+        self.laserx18 = -40000000
+        self.laserx19 = -40000000
+        self.laserx20 = -40000000
+        self.laserx21 = -40000000
+        self.laserx22 = -40000000
+        self.laserx23 = -40000000
+        self.laserx24 = -40000000
+        self.laserx25 = -40000000
+        self.horde_y = [self.y, self.y1, self.y2, self.y3, self.y4 , self.y5, self.y6 , self.y7 ,self.y8, self.y9, self.y10,self.y11, self.y12, self.y13, self.y14, self.y15, self.y16, self.y17, self.y18,self.y19,self.y20,self.y21, self.y22, self.y23, self.y24, self.y25]
+        self.horde_x = [self.x, self.x1, self.x2, self.x3, self.x4, self.x5, self.x6, self.x7, self.x8, self.x9,self.x10, self.x11, self.x12, self.x13, self.x14, self.x15, self.x16, self.x17, self.x18,self.x19,self.x20,self.x21, self.x22, self.x23, self.x24, self.x25]
         self.status = [True, True, True, True, True, True, True, True, True, True, True, True, True, True, True]
-        if self.level == 1:
-            if self.horde_x[0] <= -3000:
-                self.status[0] = False
-            if self.horde_x[1] <= -3000:
-                        self.status[1] = False
-            if self.horde_x[2] <= -3000:
-                        self.status[2] = False
-            if self.horde_x[3] <= -3000:
-                        self.status[3] = False
-            if self.horde_x[4] <= -3000:
-                        self.status[4] = False
-            if self.horde_x[5] <= -3000:
-                        self.status[5] = False
-            if self.horde_x[6] <= -3000:
-                        self.status[6] = False
-            if self.horde_x[7] <= -3000:
-                        self.status[7] = False
-            if self.horde_x[8] <= -3000:
-                        self.status[8] = False
-            if self.horde_x[9] <= -3000:
-                        self.status[9] = False
-            if self.horde_x[10] <= -3000:
-                        self.status[10] = False
-            if self.horde_x[11] <= -3000:
-                        self.status[11] = False
-            if self.horde_x[12] <= -3000:
-                        self.status[12] = False
-            if self.horde_x[13] <= -3000:
-                        self.status[13] = False
+        self.line= {self.horde_y[0]: True, self.horde_y[1]: True, self.horde_y[2]:True, self.horde_y[3]:True, self.horde_y[4]:True, self.horde_y[5]:True, self.horde_y[6]:True, self.horde_y[7]:True, self.horde_y[8]:True, self.horde_y[9]:True, self.horde_y[10]:True, self.horde_y[11]:True, self.horde_y[12]:True}
+        self.line2={self.horde_y[13]:True, self.horde_y[14]:True, self.horde_y[15]:True, self.horde_y[16]:True, self.horde_y[17]:True, self.horde_y[18]:True, self.horde_y[19]:True, self.horde_y[20]:True, self.horde_y[21]: True, self.horde_y[22]: True, self.horde_y[23]: True, self.horde_y[24]:True, self.horde_y[25]:True}
+
 
 
 
@@ -226,6 +237,18 @@ class Enemies:
                 self.horde_x[11] = 205 + 535
                 self.horde_x[12] = 150 + 535
                 self.horde_x[13] = 150 + 535
+                self.horde_x[14] = -40000000000000
+                self.horde_x[15] = -40000000000000
+                self.horde_x[16] = -40000000000000
+                self.horde_x[17] = -40000000000000
+                self.horde_x[18] = -40000000000000
+                self.horde_x[19] = -40000000000000
+                self.horde_x[20] = -40000000000000
+                self.horde_x[21] = -40000000000000
+                self.horde_x[22] = -40000000000000
+                self.horde_x[23] = -40000000000000
+                self.horde_x[24] = -40000000000000
+                self.horde_x[25] = -40000000000000
                 self.horde_y[0] = 20
                 self.horde_y[1] = 80
                 self.horde_y[2] = 130
@@ -252,10 +275,33 @@ class Enemies:
                 self.laserx7 = self.horde_x[7] + 22.5
                 self.laserx8 = self.horde_x[8] + 22.5
                 self.laserx9 = self.horde_x[9] + 22.5
+                
                 self.laserx10 = self.horde_x[10] + 22.5
                 self.laserx11 = self.horde_x[11] + 22.5
                 self.laserx12 = self.horde_x[12] + 22.5
                 self.laserx13 = self.horde_x[13] + 22.5
+                self.laserx14 = self.horde_x[14] + 22.5
+                self.laserx15 = self.horde_x[15] + 22.5
+                self.laserx16 = self.horde_x[16] + 22.5
+                self.laserx17 = self.horde_x[17] + 22.5
+                self.laserx18 = self.horde_x[18] + 22.5
+                self.laserx19 = self.horde_x[19] + 22.5
+                self.laserx20 = self.horde_x[20] + 22.5
+                self.laserx21 = self.horde_x[21] + 22.5
+                self.laserx22 = self.horde_x[22] + 22.5
+                self.laserx23 = self.horde_x[23] + 22.5
+                self.laserx24 = self.horde_x[24] + 22.5
+                self.laserx25 = self.horde_x[25] + 22.5
+
+
+
+                
+
+
+
+
+
+
         if self.level ==3:
 
                 self.horde_x[0] = 100
@@ -272,6 +318,18 @@ class Enemies:
                 self.horde_x[10] = 320
                 self.horde_x[11] = 390
                 self.horde_x[12] = 460
+                self.horde_x[14] = -40000000000000
+                self.horde_x[15] = -40000000000000
+                self.horde_x[16] = -40000000000000
+                self.horde_x[17] = -40000000000000
+                self.horde_x[18] = -40000000000000
+                self.horde_x[19] = -40000000000000
+                self.horde_x[20] = -40000000000000
+                self.horde_x[21] = -40000000000000
+                self.horde_x[22] = -40000000000000
+                self.horde_x[23] = -40000000000000
+                self.horde_x[24] = -40000000000000
+                self.horde_x[25] = -40000000000000
 
                 self.horde_y[0] = 20
                 self.horde_y[1] = 20
@@ -303,6 +361,98 @@ class Enemies:
                 self.laserx11 = self.horde_x[11] + 22.5
                 self.laserx12 = self.horde_x[12] + 22.5
                 self.laserx13 = self.horde_x[13] + 22.5
+                self.laserx14 = self.horde_x[14] + 22.5
+                self.laserx15 = self.horde_x[15] + 22.5
+                self.laserx16 = self.horde_x[16] + 22.5
+                self.laserx17 = self.horde_x[17] + 22.5
+                self.laserx18 = self.horde_x[18] + 22.5
+                self.laserx19 = self.horde_x[19] + 22.5
+                self.laserx20 = self.horde_x[20] + 22.5
+                self.laserx21 = self.horde_x[21] + 22.5
+                self.laserx22 = self.horde_x[22] + 22.5
+                self.laserx23 = self.horde_x[23] + 22.5
+                self.laserx24 = self.horde_x[24] + 22.5
+                self.laserx25 = self.horde_x[25] + 22.5
+        if self.level == 0:
+            self.shot = False
+            self.horde_y[0] = 20
+            self.horde_y[1] = 20
+            self.horde_y[2] = 20
+            self.horde_y[3] = 20
+            self.horde_y[4] = 20
+            self.horde_y[5] = 20
+            self.horde_y[6] = 20
+            self.horde_y[7] = 20
+            self.horde_y[8] = 20
+            self.horde_y[9] = 20 
+            self.horde_y[10] = 20 
+            self.horde_y[11] = 20 
+            self.horde_y[12] = 20 
+            self.horde_y[13] = 20 + 60
+            self.horde_y[14] = 20 + 60
+            self.horde_y[15] = 20 + 60
+            self.horde_y[16] = 20 + 60
+            self.horde_y[17] = 20 + 60
+            self.horde_y[18] = 20 + 60
+            self.horde_y[19] = 20 + 60
+            self.horde_y[20] = 20 + 60
+            self.horde_y[21] = 20 + 60
+            self.horde_y[22] = 20 + 60
+            self.horde_y[23] = 20 + 60
+            self.horde_y[24] = 20 + 60
+            self.horde_y[25] = 20 + 60
+            self.horde_x[0] = 70 + 30 - 20
+            self.horde_x[1] = 125 + 5 + 30 -20
+            self.horde_x[2] = 180 + 10 + 30 -20
+            self.horde_x[3] = 235 + 15 + 30 - 20
+            self.horde_x[4] = 290 + 20 + 30 - 20
+            self.horde_x[5] = 345 + 25 + 30 - 20
+            self.horde_x[6] = 400 + 30 + 30 - 20
+            self.horde_x[7] = 455 + 35 + 30 - 20
+            self.horde_x[8] = 510 + 40 + 30 - 20
+            self.horde_x[9] = 565 + 45 + 30 - 20
+            self.horde_x[10] = 620 +50 + 30 -20
+            self.horde_x[11] = 675 + 55 + 30 - 20
+            self.horde_x[12] = 730 + 60 + 30- 20
+            self.horde_x[13] = 100 -20
+            self.horde_x[14] = 125 + 5 + 30 - 20
+            self.horde_x[15] = 180 + 10 + 30- 20
+            self.horde_x[16] = 235 + 15 + 30 - 20
+            self.horde_x[17] = 290 + 20 + 30 - 20
+            self.horde_x[18] = 345 + 25 + 30 - 20
+            self.horde_x[19] = 400 + 30 + 30 - 20
+            self.horde_x[20] = 455 + 35 + 30 - 20
+            self.horde_x[21] = 510 + 40 + 30 - 20
+            self.horde_x[22] = 565 + 45 + 30 - 20
+            self.horde_x[23] = 620 +50 + 30- 20
+            self.horde_x[24] = 675 + 55 + 30 - 20
+            self.horde_x[25] = 730 + 60 + 30 - 20
+            self.laserx = self.horde_x[0] + 22.5
+            self.laserx1 = self.horde_x[1] + 22.5
+            self.laserx2 = self.horde_x[2] + 22.5
+            self.laserx3 = self.horde_x[3] + 22.5
+            self.laserx4 = self.horde_x[4] + 22.5
+            self.laserx5 = self.horde_x[5] + 22.5
+            self.laserx6 = self.horde_x[6] + 22.5
+            self.laserx7 = self.horde_x[7] + 22.5
+            self.laserx8 = self.horde_x[8] + 22.5
+            self.laserx9 = self.horde_x[9] + 22.5    
+            self.laserx10 = self.horde_x[10] + 22.5
+            self.laserx11 = self.horde_x[11] + 22.5
+            self.laserx12 = self.horde_x[12] + 22.5
+            self.laserx13 = self.horde_x[13] + 22.5
+            self.laserx14 = self.horde_x[14] + 22.5
+            self.laserx15 = self.horde_x[15] + 22.5
+            self.laserx16 = self.horde_x[16] + 22.5
+            self.laserx17 = self.horde_x[17] + 22.5
+            self.laserx18 = self.horde_x[18] + 22.5
+            self.laserx19 = self.horde_x[19] + 22.5
+            self.laserx20 = self.horde_x[20] + 22.5
+            self.laserx21 = self.horde_x[21] + 22.5
+            self.laserx22 = self.horde_x[22] + 22.5
+            self.laserx23 = self.horde_x[23] + 22.5
+            self.laserx24 = self.horde_x[24] + 22.5
+            self.laserx25 = self.horde_x[25] + 22.5
             
 
 
@@ -425,6 +575,7 @@ class Enemies:
                 self.ship_placement(self.horde[12], self.horde_x[12], self.horde_y[12])
             if self.horde_y[13] > -50:
                 self.ship_placement(self.horde[13], self.horde_x[13], self.horde_y[13])
+
             self.green_platform_placement(100, 250, 150, 5)
             self.platform_placement(550, 250, 120, 5)
         if self.level ==3:
@@ -463,7 +614,60 @@ class Enemies:
                 self.portal_placement( (0,191,255),770, 100, 60, 5,)
                 self.portal_placement( (0,0,139),220, 280, 60, 5,)
                 self.portal_placement( (0,0,139),110, 100, 60, 5,)
-            
+        if self.level == 0:
+                if self.horde_y[0] > -50:
+                    self.ship_placement(red, self.horde_x[0], self.horde_y[0])
+                if self.horde_y[1] > -50:
+                    self.ship_placement(red, self.horde_x[1], self.horde_y[1])
+                if self.horde_y[2] > -50:
+                    self.ship_placement(self.horde[9], self.horde_x[2], self.horde_y[2])
+                if self.horde_y[3] > -50:
+                    self.ship_placement(self.horde[3], self.horde_x[3], self.horde_y[3])
+                if self.horde_y[4] > -50:
+                    self.ship_placement(self.horde[4], self.horde_x[4], self.horde_y[4])
+                if self.horde_y[5] > -50:
+                    self.ship_placement(self.horde[5], self.horde_x[5], self.horde_y[5])
+                if self.horde_y[6] > -50:
+                    self.ship_placement(self.horde[6], self.horde_x[6], self.horde_y[6])
+                if self.horde_y[7] > -50:
+                    self.ship_placement(red, self.horde_x[7], self.horde_y[7])
+                if self.horde_y[8] > -50:
+                    self.ship_placement(red, self.horde_x[8], self.horde_y[8])
+                if self.horde_y[9] > -50:
+                    self.ship_placement(self.horde[9], self.horde_x[9], self.horde_y[9])
+                if self.horde_y[10] > -50:
+                    self.ship_placement(self.horde[10], self.horde_x[10], self.horde_y[10])
+                if self.horde_y[11] > -50:
+                    self.ship_placement(self.horde[11], self.horde_x[11], self.horde_y[11])
+                if self.horde_y[12] > -50:
+                    self.ship_placement(self.horde[12], self.horde_x[12], self.horde_y[12])
+                if self.horde_y[13] > -50:
+                    self.ship_placement(self.horde[13], self.horde_x[13], self.horde_y[13])
+                if self.horde_y[14] > -50:
+                    self.ship_placement(self.horde[0], self.horde_x[14], self.horde_y[14])
+                if self.horde_y[15] > -50:
+                    self.ship_placement(self.horde[0], self.horde_x[15], self.horde_y[15])
+                if self.horde_y[16] > -50:
+                    self.ship_placement(self.horde[0], self.horde_x[16], self.horde_y[16])
+                if self.horde_y[17] > -50:
+                    self.ship_placement(self.horde[0], self.horde_x[17], self.horde_y[17])
+                if self.horde_y[18] > -50:
+                    self.ship_placement(self.horde[0], self.horde_x[18], self.horde_y[18])
+                if self.horde_y[19] > -50:
+                    self.ship_placement(self.horde[0], self.horde_x[19], self.horde_y[19])
+                if self.horde_y[20] > -50:
+                    self.ship_placement(self.horde[0], self.horde_x[20], self.horde_y[20])
+                if self.horde_y[21] > -50:
+                    self.ship_placement(self.horde[0], self.horde_x[21], self.horde_y[21])
+                if self.horde_y[22] > -50:
+                    self.ship_placement(self.horde[0], self.horde_x[22], self.horde_y[22])
+                if self.horde_y[23] > -50:
+                    self.ship_placement(self.horde[0], self.horde_x[23], self.horde_y[23])
+                if self.horde_y[24] > -50:
+                    self.ship_placement(self.horde[0], self.horde_x[24], self.horde_y[24])
+                if self.horde_y[25] > -50:
+                    self.ship_placement(self.horde[0], self.horde_x[25], self.horde_y[25])
+                
 
 
 class Game:
@@ -508,6 +712,18 @@ class Game:
         self.laser_y11 = self.enemies.horde_y[11]+ 30
         self.laser_y12 = self.enemies.horde_y[12]+ 30
         self.laser_y13 = self.enemies.horde_y[13]+ 30
+        self.laser_y14 = self.enemies.horde_y[14]+ 30
+        self.laser_y15 = self.enemies.horde_y[15]+ 30
+        self.laser_y16 = self.enemies.horde_y[16]+ 30
+        self.laser_y17 = self.enemies.horde_y[17]+ 30
+        self.laser_y18 = self.enemies.horde_y[18]+ 30
+        self.laser_y19 = self.enemies.horde_y[19]+ 30
+        self.laser_y20 = self.enemies.horde_y[20]+ 30
+        self.laser_y21 = self.enemies.horde_y[21]+ 30
+        self.laser_y22 = self.enemies.horde_y[22]+ 30
+        self.laser_y23 = self.enemies.horde_y[23]+ 30
+        self.laser_y24 = self.enemies.horde_y[24]+ 30
+        self.laser_y25 = self.enemies.horde_y[25]+ 30
     def alien_laser_collision(self, x1, y1, x2, y2):
             if x2 - 20 <= x1 <= x2 + 40:
                 if y1 - 20 <= y2 <= y1 + 20:
@@ -578,7 +794,7 @@ class Game:
 
              for event in pygame.event.get():
                  if event.type == QUIT:
-                     if self.enemies.level != 1:
+                     if self.enemies.level != 1 and self.enemies.level != 0:
                         if self.enemies.level == 1.5 or self.enemies.level == 2.5:
                             self.enemies.level += 0.5
                         save.save_game(self.enemies.level, "level")
@@ -957,6 +1173,159 @@ class Game:
                     pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("enemy laser.wav")))
                 if self.laser_y9 >= 625:
                     self.enemies.down9 = False
+            
+            
+            
+            
+            
+            if self.enemies.level == 0:
+                if a == 15:
+
+                    if self.enemies.laserx14 - l <= self.player.x <= self.enemies.laserx14 + l:
+                        self.enemies.down14 = True
+
+                if self.enemies.down14:
+                    if self.laser_y14 == self.enemies.horde_y[14] + 30:
+
+                        pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("enemy laser.wav")))
+                    if self.laser_y9 >= 625:
+                        self.enemies.down9 = False
+                
+                if a == 16:
+
+                    if self.enemies.laserx15 - l <= self.player.x <= self.enemies.laserx15 + l:
+                        self.enemies.down15 = True
+
+                if self.enemies.down15:
+                    if self.laser_y15 == self.enemies.horde_y[15] + 30:
+
+                        pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("enemy laser.wav")))
+                    if self.laser_y15 >= 625:
+                        self.enemies.down15 = False
+                if a == 17:
+
+                    if self.enemies.laserx16 - l <= self.player.x <= self.enemies.laserx16 + l:
+                        self.enemies.down16 = True
+
+                if self.enemies.down16:
+                    if self.laser_y16 == self.enemies.horde_y[16] + 30:
+
+                        pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("enemy laser.wav")))
+                    if self.laser_y16 >= 625:
+                        self.enemies.down16 = False
+                if a == 18:
+
+                    if self.enemies.laserx17 - l <= self.player.x <= self.enemies.laserx17 + l:
+                        self.enemies.down17 = True
+
+                if self.enemies.down17:
+                    if self.laser_y17 == self.enemies.horde_y[17] + 30:
+
+                        pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("enemy laser.wav")))
+                    if self.laser_y17 >= 625:
+                        self.enemies.down17 = False
+                if a == 19:
+
+                    if self.enemies.laserx18 - l <= self.player.x <= self.enemies.laserx18 + l:
+                        self.enemies.down18 = True
+
+                if self.enemies.down18:
+                    if self.laser_y18 == self.enemies.horde_y[9] + 30:
+
+                        pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("enemy laser.wav")))
+                    if self.laser_y18 >= 625:
+                        self.enemies.down18 = False
+                if a == 20:
+
+                    if self.enemies.laserx19 - l <= self.player.x <= self.enemies.laserx19 + l:
+                        self.enemies.down19 = True
+
+                if self.enemies.down19:
+                    if self.laser_y19 == self.enemies.horde_y[19] + 30:
+
+                        pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("enemy laser.wav")))
+                    if self.laser_y19 >= 625:
+                        self.enemies.down19 = False
+                if a == 21:
+
+                    if self.enemies.laserx20 - l <= self.player.x <= self.enemies.laserx20 + l:
+                        self.enemies.down20 = True
+
+                if self.enemies.down20:
+                    if self.laser_y20 == self.enemies.horde_y[20] + 30:
+
+                        pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("enemy laser.wav")))
+                    if self.laser_y20 >= 625:
+                        self.enemies.down20 = False
+                if a == 22:
+
+                    if self.enemies.laserx21 - l <= self.player.x <= self.enemies.laserx21 + l:
+                        self.enemies.down21 = True
+
+                if self.enemies.down21:
+                    if self.laser_y21 == self.enemies.horde_y[21] + 30:
+
+                        pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("enemy laser.wav")))
+                    if self.laser_y21 >= 625:
+                        self.enemies.down21 = False
+                if a == 23:
+
+                    if self.enemies.laserx22 - l <= self.player.x <= self.enemies.laserx22 + l:
+                        self.enemies.down22 = True
+
+                if self.enemies.down22:
+                    if self.laser_y22 == self.enemies.horde_y[22] + 30:
+
+                        pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("enemy laser.wav")))
+                    if self.laser_y22 >= 625:
+                        self.enemies.down22 = False
+                if a == 24:
+
+                    if self.enemies.laserx23 - l <= self.player.x <= self.enemies.laserx23 + l:
+                        self.enemies.down23 = True
+
+                if self.enemies.down23:
+                    if self.laser_y23 == self.enemies.horde_y[23] + 30:
+
+                        pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("enemy laser.wav")))
+                    if self.laser_y23 >= 625:
+                        self.enemies.down23 = False
+                if a == 25:
+
+                    if self.enemies.laserx24 - l <= self.player.x <= self.enemies.laserx24 + l:
+                        self.enemies.down24 = True
+
+                if self.enemies.down24:
+                    if self.laser_y24 == self.enemies.horde_y[24] + 30:
+
+                        pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("enemy laser.wav")))
+                    if self.laser_y24 >= 625:
+                        self.enemies.down24 = False
+                if a == 26:
+
+                    if self.enemies.laserx25 - l <= self.player.x <= self.enemies.laserx25 + l:
+                        self.enemies.down25 = True
+
+                if self.enemies.down25:
+                    if self.laser_y25 == self.enemies.horde_y[25] + 30:
+
+                        pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("enemy laser.wav")))
+                    if self.laser_y25 >= 625:
+                        self.enemies.down25 = False
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
             if self.enemies.down:
@@ -1046,6 +1415,69 @@ class Game:
                 if not self.enemies.down9:
                     self.laser_y9 = self.enemies.horde_y[9] + 30
                     self.enemies.laserx9 = self.enemies.horde_x[9] + 22.5
+            if self.enemies.level == 0:
+                if self.enemies.down14:
+                    self.screen.blit(self.blast, (self.enemies.laserx14, self.laser_y14))
+                if not self.enemies.down14:
+                    self.laser_y14 = self.enemies.horde_y[14] + 30
+                    self.enemies.laserx14 = self.enemies.horde_x[14] + 22.5
+                if self.enemies.down15:
+                    self.screen.blit(self.blast, (self.enemies.laserx15, self.laser_y15))
+                if not self.enemies.down15:
+                    self.laser_y15 = self.enemies.horde_y[15] + 30
+                    self.enemies.laserx15 = self.enemies.horde_x[15] + 22.5
+                if self.enemies.down16:
+                    self.screen.blit(self.blast, (self.enemies.laserx16, self.laser_y16))
+                if not self.enemies.down16:
+                    self.laser_y16 = self.enemies.horde_y[16] + 30
+                    self.enemies.laserx16 = self.enemies.horde_x[16] + 22.5
+                if self.enemies.down17:
+                    self.screen.blit(self.blast, (self.enemies.laserx17, self.laser_y17))
+                if not self.enemies.down17:
+                    self.laser_y17 = self.enemies.horde_y[17] + 30
+                    self.enemies.laserx17 = self.enemies.horde_x[17] + 22.5
+                if self.enemies.down18:
+                    self.screen.blit(self.blast, (self.enemies.laserx18l, self.laser_y9))
+                if not self.enemies.down18:
+                    self.laser_y18 = self.enemies.horde_y[18] + 30
+                    self.enemies.laserx18 = self.enemies.horde_x[18] + 22.5
+                if self.enemies.down19:
+                    self.screen.blit(self.blast, (self.enemies.laserx19, self.laser_y19))
+                if not self.enemies.down19:
+                    self.laser_y19 = self.enemies.horde_y[19] + 30
+                    self.enemies.laserx19 = self.enemies.horde_x[19] + 22.5
+                if self.enemies.down20:
+                    self.screen.blit(self.blast, (self.enemies.laserx20, self.laser_y20))
+                if not self.enemies.down20:
+                    self.laser_y20 = self.enemies.horde_y[20] + 30
+                    self.enemies.laserx20 = self.enemies.horde_x[20] + 22.5
+                if self.enemies.down21:
+                    self.screen.blit(self.blast, (self.enemies.laserx21, self.laser_y21))
+                if not self.enemies.down21:
+                    self.laser_y21 = self.enemies.horde_y[21] + 30
+                    self.enemies.laserx21 = self.enemies.horde_x[21] + 22.5
+                if self.enemies.down22:
+                    self.screen.blit(self.blast, (self.enemies.laserx22, self.laser_y22))
+                if not self.enemies.down22:
+                    self.laser_y22 = self.enemies.horde_y[22] + 30
+                    self.enemies.laserx22 = self.enemies.horde_x[22] + 22.5
+                if self.enemies.down23:
+                    self.screen.blit(self.blast, (self.enemies.laserx23, self.laser_y23))
+                if not self.enemies.down23:
+                    self.laser_y23 = self.enemies.horde_y[23] + 30
+                    self.enemies.laserx23 = self.enemies.horde_x[23] + 22.5
+                if self.enemies.down24:
+                    self.screen.blit(self.blast, (self.enemies.laserx24, self.laser_y24))
+                if not self.enemies.down24:
+                    self.laser_y24 = self.enemies.horde_y[24] + 30
+                    self.enemies.laserx24 = self.enemies.horde_x[24] + 22.5
+                if self.enemies.down25:
+                    self.screen.blit(self.blast, (self.enemies.laserx25, self.laser_y25))
+                if not self.enemies.down25:
+                    self.laser_y25 = self.enemies.horde_y[25] + 30
+                    self.enemies.laserx25 = self.enemies.horde_x[25] + 22.5
+                
+
 
 
         if self.up:
@@ -1053,7 +1485,7 @@ class Game:
 
 
             if self.projectile.ys[self.projectile.num] > -25:
-                self.projectile.ys[self.projectile.num] -= 2.2
+                self.projectile.ys[self.projectile.num] -= 4
         if self.projectile.num >= 9:
             self.projectile.num = 0
         self.enemies.level1()
@@ -1744,7 +2176,147 @@ class Game:
                     self.reset()
                     self.count = 0
                     self.player.health = 5
-
+        if self.enemies.level == 0:
+                if self.red_laser_collision(self.player.x, self.player.y, self.enemies.laserx14, self.laser_y14):
+                    self.player.health -= 1
+                    self.col = False
+                    self.laser_y14 = 625
+                    pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("hit.wav")))
+                if self.red_laser_collision(self.player.x, self.player.y, self.enemies.laserx15, self.laser_y15):
+                    self.player.health -= 1
+                    self.col = False
+                    self.laser_y15 = 625
+                    pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("hit.wav")))
+                if self.red_laser_collision(self.player.x, self.player.y, self.enemies.laserx16, self.laser_y16):
+                    self.player.health -= 1
+                    self.col = False
+                    self.laser_y16 = 625
+                    pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("hit.wav")))
+                if self.red_laser_collision(self.player.x, self.player.y, self.enemies.laserx17, self.laser_y17):
+                    self.player.health -= 1
+                    self.col = False
+                    self.laser_y17 = 625
+                    pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("hit.wav")))
+                if self.red_laser_collision(self.player.x, self.player.y, self.enemies.laserx18, self.laser_y18):
+                    self.player.health -= 1
+                    self.col = False
+                    self.laser_y18 = 625
+                    pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("hit.wav")))
+                if self.red_laser_collision(self.player.x, self.player.y, self.enemies.laserx19, self.laser_y19):
+                    self.player.health -= 1
+                    self.col = False
+                    self.laser_y19 = 625
+                    pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("hit.wav")))
+                if self.red_laser_collision(self.player.x, self.player.y, self.enemies.laserx20, self.laser_y20):
+                    self.player.health -= 1
+                    self.col = False
+                    self.laser_y20 = 625
+                    pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("hit.wav")))
+                if self.red_laser_collision(self.player.x, self.player.y, self.enemies.laserx21, self.laser_y21):
+                    self.player.health -= 1
+                    self.col = False
+                    self.laser_y21 = 625
+                    pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("hit.wav")))
+                if self.red_laser_collision(self.player.x, self.player.y, self.enemies.laserx22, self.laser_y22):
+                    self.player.health -= 1
+                    self.col = False
+                    self.laser_y22 = 625
+                    pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("hit.wav")))
+                if self.red_laser_collision(self.player.x, self.player.y, self.enemies.laserx23, self.laser_y23):
+                    self.player.health -= 1
+                    self.col = False
+                    self.laser_y23 = 625
+                    pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("hit.wav")))
+                if self.red_laser_collision(self.player.x, self.player.y, self.enemies.laserx24, self.laser_y24):
+                    self.player.health -= 1
+                    self.col = False
+                    self.laser_y24 = 625
+                    pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("hit.wav")))
+                if self.red_laser_collision(self.player.x, self.player.y, self.enemies.laserx25, self.laser_y25):
+                    self.player.health -= 1
+                    self.col = False
+                    self.laser_y25 = 625
+                    pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("hit.wav")))
+                if self.alien_laser_collision(435 + self.projectile.difference, self.projectile.ys[self.projectile.num],self.enemies.horde_x[13], self.enemies.horde_y[13]):
+                    self.enemies.horde_y[13] = -100
+                    self.enemies.horde_x[13] = -400000
+                    self.enemies.line2[13] = False
+                    self.projectile.ys[self.projectile.num] = -26
+                    pygame.mixer.Sound.play(explosion)
+                
+                if self.alien_laser_collision(435 + self.projectile.difference, self.projectile.ys[self.projectile.num],self.enemies.horde_x[14], self.enemies.horde_y[14]):
+                    self.enemies.horde_y[14] = -100
+                    self.enemies.horde_x[14] = -400000
+                    self.enemies.line2[14] = False
+                    self.projectile.ys[self.projectile.num] = -26
+                    pygame.mixer.Sound.play(explosion)
+                    
+                if self.alien_laser_collision(435 + self.projectile.difference, self.projectile.ys[self.projectile.num],self.enemies.horde_x[15], self.enemies.horde_y[15]):
+                    self.enemies.horde_y[15] = -100
+                    self.enemies.horde_x[15] = -400000
+                    self.enemies.line2[15] = False
+                    self.projectile.ys[self.projectile.num] = -26
+                    pygame.mixer.Sound.play(explosion)
+                if self.alien_laser_collision(435 + self.projectile.difference, self.projectile.ys[self.projectile.num],self.enemies.horde_x[16], self.enemies.horde_y[16]):
+                    self.enemies.horde_y[16] = -100
+                    self.enemies.horde_x[16] = -400000
+                    self.enemies.line2[16] = False
+                    self.projectile.ys[self.projectile.num] = -26
+                    pygame.mixer.Sound.play(explosion)
+                if self.alien_laser_collision(435 + self.projectile.difference, self.projectile.ys[self.projectile.num],self.enemies.horde_x[17], self.enemies.horde_y[17]):
+                    self.enemies.horde_y[17] = -100
+                    self.enemies.horde_x[17] = -400000
+                    self.enemies.line2[17] = False
+                    self.projectile.ys[self.projectile.num] = -26
+                    pygame.mixer.Sound.play(explosion)
+                if self.alien_laser_collision(435 + self.projectile.difference, self.projectile.ys[self.projectile.num],self.enemies.horde_x[18], self.enemies.horde_y[18]):
+                    self.enemies.horde_y[18] = -100
+                    self.enemies.horde_x[18] = -400000
+                    self.enemies.line2[18] = False
+                    self.projectile.ys[self.projectile.num] = -26
+                    pygame.mixer.Sound.play(explosion)
+                if self.alien_laser_collision(435 + self.projectile.difference, self.projectile.ys[self.projectile.num],self.enemies.horde_x[19], self.enemies.horde_y[19]):
+                    self.enemies.horde_y[19] = -100
+                    self.enemies.horde_x[19] = -400000
+                    self.enemies.line2[19] = False
+                    self.projectile.ys[self.projectile.num] = -26
+                    pygame.mixer.Sound.play(explosion)
+                if self.alien_laser_collision(435 + self.projectile.difference, self.projectile.ys[self.projectile.num],self.enemies.horde_x[20], self.enemies.horde_y[20]):
+                    self.enemies.horde_y[20] = -100
+                    self.enemies.horde_x[20] = -400000
+                    self.enemies.line2[20] = False
+                    self.projectile.ys[self.projectile.num] = -26
+                    pygame.mixer.Sound.play(explosion)
+                if self.alien_laser_collision(435 + self.projectile.difference, self.projectile.ys[self.projectile.num],self.enemies.horde_x[21], self.enemies.horde_y[21]):
+                    self.enemies.horde_y[21] = -100
+                    self.enemies.horde_x[21] = -400000
+                    self.enemies.line2[21] = False
+                    self.projectile.ys[self.projectile.num] = -26
+                    pygame.mixer.Sound.play(explosion)
+                if self.alien_laser_collision(435 + self.projectile.difference, self.projectile.ys[self.projectile.num],self.enemies.horde_x[22], self.enemies.horde_y[22]):
+                    self.enemies.horde_y[22] = -100
+                    self.enemies.horde_x[22] = -400000
+                    self.enemies.line2[22] = False
+                    self.projectile.ys[self.projectile.num] = -26
+                    pygame.mixer.Sound.play(explosion)
+                if self.alien_laser_collision(435 + self.projectile.difference, self.projectile.ys[self.projectile.num],self.enemies.horde_x[23], self.enemies.horde_y[23]):
+                    self.enemies.horde_y[23] = -100
+                    self.enemies.horde_x[23] = -400000
+                    self.enemies.line2[23] = False
+                    self.projectile.ys[self.projectile.num] = -26
+                    pygame.mixer.Sound.play(explosion)
+                if self.alien_laser_collision(435 + self.projectile.difference, self.projectile.ys[self.projectile.num],self.enemies.horde_x[24], self.enemies.horde_y[24]):
+                    self.enemies.horde_y[24] = -100
+                    self.enemies.horde_x[24] = -400000
+                    self.enemies.line2[24] = False
+                    self.projectile.ys[self.projectile.num] = -26
+                    pygame.mixer.Sound.play(explosion)
+                if self.alien_laser_collision(435 + self.projectile.difference, self.projectile.ys[self.projectile.num],self.enemies.horde_x[25], self.enemies.horde_y[25]):
+                    self.enemies.horde_y[25] = -100
+                    self.enemies.horde_x[25] = -400000
+                    self.enemies.line2[25] = False
+                    self.projectile.ys[self.projectile.num] = -26
+                    pygame.mixer.Sound.play(explosion)
 
 
 
@@ -1785,15 +2357,16 @@ class Game:
 
 
     def run(self):
+        speed = 1
         run = True
         pause = False
         while run:
 
             r = random.randint(3, 9)
             if self.enemies.level == 3:
-                f = 1.2
+                f = 1.7
             else:
-                f = 1.4
+                f = 1.5
             if self.enemies.down:
                         if self.laser_y < 625:
 
@@ -1861,9 +2434,68 @@ class Game:
                                 self.enemies.laserx12 = self.enemies.laserx12
             if self.enemies.down13:
                         if self.laser_y13 < 625:
-
                                 self.laser_y13 +=  f
                                 self.enemies.laserx13 = self.enemies.laserx13
+            if self.enemies.down14:
+                        if self.laser_y14 < 625:
+
+                                self.laser_y14 +=  f
+                                self.enemies.laserx14 = self.enemies.laserx14
+            if self.enemies.down15:
+                        if self.laser_y15 < 625:
+
+                                self.laser_y15 +=  f
+                                self.enemies.laserx15 = self.enemies.laserx15
+            if self.enemies.down16:
+                        if self.laser_y16 < 625:
+
+                                self.laser_y16 +=  f
+                                self.enemies.laserx16 = self.enemies.laserx16
+            if self.enemies.down17:
+                        if self.laser_y17 < 625:
+
+                                self.laser_y17 +=  f
+                                self.enemies.laserx17 = self.enemies.laserx17
+            if self.enemies.down18:
+                        if self.laser_y18 < 625:
+
+                                self.laser_y18 +=  f
+                                self.enemies.laserx18 = self.enemies.laserx18
+            if self.enemies.down19:
+                        if self.laser_y19 < 625:
+
+                                self.laser_y19 +=  f
+                                self.enemies.laserx19 = self.enemies.laserx19
+            if self.enemies.down20:
+                        if self.laser_y20 < 625:
+
+                                self.laser_y20 +=  f
+                                self.enemies.laserx20 = self.enemies.laserx20
+            if self.enemies.down21:
+                        if self.laser_y21 < 625:
+
+                                self.laser_y21 +=  f
+                                self.enemies.laserx21 = self.enemies.laserx21
+            if self.enemies.down22:
+                        if self.laser_y22 < 625:
+
+                                self.laser_y22 +=  f
+                                self.enemies.laserx22 = self.enemies.laserx22
+            if self.enemies.down23:
+                        if self.laser_y23 < 625:
+
+                                self.laser_y23 +=  f
+                                self.enemies.laserx23 = self.enemies.laserx23
+            if self.enemies.down24:
+                        if self.laser_y24 < 625:
+
+                                self.laser_y24 +=  f
+                                self.enemies.laserx24 = self.enemies.laserx24
+            if self.enemies.down25:
+                        if self.laser_y25 < 625:
+
+                                self.laser_y25 +=  f
+                                self.enemies.laserx25 = self.enemies.laserx25
 
 
 
@@ -1876,98 +2508,98 @@ class Game:
                     if self.enemies.status[0]:
                         if self.enemies.horde_x[0] < 525:
                             if self.enemies.down:
-                                self.enemies.horde_x[0] += 0.5
+                                self.enemies.horde_x[0] += speed
                             if not self.enemies.down:
-                                self.enemies.horde_x[0] += 0.5
-                                self.enemies.laserx += 0.5
+                                self.enemies.horde_x[0] += speed
+                                self.enemies.laserx += speed
                 if self.direction == "right":
                     if self.enemies.status[1]:
                         if self.enemies.horde_x[1]  < 580:
                             if self.enemies.down1:
-                                self.enemies.horde_x[1] += 0.5
+                                self.enemies.horde_x[1] += speed
                             if not self.enemies.down1:
-                                self.enemies.horde_x[1] += 0.5
-                                self.enemies.laserx1 += 0.5
+                                self.enemies.horde_x[1] += speed
+                                self.enemies.laserx1 += speed
                 if self.direction == "right":
                     if self.enemies.status[2]:
                         if self.enemies.horde_x[2]  < 635:
                             if self.enemies.down2:
-                                self.enemies.horde_x[2] += 0.5
+                                self.enemies.horde_x[2] += speed
                             if not self.enemies.down2:
-                                self.enemies.horde_x[2] += 0.5
-                                self.enemies.laserx2 += 0.5
+                                self.enemies.horde_x[2] += speed
+                                self.enemies.laserx2 += speed
                 if self.direction == "right":
                     if self.enemies.status[3]:
                         if self.enemies.horde_x[3]  < 690:
                             if self.enemies.down3:
-                                self.enemies.horde_x[3] += 0.5
+                                self.enemies.horde_x[3] += speed
                             if not self.enemies.down3:
-                                self.enemies.horde_x[3] += 0.5
-                                self.enemies.laserx3 += 0.5
+                                self.enemies.horde_x[3] += speed
+                                self.enemies.laserx3 += speed
                 if self.direction == "right":
                     if self.enemies.status[4]:
                         if self.enemies.horde_x[4]  < 745:
                             if self.enemies.down4:
-                                self.enemies.horde_x[4] += 0.5
+                                self.enemies.horde_x[4] += speed
                             if not self.enemies.down4:
-                                self.enemies.horde_x[4] += 0.5
-                                self.enemies.laserx4 += 0.5
+                                self.enemies.horde_x[4] += speed
+                                self.enemies.laserx4 += speed
                 if self.direction == "right":
                     if self.enemies.status[5]:
                         if self.enemies.horde_x[5]  < 800:
                             if self.enemies.down5:
-                                self.enemies.horde_x[5] += 0.5
+                                self.enemies.horde_x[5] += speed
                             if not self.enemies.down5:
-                                self.enemies.horde_x[5] += 0.5
-                                self.enemies.laserx5 += 0.5
+                                self.enemies.horde_x[5] += speed
+                                self.enemies.laserx5 += speed
                 if self.direction == "right":
                     if self.enemies.status[6]:
                         if self.enemies.horde_x[6]  < 525:
                             if self.enemies.down6:
-                                self.enemies.horde_x[6] += 0.5
+                                self.enemies.horde_x[6] += speed
                             if not self.enemies.down6:
-                                self.enemies.horde_x[6] += 0.5
-                                self.enemies.laserx6 += 0.5
+                                self.enemies.horde_x[6] += speed
+                                self.enemies.laserx6 += speed
                 if self.direction == "right":
                     if self.enemies.status[7]:
                         if self.enemies.horde_x[7]  < 635:
                             if self.enemies.down7:
-                                self.enemies.horde_x[7] += 0.5
+                                self.enemies.horde_x[7] += speed
                             if not self.enemies.down7:
-                                self.enemies.horde_x[7] += 0.5
-                                self.enemies.laserx7 += 0.5
+                                self.enemies.horde_x[7] += speed
+                                self.enemies.laserx7 += speed
                 if self.direction == "right":
                     if self.enemies.status[8]:
                         if self.enemies.horde_x[8]  < 690:
                             if self.enemies.down8:
-                                self.enemies.horde_x[8] += 0.5
+                                self.enemies.horde_x[8] += speed
                             if not self.enemies.down8:
-                                self.enemies.horde_x[8] += 0.5
-                                self.enemies.laserx8 += 0.5
+                                self.enemies.horde_x[8] += speed
+                                self.enemies.laserx8 += speed
                 if self.direction == "right":
                     if self.enemies.status[10]:
                         if self.enemies.horde_x[10]  < 800:
                             if self.enemies.down10:
-                                self.enemies.horde_x[10] += 0.5
+                                self.enemies.horde_x[10] += speed
                             if not self.enemies.down10:
-                                self.enemies.horde_x[10] += 0.5
-                                self.enemies.laserx10 += 0.5
+                                self.enemies.horde_x[10] += speed
+                                self.enemies.laserx10 += speed
                 if self.direction == "right":
                     if self.enemies.status[11]:
                         if self.enemies.horde_x[11]  < 525:
                             if self.enemies.down11:
-                                self.enemies.horde_x[11] += 0.5
+                                self.enemies.horde_x[11] += speed
                             if not self.enemies.down11:
-                                self.enemies.horde_x[11] += 0.5
-                                self.enemies.laserx11 += 0.5
+                                self.enemies.horde_x[11] += speed
+                                self.enemies.laserx11 += speed
                 if self.direction == "right":
                     if self.enemies.status[12]:
                         if self.enemies.horde_x[12]  < 800:
                             if self.enemies.down12:
-                                self.enemies.horde_x[12] += 0.5
+                                self.enemies.horde_x[12] += speed
                             if not self.enemies.down12:
-                                self.enemies.horde_x[12] += 0.5
-                                self.enemies.laserx12 += 0.5
+                                self.enemies.horde_x[12] += speed
+                                self.enemies.laserx12 += speed
 
                 #Switching Direction1= level 1 (from right to left)
                 if self.direction == "right":
@@ -2023,76 +2655,76 @@ class Game:
                 if self.direction == "left":
                     if self.enemies.horde_x[0] > 70:
                         if self.enemies.down:
-                            self.enemies.horde_x[0] -= 0.5
+                            self.enemies.horde_x[0] -= speed
                         if not self.enemies.down:
-                            self.enemies.horde_x[0] -= 0.5
-                            self.enemies.laserx -= 0.5
+                            self.enemies.horde_x[0] -= speed
+                            self.enemies.laserx -= speed
                     if self.enemies.horde_x[1] > 125:
                         if self.enemies.down1:
-                            self.enemies.horde_x[1] -= 0.5
+                            self.enemies.horde_x[1] -= speed
                         if not self.enemies.down1:
-                            self.enemies.horde_x[1] -= 0.5
-                            self.enemies.laserx1 -= 0.5
+                            self.enemies.horde_x[1] -= speed
+                            self.enemies.laserx1 -= speed
                     if self.enemies.horde_x[2] > 180:
                         if self.enemies.down2:
-                            self.enemies.horde_x[2] -= 0.5
+                            self.enemies.horde_x[2] -= speed
                         if not self.enemies.down2:
-                            self.enemies.horde_x[2] -= 0.5
-                            self.enemies.laserx2 -= 0.5
+                            self.enemies.horde_x[2] -= speed
+                            self.enemies.laserx2 -= speed
                     if self.enemies.horde_x[3] > 235:
                         if self.enemies.down3:
-                            self.enemies.horde_x[3] -= 0.5
+                            self.enemies.horde_x[3] -= speed
                         if not self.enemies.down3:
-                            self.enemies.horde_x[3] -= 0.5
-                            self.enemies.laserx3 -= 0.5
+                            self.enemies.horde_x[3] -= speed
+                            self.enemies.laserx3 -= speed
                     if self.enemies.horde_x[4] > 290:
                         if self.enemies.down4:
-                            self.enemies.horde_x[4] -= 0.5
+                            self.enemies.horde_x[4] -= speed
                         if not self.enemies.down4:
-                            self.enemies.horde_x[4] -= 0.5
-                            self.enemies.laserx4 -= 0.5
+                            self.enemies.horde_x[4] -= speed
+                            self.enemies.laserx4 -= speed
                     if self.enemies.horde_x[5] > 345:
                         if self.enemies.down5:
-                            self.enemies.horde_x[5] -= 0.5
+                            self.enemies.horde_x[5] -= speed
                         if not self.enemies.down5:
-                            self.enemies.horde_x[5] -= 0.5
-                            self.enemies.laserx5 -= 0.5
+                            self.enemies.horde_x[5] -= speed
+                            self.enemies.laserx5 -= speed
                     if self.enemies.horde_x[6] > 70:
                         if self.enemies.down6:
-                            self.enemies.horde_x[6] -= 0.5
+                            self.enemies.horde_x[6] -= speed
                         if not self.enemies.down6:
-                            self.enemies.horde_x[6] -= 0.5
-                            self.enemies.laserx6 -= 0.5
+                            self.enemies.horde_x[6] -= speed
+                            self.enemies.laserx6 -= speed
                     if self.enemies.horde_x[7] > 180:
                         if self.enemies.down7:
-                            self.enemies.horde_x[7] -= 0.5
+                            self.enemies.horde_x[7] -= speed
                         if not self.enemies.down7:
-                            self.enemies.horde_x[7] -= 0.5
-                            self.enemies.laserx7 -= 0.5
+                            self.enemies.horde_x[7] -= speed
+                            self.enemies.laserx7 -= speed
                     if self.enemies.horde_x[8] > 235:
                         if self.enemies.down8:
-                            self.enemies.horde_x[8] -= 0.5
+                            self.enemies.horde_x[8] -= speed
                         if not self.enemies.down8:
-                            self.enemies.horde_x[8] -= 0.5
-                            self.enemies.laserx8 -= 0.5
+                            self.enemies.horde_x[8] -= speed
+                            self.enemies.laserx8 -= speed
                     if self.enemies.horde_x[10] > 345:
                         if self.enemies.down10:
-                            self.enemies.horde_x[10] -= 0.5
+                            self.enemies.horde_x[10] -= speed
                         if not self.enemies.down10:
-                            self.enemies.horde_x[10] -= 0.5
-                            self.enemies.laserx10 -= 0.5
+                            self.enemies.horde_x[10] -= speed
+                            self.enemies.laserx10 -= speed
                     if self.enemies.horde_x[11] > 70:
                         if self.enemies.down11:
-                            self.enemies.horde_x[11] -= 0.5
+                            self.enemies.horde_x[11] -= speed
                         if not self.enemies.down11:
-                            self.enemies.horde_x[11] -= 0.5
-                            self.enemies.laserx11 -= 0.5
+                            self.enemies.horde_x[11] -= speed
+                            self.enemies.laserx11 -= speed
                     if self.enemies.horde_x[12] > 345:
                         if self.enemies.down12:
-                            self.enemies.horde_x[12] -= 0.5
+                            self.enemies.horde_x[12] -= speed
                         if not self.enemies.down12:
-                            self.enemies.horde_x[12] -= 0.5
-                            self.enemies.laserx12 -= 0.5
+                            self.enemies.horde_x[12] -= speed
+                            self.enemies.laserx12 -= speed
                 #Switching directions in level 1 (from left to right)
                 if self.direction == "left":
                     if self.enemies.horde_x[0] == 70:
@@ -2125,112 +2757,112 @@ class Game:
                     if self.enemies.status[0]:
                         if self.enemies.horde_x[0] < 740:
                             if self.enemies.down:
-                                self.enemies.horde_x[0] += 0.5
+                                self.enemies.horde_x[0] += speed
                             if not self.enemies.down:
-                                self.enemies.horde_x[0] += 0.5
-                                self.enemies.laserx += 0.5
+                                self.enemies.horde_x[0] += speed
+                                self.enemies.laserx += speed
 
                     if self.enemies.status[1]:
                         if self.enemies.horde_x[1]  < 740:
                             if self.enemies.down1:
-                                self.enemies.horde_x[1] += 0.5
+                                self.enemies.horde_x[1] += speed
                             if not self.enemies.down1:
-                                self.enemies.horde_x[1] += 0.5
-                                self.enemies.laserx1 += 0.5
+                                self.enemies.horde_x[1] += speed
+                                self.enemies.laserx1 += speed
 
                     if self.enemies.status[2]:
                         if self.enemies.horde_x[2]  < 740:
                             if self.enemies.down2:
-                                self.enemies.horde_x[2] += 0.5
+                                self.enemies.horde_x[2] += speed
                             if not self.enemies.down2:
-                                self.enemies.horde_x[2] += 0.5
-                                self.enemies.laserx2 += 0.5
+                                self.enemies.horde_x[2] += speed
+                                self.enemies.laserx2 += speed
 
                     if self.enemies.status[3]:
                         if self.enemies.horde_x[3]  < 795:
                             if self.enemies.down3:
-                                self.enemies.horde_x[3] += 0.5
+                                self.enemies.horde_x[3] += speed
                             if not self.enemies.down3:
-                                self.enemies.horde_x[3] += 0.5
-                                self.enemies.laserx3 += 0.5
+                                self.enemies.horde_x[3] += speed
+                                self.enemies.laserx3 += speed
 
                     if self.enemies.status[4]:
                         if self.enemies.horde_x[4]  < 795:
                             if self.enemies.down4:
-                                self.enemies.horde_x[4] += 0.5
+                                self.enemies.horde_x[4] += speed
                             if not self.enemies.down4:
-                                self.enemies.horde_x[4] += 0.5
-                                self.enemies.laserx4 += 0.5
+                                self.enemies.horde_x[4] += speed
+                                self.enemies.laserx4 += speed
 
                     if self.enemies.status[5]:
                         if self.enemies.horde_x[5]  < 850:
                             if self.enemies.down5:
-                                self.enemies.horde_x[5] += 0.5
+                                self.enemies.horde_x[5] += speed
                             if not self.enemies.down5:
-                                self.enemies.horde_x[5] += 0.5
-                                self.enemies.laserx5 += 0.5
+                                self.enemies.horde_x[5] += speed
+                                self.enemies.laserx5 += speed
 
                     if self.enemies.status[6]:
                         if self.enemies.horde_x[6]  < 850:
                             if self.enemies.down6:
-                                self.enemies.horde_x[6] += 0.5
+                                self.enemies.horde_x[6] += speed
                             if not self.enemies.down6:
-                                self.enemies.horde_x[6] += 0.5
-                                self.enemies.laserx6 += 0.5
+                                self.enemies.horde_x[6] += speed
+                                self.enemies.laserx6 += speed
 
                     if self.enemies.status[7]:
                         if self.enemies.horde_x[7]  > 205:
                             if self.enemies.down7:
-                                self.enemies.horde_x[7] -= 0.5
+                                self.enemies.horde_x[7] -= speed
                             if not self.enemies.down7:
-                                self.enemies.horde_x[7] -= 0.5
-                                self.enemies.laserx7 -= 0.5
+                                self.enemies.horde_x[7] -= speed
+                                self.enemies.laserx7 -= speed
 
                     if self.enemies.status[8]:
                         if self.enemies.horde_x[8]  > 205:
                             if self.enemies.down8:
-                                self.enemies.horde_x[8] -= 0.5
+                                self.enemies.horde_x[8] -= speed
                             if not self.enemies.down8:
-                                self.enemies.horde_x[8] -= 0.5
-                                self.enemies.laserx8 -= 0.5
+                                self.enemies.horde_x[8] -= speed
+                                self.enemies.laserx8 -= speed
                     if self.enemies.status[9]:
                         if self.enemies.horde_x[9]  > 205:
                             if self.enemies.down8:
-                                self.enemies.horde_x[9] -= 0.5
+                                self.enemies.horde_x[9] -= speed
                             if not self.enemies.down8:
-                                self.enemies.horde_x[9] -= 0.5
-                                self.enemies.laserx8 -= 0.5
+                                self.enemies.horde_x[9] -= speed
+                                self.enemies.laserx8 -= speed
 
                     if self.enemies.status[10]:
                         if self.enemies.horde_x[10]  > 150:
                             if self.enemies.down10:
-                                self.enemies.horde_x[10] -= 0.5
+                                self.enemies.horde_x[10] -= speed
                             if not self.enemies.down10:
-                                self.enemies.horde_x[10] -= 0.5
-                                self.enemies.laserx10 -= 0.5
+                                self.enemies.horde_x[10] -= speed
+                                self.enemies.laserx10 -= speed
 
                     if self.enemies.status[11]:
                         if self.enemies.horde_x[11]  > 150:
                             if self.enemies.down11:
-                                self.enemies.horde_x[11] -= 0.5
+                                self.enemies.horde_x[11] -= speed
                             if not self.enemies.down11:
-                                self.enemies.horde_x[11] -= 0.5
-                                self.enemies.laserx11 -= 0.5
+                                self.enemies.horde_x[11] -= speed
+                                self.enemies.laserx11 -= speed
 
                     if self.enemies.status[12]:
                         if self.enemies.horde_x[12]  > 95:
                             if self.enemies.down12:
-                                self.enemies.horde_x[12] -= 0.5
+                                self.enemies.horde_x[12] -= speed
                             if not self.enemies.down12:
-                                self.enemies.horde_x[12] -= 0.5
-                                self.enemies.laserx12 -= 0.5
+                                self.enemies.horde_x[12] -= speed
+                                self.enemies.laserx12 -= speed
                     if self.enemies.status[13]:
                         if self.enemies.horde_x[13]  > 95:
                             if self.enemies.down12:
-                                self.enemies.horde_x[13] -= 0.5
+                                self.enemies.horde_x[13] -= speed
                             if not self.enemies.down12:
-                                self.enemies.horde_x[13] -= 0.5
-                                self.enemies.laserx12 -= 0.5
+                                self.enemies.horde_x[13] -= speed
+                                self.enemies.laserx12 -= speed
 
 
                 #Switching Direction1= level 2 (from right to left)
@@ -2295,88 +2927,88 @@ class Game:
                 if self.direction == "left":
                     if self.enemies.horde_x[0] > 150:
                         if self.enemies.down:
-                            self.enemies.horde_x[0] -= 0.5
+                            self.enemies.horde_x[0] -= speed
                         if not self.enemies.down:
-                            self.enemies.horde_x[0] -= 0.5
-                            self.enemies.laserx -= 0.5
+                            self.enemies.horde_x[0] -= speed
+                            self.enemies.laserx -= speed
                     if self.enemies.horde_x[1] > 150:
                         if self.enemies.down1:
-                            self.enemies.horde_x[1] -= 0.5
+                            self.enemies.horde_x[1] -= speed
                         if not self.enemies.down1:
-                            self.enemies.horde_x[1] -= 0.5
-                            self.enemies.laserx1 -= 0.5
+                            self.enemies.horde_x[1] -= speed
+                            self.enemies.laserx1 -= speed
                     if self.enemies.horde_x[2] > 150:
                         if self.enemies.down2:
-                            self.enemies.horde_x[2] -= 0.5
+                            self.enemies.horde_x[2] -= speed
                         if not self.enemies.down2:
-                            self.enemies.horde_x[2] -= 0.5
-                            self.enemies.laserx2 -= 0.5
+                            self.enemies.horde_x[2] -= speed
+                            self.enemies.laserx2 -= speed
                     if self.enemies.horde_x[3] > 205:
                         if self.enemies.down3:
-                            self.enemies.horde_x[3] -= 0.5
+                            self.enemies.horde_x[3] -= speed
                         if not self.enemies.down3:
-                            self.enemies.horde_x[3] -= 0.5
-                            self.enemies.laserx3 -= 0.5
+                            self.enemies.horde_x[3] -= speed
+                            self.enemies.laserx3 -= speed
                     if self.enemies.horde_x[4] > 205:
                         if self.enemies.down4:
-                            self.enemies.horde_x[4] -= 0.5
+                            self.enemies.horde_x[4] -= speed
                         if not self.enemies.down4:
-                            self.enemies.horde_x[4] -= 0.5
-                            self.enemies.laserx4 -= 0.5
+                            self.enemies.horde_x[4] -= speed
+                            self.enemies.laserx4 -= speed
                     if self.enemies.horde_x[5] > 260:
                         if self.enemies.down5:
-                            self.enemies.horde_x[5] -= 0.5
+                            self.enemies.horde_x[5] -= speed
                         if not self.enemies.down5:
-                            self.enemies.horde_x[5] -= 0.5
-                            self.enemies.laserx5 -= 0.5
+                            self.enemies.horde_x[5] -= speed
+                            self.enemies.laserx5 -= speed
                     if self.enemies.horde_x[6] > 260:
                         if self.enemies.down6:
-                            self.enemies.horde_x[6] -= 0.5
+                            self.enemies.horde_x[6] -= speed
                         if not self.enemies.down6:
-                            self.enemies.horde_x[6] -= 0.5
-                            self.enemies.laserx6 -= 0.5
+                            self.enemies.horde_x[6] -= speed
+                            self.enemies.laserx6 -= speed
                     if self.enemies.horde_x[7] < 795:
                         if self.enemies.down7:
-                            self.enemies.horde_x[7] += 0.5
+                            self.enemies.horde_x[7] += speed
                         if not self.enemies.down7:
-                            self.enemies.horde_x[7] += 0.5
-                            self.enemies.laserx7 += 0.5
+                            self.enemies.horde_x[7] += speed
+                            self.enemies.laserx7 += speed
                     if self.enemies.horde_x[8] < 795:
                         if self.enemies.down8:
-                            self.enemies.horde_x[8] += 0.5
+                            self.enemies.horde_x[8] += speed
                         if not self.enemies.down8:
-                            self.enemies.horde_x[8] += 0.5
-                            self.enemies.laserx8 += 0.5
+                            self.enemies.horde_x[8] += speed
+                            self.enemies.laserx8 += speed
                     if self.enemies.horde_x[9] < 795:
                         if self.enemies.down8:
-                            self.enemies.horde_x[9] += 0.5
+                            self.enemies.horde_x[9] += speed
                         if not self.enemies.down8:
-                            self.enemies.horde_x[9] += 0.5
-                            self.enemies.laserx8 += 0.5
+                            self.enemies.horde_x[9] += speed
+                            self.enemies.laserx8 += speed
                     if self.enemies.horde_x[10] < 205 + 535:
                         if self.enemies.down10:
-                            self.enemies.horde_x[10] += 0.5
+                            self.enemies.horde_x[10] += speed
                         if not self.enemies.down10:
-                            self.enemies.horde_x[10] += 0.5
-                            self.enemies.laserx10 += 0.5
+                            self.enemies.horde_x[10] += speed
+                            self.enemies.laserx10 += speed
                     if self.enemies.horde_x[11] < 205 + 535:
                         if self.enemies.down11:
-                            self.enemies.horde_x[11] += 0.5
+                            self.enemies.horde_x[11] += speed
                         if not self.enemies.down11:
-                            self.enemies.horde_x[11] += 0.5
-                            self.enemies.laserx11 += 0.5
+                            self.enemies.horde_x[11] += speed
+                            self.enemies.laserx11 += speed
                     if self.enemies.horde_x[12] < 150 + 535:
                         if self.enemies.down12:
-                            self.enemies.horde_x[12] += 0.5
+                            self.enemies.horde_x[12] += speed
                         if not self.enemies.down12:
-                            self.enemies.horde_x[12] += 0.5
-                            self.enemies.laserx12 += 0.5
+                            self.enemies.horde_x[12] += speed
+                            self.enemies.laserx12 += speed
                     if self.enemies.horde_x[13] < 150 + 535:
                         if self.enemies.down12:
-                            self.enemies.horde_x[13] += 0.5
+                            self.enemies.horde_x[13] += speed
                         if not self.enemies.down12:
-                            self.enemies.horde_x[13] += 0.5
-                            self.enemies.laserx12 += 0.5
+                            self.enemies.horde_x[13] += speed
+                            self.enemies.laserx12 += speed
                 #Switching directions in level 2 (from left to right)
                 if self.direction == "left":
                     if self.enemies.horde_x[0] == 150:
@@ -2413,114 +3045,114 @@ class Game:
                     if self.enemies.status[0]:
                         if self.enemies.horde_x[0] < 200:
                             if self.enemies.down:
-                                self.enemies.horde_x[0] += 0.5
+                                self.enemies.horde_x[0] += speed
                             if not self.enemies.down:
-                                self.enemies.horde_x[0] += 0.5
-                                self.enemies.laserx += 0.5
+                                self.enemies.horde_x[0] += speed
+                                self.enemies.laserx += speed
 
                     if self.enemies.status[1]:
                         if self.enemies.horde_x[1]  > 700:
                             if self.enemies.down1:
-                                self.enemies.horde_x[1] -= 0.5
+                                self.enemies.horde_x[1] -= speed
                             if not self.enemies.down1:
-                                self.enemies.horde_x[1] -= 0.5
-                                self.enemies.laserx1 -= 0.5
+                                self.enemies.horde_x[1] -= speed
+                                self.enemies.laserx1 -= speed
                 if self.direction2 == "right":
                     if self.enemies.status[2]:
                         if self.enemies.horde_x[2]  < 590:
                             if self.enemies.down2:
-                                self.enemies.horde_x[2] += 0.5
+                                self.enemies.horde_x[2] += speed
                             if not self.enemies.down2:
-                                self.enemies.horde_x[2] += 0.5
-                                self.enemies.laserx2 += 0.5
+                                self.enemies.horde_x[2] += speed
+                                self.enemies.laserx2 += speed
 
                     if self.enemies.status[3]:
                         if self.enemies.horde_x[3]  < 645:
                             if self.enemies.down3:
-                                self.enemies.horde_x[3] += 0.5
+                                self.enemies.horde_x[3] += speed
                             if not self.enemies.down3:
-                                self.enemies.horde_x[3] += 0.5
-                                self.enemies.laserx3 += 0.5
+                                self.enemies.horde_x[3] += speed
+                                self.enemies.laserx3 += speed
 
                     if self.enemies.status[4]:
                         if self.enemies.horde_x[4]  < 700:
                             if self.enemies.down4:
-                                self.enemies.horde_x[4] += 0.5
+                                self.enemies.horde_x[4] += speed
                             if not self.enemies.down4:
-                                self.enemies.horde_x[4] += 0.5
-                                self.enemies.laserx4 += 0.5
+                                self.enemies.horde_x[4] += speed
+                                self.enemies.laserx4 += speed
                 if self.direction3 == "right":
 
                     if self.enemies.status[5]:
                         if self.enemies.horde_x[5]  > 310:
                             if self.enemies.down5:
-                                self.enemies.horde_x[5] -= 0.5
+                                self.enemies.horde_x[5] -= speed
                             if not self.enemies.down5:
-                                self.enemies.horde_x[5] -= 0.5
-                                self.enemies.laserx5 -= 0.5
+                                self.enemies.horde_x[5] -= speed
+                                self.enemies.laserx5 -= speed
 
                     if self.enemies.status[6]:
                         if self.enemies.horde_x[6]  > 255:
                             if self.enemies.down6:
-                                self.enemies.horde_x[6] -= 0.5
+                                self.enemies.horde_x[6] -= speed
                             if not self.enemies.down6:
-                                self.enemies.horde_x[6] -= 0.5
-                                self.enemies.laserx6 -= 0.5
+                                self.enemies.horde_x[6] -= speed
+                                self.enemies.laserx6 -= speed
                     if self.enemies.status[13]:
                         if self.enemies.horde_x[13]  > 200:
                             if self.enemies.down12:
-                                self.enemies.horde_x[13] -= 0.5
+                                self.enemies.horde_x[13] -= speed
                             if not self.enemies.down12:
-                                self.enemies.horde_x[13] -= 0.5
-                                self.enemies.laserx12 -= 0.5
+                                self.enemies.horde_x[13] -= speed
+                                self.enemies.laserx12 -= speed
                 if self.direction1 == "right":
 
                     if self.enemies.status[7]:
                         if self.enemies.horde_x[7]  < 575:
                             if self.enemies.down7:
-                                self.enemies.horde_x[7] += 0.5
+                                self.enemies.horde_x[7] += speed
                             if not self.enemies.down7:
-                                self.enemies.horde_x[7] += 0.5
-                                self.enemies.laserx7 += 0.5
+                                self.enemies.horde_x[7] += speed
+                                self.enemies.laserx7 += speed
 
                     if self.enemies.status[8]:
                         if self.enemies.horde_x[8]  < 630:
                             if self.enemies.down8:
-                                self.enemies.horde_x[8] += 0.5
+                                self.enemies.horde_x[8] += speed
                             if not self.enemies.down8:
-                                self.enemies.horde_x[8] += 0.5
-                                self.enemies.laserx8 += 0.5
+                                self.enemies.horde_x[8] += speed
+                                self.enemies.laserx8 += speed
                     if self.enemies.status[9]:
                         if self.enemies.horde_x[9]  < 490:
                             if self.enemies.down8:
-                                self.enemies.horde_x[9] += 0.5
+                                self.enemies.horde_x[9] += speed
                             if not self.enemies.down8:
-                                self.enemies.horde_x[9] += 0.5
-                                self.enemies.laserx8 += 0.5
+                                self.enemies.horde_x[9] += speed
+                                self.enemies.laserx8 += speed
 
                     if self.enemies.status[10]:
                         if self.enemies.horde_x[10]  < 560:
                             if self.enemies.down10:
-                                self.enemies.horde_x[10] += 0.5
+                                self.enemies.horde_x[10] += speed
                             if not self.enemies.down10:
-                                self.enemies.horde_x[10] += 0.5
-                                self.enemies.laserx10 += 0.5
+                                self.enemies.horde_x[10] += speed
+                                self.enemies.laserx10 += speed
 
                     if self.enemies.status[11]:
                         if self.enemies.horde_x[11]  < 630:
                             if self.enemies.down11:
-                                self.enemies.horde_x[11] += 0.5
+                                self.enemies.horde_x[11] += speed
                             if not self.enemies.down11:
-                                self.enemies.horde_x[11] += 0.5
-                                self.enemies.laserx11 += 0.5
+                                self.enemies.horde_x[11] += speed
+                                self.enemies.laserx11 += speed
 
                     if self.enemies.status[12]:
                         if self.enemies.horde_x[12]  < 700:
                             if self.enemies.down12:
-                                self.enemies.horde_x[12] += 0.5
+                                self.enemies.horde_x[12] += speed
                             if not self.enemies.down12:
-                                self.enemies.horde_x[12] += 0.5
-                                self.enemies.laserx12 += 0.5
+                                self.enemies.horde_x[12] += speed
+                                self.enemies.laserx12 += speed
                     
 
 
@@ -2586,91 +3218,91 @@ class Game:
                 if self.direction == "left":
                     if self.enemies.horde_x[0] > 40:
                         if self.enemies.down:
-                            self.enemies.horde_x[0] -= 0.5
+                            self.enemies.horde_x[0] -= speed
                         if not self.enemies.down:
-                            self.enemies.horde_x[0] -= 0.5
-                            self.enemies.laserx -= 0.5
+                            self.enemies.horde_x[0] -= speed
+                            self.enemies.laserx -= speed
                     if self.enemies.horde_x[1] < 860:
                         if self.enemies.down1:
-                            self.enemies.horde_x[1] += 0.5
+                            self.enemies.horde_x[1] += speed
                         if not self.enemies.down1:
-                            self.enemies.horde_x[1] += 0.5
-                            self.enemies.laserx1 += 0.5
+                            self.enemies.horde_x[1] += speed
+                            self.enemies.laserx1 += speed
                 if self.direction2 == "left":
                     if self.enemies.horde_x[2] > 150:
                         if self.enemies.down2:
-                            self.enemies.horde_x[2] -= 0.5
+                            self.enemies.horde_x[2] -= speed
                         if not self.enemies.down2:
-                            self.enemies.horde_x[2] -= 0.5
-                            self.enemies.laserx2 -= 0.5
+                            self.enemies.horde_x[2] -= speed
+                            self.enemies.laserx2 -= speed
                     if self.enemies.horde_x[3] > 205:
                         if self.enemies.down3:
-                            self.enemies.horde_x[3] -= 0.5
+                            self.enemies.horde_x[3] -= speed
                         if not self.enemies.down3:
-                            self.enemies.horde_x[3] -= 0.5
-                            self.enemies.laserx3 -= 0.5
+                            self.enemies.horde_x[3] -= speed
+                            self.enemies.laserx3 -= speed
                     if self.enemies.horde_x[4] > 260:
                         if self.enemies.down4:
-                            self.enemies.horde_x[4] -= 0.5
+                            self.enemies.horde_x[4] -= speed
                         if not self.enemies.down4:
-                            self.enemies.horde_x[4] -= 0.5
-                            self.enemies.laserx4 -= 0.5
+                            self.enemies.horde_x[4] -= speed
+                            self.enemies.laserx4 -= speed
                 if self.direction3 == "left":
                     if self.enemies.horde_x[5] < 745:
                         if self.enemies.down5:
-                            self.enemies.horde_x[5] += 0.5
+                            self.enemies.horde_x[5] += speed
                         if not self.enemies.down5:
-                            self.enemies.horde_x[5] += 0.5
-                            self.enemies.laserx5 += 0.5
+                            self.enemies.horde_x[5] += speed
+                            self.enemies.laserx5 += speed
                     if self.enemies.horde_x[6] < 690:
                         if self.enemies.down6:
-                            self.enemies.horde_x[6] += 0.5
+                            self.enemies.horde_x[6] += speed
                         if not self.enemies.down6:
-                            self.enemies.horde_x[6] += 0.5
-                            self.enemies.laserx6 += 0.5
+                            self.enemies.horde_x[6] += speed
+                            self.enemies.laserx6 += speed
                     if self.enemies.horde_x[13] < 635:
                         if self.enemies.down7:
-                            self.enemies.horde_x[13] += 0.5
+                            self.enemies.horde_x[13] += speed
                         if not self.enemies.down7:
-                            self.enemies.horde_x[13] += 0.5
-                            self.enemies.laserx7 += 0.5
+                            self.enemies.horde_x[13] += speed
+                            self.enemies.laserx7 += speed
                 if self.direction1 == "left":
                     if self.enemies.horde_x[7] > 335:
                         if self.enemies.down7:
-                            self.enemies.horde_x[7] -= 0.5
+                            self.enemies.horde_x[7] -= speed
                         if not self.enemies.down7:
-                            self.enemies.horde_x[7] -= 0.5
-                            self.enemies.laserx7 -= 0.5
+                            self.enemies.horde_x[7] -= speed
+                            self.enemies.laserx7 -= speed
                     if self.enemies.horde_x[8] > 390:
                         if self.enemies.down8:
-                            self.enemies.horde_x[8] -= 0.5
+                            self.enemies.horde_x[8] -= speed
                         if not self.enemies.down8:
-                            self.enemies.horde_x[8] -= 0.5
-                            self.enemies.laserx8 -= 0.5
+                            self.enemies.horde_x[8] -= speed
+                            self.enemies.laserx8 -= speed
                     if self.enemies.horde_x[9] > 250:
                         if self.enemies.down8:
-                            self.enemies.horde_x[9] -= 0.5
+                            self.enemies.horde_x[9] -= speed
                         if not self.enemies.down8:
-                            self.enemies.horde_x[9] -= 0.5
-                            self.enemies.laserx8 -= 0.5
+                            self.enemies.horde_x[9] -= speed
+                            self.enemies.laserx8 -= speed
                     if self.enemies.horde_x[10]  >320:
                         if self.enemies.down10:
-                            self.enemies.horde_x[10] -= 0.5
+                            self.enemies.horde_x[10] -= speed
                         if not self.enemies.down10:
-                            self.enemies.horde_x[10] -= 0.5
-                            self.enemies.laserx10 -= 0.5
+                            self.enemies.horde_x[10] -= speed
+                            self.enemies.laserx10 -= speed
                     if self.enemies.horde_x[11] > 390:
                         if self.enemies.down11:
-                            self.enemies.horde_x[11] -= 0.5
+                            self.enemies.horde_x[11] -= speed
                         if not self.enemies.down11:
-                            self.enemies.horde_x[11] -= 0.5
-                            self.enemies.laserx11 -= 0.5
+                            self.enemies.horde_x[11] -= speed
+                            self.enemies.laserx11 -= speed
                     if self.enemies.horde_x[12] > 460:
                         if self.enemies.down12:
-                            self.enemies.horde_x[12] -= 0.5
+                            self.enemies.horde_x[12] -= speed
                         if not self.enemies.down12:
-                            self.enemies.horde_x[12] -= 0.5
-                            self.enemies.laserx12 -= 0.5
+                            self.enemies.horde_x[12] -= speed
+                            self.enemies.laserx12 -= speed
 
                 #Switching directions in level 2 (from left to right)
                 if self.direction == "left":
@@ -2715,10 +3347,11 @@ class Game:
                     run = False
                     if self.enemies.level == 1.5 or self.enemies.level == 2.5:
                             self.enemies.level += 0.5
-                    save.save_game(self.enemies.level, "level")
+                    if self.enemies.level != 0:
+                        save.save_game(self.enemies.level, "level")
                 pygame.key.set_repeat(1, 1)
                 if event.type == KEYDOWN:
-                    if  self.enemies.level == 1  or self.enemies.level == 2  or self.enemies.level == 3:   
+                    if  self.enemies.level == 1  or self.enemies.level == 2  or self.enemies.level == 3 or self.enemies.level == 4 or self.enemies.level == 0:   
 
                         if event.key == K_a or event.key == K_LEFT or event.key == CONTROLLER_BUTTON_DPAD_LEFT:
 
@@ -2767,7 +3400,8 @@ class Game:
                         if event.type == QUIT:
                             if self.enemies.level == 1.5 or self.enemies.level == 2.5:
                                 self.enemies.level += 0.5
-                            save.save_game(self.enemies.level, "level")
+                            if self.enemies.level != 0:
+                                save.save_game(self.enemies.level, "level")
                             pygame.quit()
                             sys.exit()
 
