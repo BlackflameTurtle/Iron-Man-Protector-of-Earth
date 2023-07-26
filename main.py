@@ -1600,7 +1600,7 @@ class Game:
                             pause = True
             while pause:
                 #Pause screen while loop
-                font1 = pygame.font.SysFont("Comic Sans", 70, bold=False, italic=False)
+                font1 = pygame.font.SysFont("Comic Sans", 50, bold=False, italic=False)
                 line = font1.render("Paused", False, (255, 255, 255))
                 self.screen.blit(line, (700, 10))
                 pygame.display.update()
