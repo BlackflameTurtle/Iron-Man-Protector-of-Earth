@@ -8,6 +8,9 @@ pygame.mixer.init()
 from PySide6.QtWidgets import QApplication, QPushButton  
 from SaveSystem import SaveandLoad
 import os
+clock = pygame.time.Clock()
+
+
 def resource_path(relative_path):
     """ Get absolute path to resource, works for dev and for PyInstaller """
     try:
@@ -22,6 +25,9 @@ explosion = pygame.mixer.Sound(resource_path("explosion.wav"))
 laser1 = pygame.mixer.Sound(resource_path("enemy laser.wav"))
 hurt = pygame.mixer.Sound(resource_path("hurt.wav"))
 red = pygame.image.load(resource_path(r"red.png"))
+hit = pygame.mixer.Sound(resource_path("hit.wav"))
+white_barrier = pygame.mixer.Sound(resource_path("white barrier.wav"))
+
 
 save = SaveandLoad(".level_data", "Space invaders stuff" )
 class GameOver(Exception):
@@ -115,24 +121,13 @@ class Enemies:
             self.level = save.load("level")
         else:
             self.level = 0
+        if self.level >0:
+            self.intended_fps = 180
+        else:
+            self.intended_fps = 163
 
         self.screen = screen
         self.ship = pygame.image.load(resource_path("Alien.png"))
-        self.ship1 = pygame.image.load(resource_path("Alien.png"))
-        self.ship2 = pygame.image.load(resource_path("Alien.png"))
-        self.ship3 = pygame.image.load(resource_path("Alien.png"))
-        self.ship4 = pygame.image.load(resource_path("Alien.png"))
-        self.ship5 = pygame.image.load(resource_path("Alien.png"))
-        self.ship6 = pygame.image.load(resource_path("Alien.png"))
-        self.ship7 = pygame.image.load(resource_path("Alien.png"))
-        self.ship8 = pygame.image.load(resource_path("Alien.png"))
-        self.ship9 = pygame.image.load(resource_path("Alien.png"))
-        self.ship10 = pygame.image.load(resource_path("Alien.png"))
-        self.ship11 = pygame.image.load(resource_path("Alien.png"))
-        self.ship12 = pygame.image.load(resource_path("Alien.png"))
-        self.ship13 = pygame.image.load(resource_path("Alien.png"))
-        self.ship14 = pygame.image.load(resource_path("Alien.png"))
-        self.horde = [self.ship, self.ship1, self.ship2, self.ship3, self.ship4, self.ship5, self.ship6, self.ship7, self.ship8, self.ship9, self.ship10, self.ship11, self.ship12, self.ship13, self.ship14]
         self.y = 20
         self.y1 = 20
         self.y2 = 20
@@ -214,6 +209,8 @@ class Enemies:
         self.laserx25 = -40000000
         self.horde_y = [self.y, self.y1, self.y2, self.y3, self.y4 , self.y5, self.y6 , self.y7 ,self.y8, self.y9, self.y10,self.y11, self.y12, self.y13, self.y14, self.y15, self.y16, self.y17, self.y18,self.y19,self.y20,self.y21, self.y22, self.y23, self.y24, self.y25]
         self.horde_x = [self.x, self.x1, self.x2, self.x3, self.x4, self.x5, self.x6, self.x7, self.x8, self.x9,self.x10, self.x11, self.x12, self.x13, self.x14, self.x15, self.x16, self.x17, self.x18,self.x19,self.x20,self.x21, self.x22, self.x23, self.x24, self.x25]
+        self.laserxs= [self.laserx, self.laserx1, self.laserx2, self.laserx3, self.laserx4, self.laserx5, self.laserx5, self.laserx6, self.laserx7, self.laserx8, self.laserx9, self.laserx10, self.laserx11, self.laserx12, self.laserx13, self.laserx14, self.laserx15, self.laserx16, self.laserx17, self.laserx18, self.laserx19, self.laserx20, self.laserx21, self.laserx22, self.laserx23, self.laserx24, self.laserx25]
+        self.downs = [self.down, self.down1, self.down2, self.down3, self.down4, self.down5, self.down6, self.down7, self.down8, self.down9, self.down10, self.down11, self.down12, self.down13, self.down14, self.down15, self.down16, self.down17, self.down18, self.down19, self.down20, self.down21, self.down22, self.down22, self.down23, self.down24, self.down25]
         self.status = [True, True, True, True, True, True, True, True, True, True, True, True, True, True, True]
         self.line= {self.horde_y[0]: True, self.horde_y[1]: True, self.horde_y[2]:True, self.horde_y[3]:True, self.horde_y[4]:True, self.horde_y[5]:True, self.horde_y[6]:True, self.horde_y[7]:True, self.horde_y[8]:True, self.horde_y[9]:True, self.horde_y[10]:True, self.horde_y[11]:True, self.horde_y[12]:True}
         self.line2={self.horde_y[13]:True, self.horde_y[14]:True, self.horde_y[15]:True, self.horde_y[16]:True, self.horde_y[17]:True, self.horde_y[18]:True, self.horde_y[19]:True, self.horde_y[20]:True, self.horde_y[21]: True, self.horde_y[22]: True, self.horde_y[23]: True, self.horde_y[24]:True, self.horde_y[25]:True}
@@ -265,45 +262,9 @@ class Enemies:
                 self.horde_y[13] = 80
                 self.status = [True, True, True, True, True, True, True, True, True, True, True, True, True, True, True]  
                 self.shot = False
-                self.laserx = self.horde_x[0] + 22.5
-                self.laserx1 = self.horde_x[1] + 22.5
-                self.laserx2 = self.horde_x[2] + 22.5
-                self.laserx3 = self.horde_x[3] + 22.5
-                self.laserx4 = self.horde_x[4] + 22.5
-                self.laserx5 = self.horde_x[5] + 22.5
-                self.laserx6 = self.horde_x[6] + 22.5
-                self.laserx7 = self.horde_x[7] + 22.5
-                self.laserx8 = self.horde_x[8] + 22.5
-                self.laserx9 = self.horde_x[9] + 22.5
-                
-                self.laserx10 = self.horde_x[10] + 22.5
-                self.laserx11 = self.horde_x[11] + 22.5
-                self.laserx12 = self.horde_x[12] + 22.5
-                self.laserx13 = self.horde_x[13] + 22.5
-                self.laserx14 = self.horde_x[14] + 22.5
-                self.laserx15 = self.horde_x[15] + 22.5
-                self.laserx16 = self.horde_x[16] + 22.5
-                self.laserx17 = self.horde_x[17] + 22.5
-                self.laserx18 = self.horde_x[18] + 22.5
-                self.laserx19 = self.horde_x[19] + 22.5
-                self.laserx20 = self.horde_x[20] + 22.5
-                self.laserx21 = self.horde_x[21] + 22.5
-                self.laserx22 = self.horde_x[22] + 22.5
-                self.laserx23 = self.horde_x[23] + 22.5
-                self.laserx24 = self.horde_x[24] + 22.5
-                self.laserx25 = self.horde_x[25] + 22.5
-
-
-
-                
-
-
-
-
-
-
+                for i in range(0, 26):
+                    self.laserxs[i] = self.horde_x[i] + 22.5
         if self.level ==3:
-
                 self.horde_x[0] = 100
                 self.horde_x[1] = 800
                 self.horde_x[2] = 150
@@ -330,7 +291,6 @@ class Enemies:
                 self.horde_x[23] = -40000000000000
                 self.horde_x[24] = -40000000000000
                 self.horde_x[25] = -40000000000000
-
                 self.horde_y[0] = 20
                 self.horde_y[1] = 20
                 self.horde_y[2] = 300
@@ -347,158 +307,37 @@ class Enemies:
                 self.horde_y[13] = 300 
                 self.status = [True, True, True, True, True, True, True, True, True, True, True, True, True, True, True]  
                 self.shot = False
-                self.laserx = self.horde_x[0] + 22.5
-                self.laserx1 = self.horde_x[1] + 22.5
-                self.laserx2 = self.horde_x[2] + 22.5
-                self.laserx3 = self.horde_x[3] + 22.5
-                self.laserx4 = self.horde_x[4] + 22.5
-                self.laserx5 = self.horde_x[5] + 22.5
-                self.laserx6 = self.horde_x[6] + 22.5
-                self.laserx7 = self.horde_x[7] + 22.5
-                self.laserx8 = self.horde_x[8] + 22.5
-                self.laserx9 = self.horde_x[9] + 22.5
-                self.laserx10 = self.horde_x[10] + 22.5
-                self.laserx11 = self.horde_x[11] + 22.5
-                self.laserx12 = self.horde_x[12] + 22.5
-                self.laserx13 = self.horde_x[13] + 22.5
-                self.laserx14 = self.horde_x[14] + 22.5
-                self.laserx15 = self.horde_x[15] + 22.5
-                self.laserx16 = self.horde_x[16] + 22.5
-                self.laserx17 = self.horde_x[17] + 22.5
-                self.laserx18 = self.horde_x[18] + 22.5
-                self.laserx19 = self.horde_x[19] + 22.5
-                self.laserx20 = self.horde_x[20] + 22.5
-                self.laserx21 = self.horde_x[21] + 22.5
-                self.laserx22 = self.horde_x[22] + 22.5
-                self.laserx23 = self.horde_x[23] + 22.5
-                self.laserx24 = self.horde_x[24] + 22.5
-                self.laserx25 = self.horde_x[25] + 22.5
+                for i in range(0, 26):
+                    self.laserxs[i] = self.horde_x[i] + 22.5
         if self.level == 0:
+            standard = 80
             self.shot = False
-            self.horde_y[0] = 20
-            self.horde_y[1] = 20
-            self.horde_y[2] = 20
-            self.horde_y[3] = 20
-            self.horde_y[4] = 20
-            self.horde_y[5] = 20
-            self.horde_y[6] = 20
-            self.horde_y[7] = 20
-            self.horde_y[8] = 20
-            self.horde_y[9] = 20 
-            self.horde_y[10] = 20 
-            self.horde_y[11] = 20 
-            self.horde_y[12] = 20 
-            self.horde_y[13] = 20 + 60
-            self.horde_y[14] = 20 + 60
-            self.horde_y[15] = 20 + 60
-            self.horde_y[16] = 20 + 60
-            self.horde_y[17] = 20 + 60
-            self.horde_y[18] = 20 + 60
-            self.horde_y[19] = 20 + 60
-            self.horde_y[20] = 20 + 60
-            self.horde_y[21] = 20 + 60
-            self.horde_y[22] = 20 + 60
-            self.horde_y[23] = 20 + 60
-            self.horde_y[24] = 20 + 60
-            self.horde_y[25] = 20 + 60
-            self.horde_x[0] = 70 + 30 - 20
-            self.horde_x[1] = 125 + 5 + 30 -20
-            self.horde_x[2] = 180 + 10 + 30 -20
-            self.horde_x[3] = 235 + 15 + 30 - 20
-            self.horde_x[4] = 290 + 20 + 30 - 20
-            self.horde_x[5] = 345 + 25 + 30 - 20
-            self.horde_x[6] = 400 + 30 + 30 - 20
-            self.horde_x[7] = 455 + 35 + 30 - 20
-            self.horde_x[8] = 510 + 40 + 30 - 20
-            self.horde_x[9] = 565 + 45 + 30 - 20
-            self.horde_x[10] = 620 +50 + 30 -20
-            self.horde_x[11] = 675 + 55 + 30 - 20
-            self.horde_x[12] = 730 + 60 + 30- 20
-            self.horde_x[13] = 100 -20
-            self.horde_x[14] = 125 + 5 + 30 - 20
-            self.horde_x[15] = 180 + 10 + 30- 20
-            self.horde_x[16] = 235 + 15 + 30 - 20
-            self.horde_x[17] = 290 + 20 + 30 - 20
-            self.horde_x[18] = 345 + 25 + 30 - 20
-            self.horde_x[19] = 400 + 30 + 30 - 20
-            self.horde_x[20] = 455 + 35 + 30 - 20
-            self.horde_x[21] = 510 + 40 + 30 - 20
-            self.horde_x[22] = 565 + 45 + 30 - 20
-            self.horde_x[23] = 620 +50 + 30- 20
-            self.horde_x[24] = 675 + 55 + 30 - 20
-            self.horde_x[25] = 730 + 60 + 30 - 20
-            self.laserx = self.horde_x[0] + 22.5
-            self.laserx1 = self.horde_x[1] + 22.5
-            self.laserx2 = self.horde_x[2] + 22.5
-            self.laserx3 = self.horde_x[3] + 22.5
-            self.laserx4 = self.horde_x[4] + 22.5
-            self.laserx5 = self.horde_x[5] + 22.5
-            self.laserx6 = self.horde_x[6] + 22.5
-            self.laserx7 = self.horde_x[7] + 22.5
-            self.laserx8 = self.horde_x[8] + 22.5
-            self.laserx9 = self.horde_x[9] + 22.5    
-            self.laserx10 = self.horde_x[10] + 22.5
-            self.laserx11 = self.horde_x[11] + 22.5
-            self.laserx12 = self.horde_x[12] + 22.5
-            self.laserx13 = self.horde_x[13] + 22.5
-            self.laserx14 = self.horde_x[14] + 22.5
-            self.laserx15 = self.horde_x[15] + 22.5
-            self.laserx16 = self.horde_x[16] + 22.5
-            self.laserx17 = self.horde_x[17] + 22.5
-            self.laserx18 = self.horde_x[18] + 22.5
-            self.laserx19 = self.horde_x[19] + 22.5
-            self.laserx20 = self.horde_x[20] + 22.5
-            self.laserx21 = self.horde_x[21] + 22.5
-            self.laserx22 = self.horde_x[22] + 22.5
-            self.laserx23 = self.horde_x[23] + 22.5
-            self.laserx24 = self.horde_x[24] + 22.5
-            self.laserx25 = self.horde_x[25] + 22.5
-            
-
-
-
-
+            for i in range(0, 13):
+                self.horde_y[i] = 20
+            for i in range(13, 26):
+                self.horde_y[i] = 20 + 60
+            for i in range(0, 13):
+                self.horde_x[i] = standard
+                standard += 60
+            for i in range(13, 26):
+                self.horde_x[i] = self.horde_x[i - 13]
+            for i in range(0, 26):
+                self.laserxs[i] = self.horde_x[i]
     def ship_placement(self, ship, x, y):
         self.screen.blit(ship, (x, y))
-
-
     def platform_placement(self, x1, y1, x_extension, y_extension):
         pygame.draw.rect(self.screen, (200, 200, 200), [x1, y1, x_extension, y_extension])
     def green_platform_placement(self, x1, y1, x_extension, y_extension):
         pygame.draw.rect(self.screen, (0, 150, 0), [x1, y1, x_extension, y_extension])
     def portal_placement(self, color, x1, y1, x_extension, y_extension):
         pygame.draw.rect(self.screen, color , [x1, y1, x_extension, y_extension])
-    
-
     def level1(self):
-
-
         if self.level == 1:
-
-            if self.horde_y[0] > -50:
-                self.ship_placement(self.horde[0], self.horde_x[0], self.horde_y[0])
-            if self.horde_y[1] > -50:
-                self.ship_placement(self.horde[1], self.horde_x[1], self.horde_y[1])
-            if self.horde_y[2] > -50:
-                self.ship_placement(self.horde[2], self.horde_x[2], self.horde_y[2])
-            if self.horde_y[3] > -50:
-                self.ship_placement(self.horde[3], self.horde_x[3], self.horde_y[3])
-            if self.horde_y[4] > -50:
-                self.ship_placement(self.horde[4], self.horde_x[4], self.horde_y[4])
-            if self.horde_y[5] > -50:
-                self.ship_placement(self.horde[5], self.horde_x[5], self.horde_y[5])
-            if self.horde_y[6] > -50:
-                self.ship_placement(self.horde[6], self.horde_x[6], self.horde_y[6])
-            if self.horde_y[7] > -50:
-                self.ship_placement(self.horde[7], self.horde_x[7], self.horde_y[7])
-            if self.horde_y[8] > -50:
-                self.ship_placement(self.horde[8], self.horde_x[8], self.horde_y[8])
-            if self.horde_y[10] > -50:
-                self.ship_placement(self.horde[10], self.horde_x[10], self.horde_y[10])
-            if self.horde_y[11] > -50:
-                self.ship_placement(self.horde[11], self.horde_x[11], self.horde_y[11])
-            if self.horde_y[12] > -50:
-                self.ship_placement(self.horde[12], self.horde_x[12], self.horde_y[12])
+            for i in range(0, 13):
+                if i ==9:
+                    continue
+                if self.horde_y[i] < 900:
+                    self.ship_placement(self.ship, self.horde_x[i], self.horde_y[i])
             self.platform_placement(200, 300, 90, 5)
             self.platform_placement(650, 300, 90, 5)
             pygame.display.update()
@@ -508,7 +347,6 @@ class Enemies:
             font1 = pygame.font.SysFont("Typeface Mario World Pixel Filled", 100, bold=False, italic=False)
             line = font1.render("Success", False, (0, 255, 0))
             self.screen.blit(line, (300, 50))
-            
             mouse_x, mouse_y = pygame.mouse.get_pos()
             if 310 <= mouse_x <= 610 and 235 <= mouse_y <= 315:
                 green = (173,216, 230)
@@ -517,8 +355,6 @@ class Enemies:
                         Game().reset()
                         self.level = 2
                         Game().reset()
-                        
-
             font2 = pygame.font.SysFont("Typeface Mario World Pixel Filled", 75, bold=False, italic=False)
             line2 = font2.render("Continue?", False, (0, 255, 0))
             self.screen.blit(line2, (350 - 20, 50 + 200))
@@ -529,7 +365,6 @@ class Enemies:
             font1 = pygame.font.SysFont("Typeface Mario World Pixel Filled", 100, bold=False, italic=False)
             line = font1.render("Success", False, (0, 255, 0))
             self.screen.blit(line, (300, 50))
-            
             mouse_x, mouse_y = pygame.mouse.get_pos()
             if 310 <= mouse_x <= 610 and 235 <= mouse_y <= 315:
                 green = (173,216, 230)
@@ -542,72 +377,23 @@ class Enemies:
             line2 = font2.render("Continue?", False, (0, 255, 0))
             self.screen.blit(line2, (350 - 20, 50 + 200))
             pygame.draw.rect(self.screen, green, [330 - 20, 35 + 200, 300, 80], 1, 5)
-
             pygame.display.update()
-        
         if self.level == 2:
-            
-            if self.horde_y[0] > -50:
-                self.ship_placement(red, self.horde_x[0], self.horde_y[0])
-            if self.horde_y[1] > -50:
-                self.ship_placement(red, self.horde_x[1], self.horde_y[1])
-            if self.horde_y[2] > -50:
-                self.ship_placement(self.horde[9], self.horde_x[2], self.horde_y[2])
-            if self.horde_y[3] > -50:
-                self.ship_placement(self.horde[3], self.horde_x[3], self.horde_y[3])
-            if self.horde_y[4] > -50:
-                self.ship_placement(self.horde[4], self.horde_x[4], self.horde_y[4])
-            if self.horde_y[5] > -50:
-                self.ship_placement(self.horde[5], self.horde_x[5], self.horde_y[5])
-            if self.horde_y[6] > -50:
-                self.ship_placement(self.horde[6], self.horde_x[6], self.horde_y[6])
-            if self.horde_y[7] > -50:
-                self.ship_placement(red, self.horde_x[7], self.horde_y[7])
-            if self.horde_y[8] > -50:
-                self.ship_placement(red, self.horde_x[8], self.horde_y[8])
-            if self.horde_y[9] > -50:
-                self.ship_placement(self.horde[9], self.horde_x[9], self.horde_y[9])
-            if self.horde_y[10] > -50:
-                self.ship_placement(self.horde[10], self.horde_x[10], self.horde_y[10])
-            if self.horde_y[11] > -50:
-                self.ship_placement(self.horde[11], self.horde_x[11], self.horde_y[11])
-            if self.horde_y[12] > -50:
-                self.ship_placement(self.horde[12], self.horde_x[12], self.horde_y[12])
-            if self.horde_y[13] > -50:
-                self.ship_placement(self.horde[13], self.horde_x[13], self.horde_y[13])
-
+            for i in range(0, 14):
+                if self.horde_y[i] < 900:
+                    if i ==7 or i ==8 or i ==0 or i== 1:
+                        self.ship_placement(red, self.horde_x[i], self.horde_y[i])
+                    else:
+                        self.ship_placement(self.ship, self.horde_x[i], self.horde_y[i])
             self.green_platform_placement(100, 250, 150, 5)
             self.platform_placement(550, 250, 120, 5)
         if self.level ==3:
-
-                if self.horde_y[0] > -50:
-                    self.ship_placement(red, self.horde_x[0], self.horde_y[0])
-                if self.horde_y[1] > -50:
-                    self.ship_placement(red, self.horde_x[1], self.horde_y[1])
-                if self.horde_y[2] > -50:
-                    self.ship_placement(self.horde[9], self.horde_x[2], self.horde_y[2])
-                if self.horde_y[3] > -50:
-                    self.ship_placement(self.horde[3], self.horde_x[3], self.horde_y[3])
-                if self.horde_y[4] > -50:
-                    self.ship_placement(self.horde[4], self.horde_x[4], self.horde_y[4])
-                if self.horde_y[5] > -50:
-                    self.ship_placement(self.horde[5], self.horde_x[5], self.horde_y[5])
-                if self.horde_y[6] > -50:
-                    self.ship_placement(self.horde[6], self.horde_x[6], self.horde_y[6])
-                if self.horde_y[7] > -50:
-                    self.ship_placement(red, self.horde_x[7], self.horde_y[7])
-                if self.horde_y[8] > -50:
-                    self.ship_placement(red, self.horde_x[8], self.horde_y[8])
-                if self.horde_y[9] > -50:
-                    self.ship_placement(self.horde[9], self.horde_x[9], self.horde_y[9])
-                if self.horde_y[10] > -50:
-                    self.ship_placement(self.horde[10], self.horde_x[10], self.horde_y[10])
-                if self.horde_y[11] > -50:
-                    self.ship_placement(self.horde[11], self.horde_x[11], self.horde_y[11])
-                if self.horde_y[12] > -50:
-                    self.ship_placement(self.horde[12], self.horde_x[12], self.horde_y[12])
-                if self.horde_y[13] > -50:
-                    self.ship_placement(self.horde[13], self.horde_x[13], self.horde_y[13])
+            for i in range(0, 14):
+                if self.horde_y[i] < 900:
+                    if i ==7 or i ==8 or i ==0 or i== 1:
+                        self.ship_placement(red, self.horde_x[i], self.horde_y[i])
+                    else:
+                        self.ship_placement(self.ship, self.horde_x[i], self.horde_y[i])
                 self.green_platform_placement(0, 150, 200, 5)
                 self.green_platform_placement(700, 150, 200, 5)
                 self.portal_placement( (0,191,255),660, 280, 60, 5,)
@@ -615,61 +401,13 @@ class Enemies:
                 self.portal_placement( (0,0,139),220, 280, 60, 5,)
                 self.portal_placement( (0,0,139),110, 100, 60, 5,)
         if self.level == 0:
-                if self.horde_y[0] > -50:
-                    self.ship_placement(red, self.horde_x[0], self.horde_y[0])
-                if self.horde_y[1] > -50:
-                    self.ship_placement(red, self.horde_x[1], self.horde_y[1])
-                if self.horde_y[2] > -50:
-                    self.ship_placement(self.horde[9], self.horde_x[2], self.horde_y[2])
-                if self.horde_y[3] > -50:
-                    self.ship_placement(self.horde[3], self.horde_x[3], self.horde_y[3])
-                if self.horde_y[4] > -50:
-                    self.ship_placement(self.horde[4], self.horde_x[4], self.horde_y[4])
-                if self.horde_y[5] > -50:
-                    self.ship_placement(self.horde[5], self.horde_x[5], self.horde_y[5])
-                if self.horde_y[6] > -50:
-                    self.ship_placement(self.horde[6], self.horde_x[6], self.horde_y[6])
-                if self.horde_y[7] > -50:
-                    self.ship_placement(red, self.horde_x[7], self.horde_y[7])
-                if self.horde_y[8] > -50:
-                    self.ship_placement(red, self.horde_x[8], self.horde_y[8])
-                if self.horde_y[9] > -50:
-                    self.ship_placement(self.horde[9], self.horde_x[9], self.horde_y[9])
-                if self.horde_y[10] > -50:
-                    self.ship_placement(self.horde[10], self.horde_x[10], self.horde_y[10])
-                if self.horde_y[11] > -50:
-                    self.ship_placement(self.horde[11], self.horde_x[11], self.horde_y[11])
-                if self.horde_y[12] > -50:
-                    self.ship_placement(self.horde[12], self.horde_x[12], self.horde_y[12])
-                if self.horde_y[13] > -50:
-                    self.ship_placement(self.horde[13], self.horde_x[13], self.horde_y[13])
-                if self.horde_y[14] > -50:
-                    self.ship_placement(self.horde[0], self.horde_x[14], self.horde_y[14])
-                if self.horde_y[15] > -50:
-                    self.ship_placement(self.horde[0], self.horde_x[15], self.horde_y[15])
-                if self.horde_y[16] > -50:
-                    self.ship_placement(self.horde[0], self.horde_x[16], self.horde_y[16])
-                if self.horde_y[17] > -50:
-                    self.ship_placement(self.horde[0], self.horde_x[17], self.horde_y[17])
-                if self.horde_y[18] > -50:
-                    self.ship_placement(self.horde[0], self.horde_x[18], self.horde_y[18])
-                if self.horde_y[19] > -50:
-                    self.ship_placement(self.horde[0], self.horde_x[19], self.horde_y[19])
-                if self.horde_y[20] > -50:
-                    self.ship_placement(self.horde[0], self.horde_x[20], self.horde_y[20])
-                if self.horde_y[21] > -50:
-                    self.ship_placement(self.horde[0], self.horde_x[21], self.horde_y[21])
-                if self.horde_y[22] > -50:
-                    self.ship_placement(self.horde[0], self.horde_x[22], self.horde_y[22])
-                if self.horde_y[23] > -50:
-                    self.ship_placement(self.horde[0], self.horde_x[23], self.horde_y[23])
-                if self.horde_y[24] > -50:
-                    self.ship_placement(self.horde[0], self.horde_x[24], self.horde_y[24])
-                if self.horde_y[25] > -50:
-                    self.ship_placement(self.horde[0], self.horde_x[25], self.horde_y[25])
-                
-
-
+            for i in range(0, 26):
+                if self.horde_y[i] < 900:
+                    if i ==7 or i ==8 or i ==0 or i== 1:
+                        self.ship_placement(red, self.horde_x[i], self.horde_y[i])
+                    else:
+                        self.ship_placement(self.ship, self.horde_x[i], self.horde_y[i])
+            pygame.display.update()
 class Game:
     def __init__(self):
         self.h0 = 3
@@ -677,6 +415,7 @@ class Game:
         self.h7 = 3
         self.h8 = 3
         self.count = 0
+        self.count2 = 0
         self.state = "none"
         self.background = pygame.image.load(resource_path("Background.png"))
         pygame.mixer.music.load(resource_path("Music.mp3"))
@@ -695,6 +434,9 @@ class Game:
         self.screen_x = 900
         self.screen_y = 600
         self.screen = pygame.display.set_mode((self.screen_x, self.screen_y))
+        icon = pygame.image.load(resource_path("title.png"))
+        pygame.display.set_caption("Space Invaders")
+        pygame.display.set_icon(icon)
         self.player = Player(self.screen_x/2 - 40, self.screen_y - 80, self.screen)
         self.projectile = Projectile(self.screen, self.player.y - 35)
         self.enemies = Enemies(self.screen)
@@ -724,18 +466,19 @@ class Game:
         self.laser_y23 = self.enemies.horde_y[23]+ 30
         self.laser_y24 = self.enemies.horde_y[24]+ 30
         self.laser_y25 = self.enemies.horde_y[25]+ 30
+        self.laser_ys = [self.laser_y, self.laser_y1, self.laser_y2, self.laser_y3, self.laser_y4, self.laser_y5, self.laser_y6, self.laser_y7, self.laser_y8, self.laser_y9, self.laser_y10, self.laser_y11, self.laser_y12, self.laser_y13, self.laser_y14, self.laser_y15, self.laser_y16, self.laser_y17, self.laser_y18, self.laser_y19, self.laser_y20, self.laser_y21, self.laser_y22, self.laser_y23, self.laser_y24, self.laser_y25]
+        if self.enemies.level > 0:
+            self.projectile_speed = 4
+        else:
+            self.projectile_speed = 4.5
     def alien_laser_collision(self, x1, y1, x2, y2):
             if x2 - 20 <= x1 <= x2 + 40:
                 if y1 - 20 <= y2 <= y1 + 20:
                     return True
             return False
-
-
-
-
     def red_laser_collision(self, x1, y1, x2, y2):
-            if x1 -5 <= x2 <= x1 + 70:
-                if y1 - 5 <= y2 <= y1 + 28:
+            if x1 -25 <= x2 <= x1 + 70:
+                if y1 - 5 <= y2 <= y1 + 70:
                     return True
             return False
     def red_white_collision(self, x1, y1, x2, y2, extension):
@@ -748,12 +491,9 @@ class Game:
             if y1  <= y2 <= y1 + 5:
                 return True
         return False
-
-
     def title(self):
         title = True
         while title:
- 
              green = (0, 255, 0)
              color = (0, 255, 0)
              font1 = pygame.font.SysFont("Typeface Mario World Pixel Filled", 100, bold=False, italic=False)
@@ -762,8 +502,6 @@ class Game:
              line2 = font1.render("Continue", False, (green))
              red = pygame.image.load(resource_path("title1.jpg"))
              mouse_x, mouse_y = pygame.mouse.get_pos()
-
- 
              if 250 <= mouse_x <= 250 + 400 and 280 <= mouse_y <= 430 - 50:
                  green = (173, 216, 230)
                  if pygame.mouse.get_pressed() != (0,0,0):
@@ -782,16 +520,10 @@ class Game:
                         title = False
                 pygame.draw.rect(self.screen, color, [280, 400, 350, 100], 5, 10)
                 self.screen.blit(line2, (300, 420))
-
-
-
              pygame.draw.rect(self.screen, green, [250, 280, 400, 100], 5, 10)
-
              self.screen.blit(line1, (270, 300))
-
              self.screen.blit(line, (200, 50))
              self.screen.blit(red, (350, 150))
-
              for event in pygame.event.get():
                  if event.type == QUIT:
                      if self.enemies.level != 1 and self.enemies.level != 0:
@@ -800,26 +532,13 @@ class Game:
                         save.save_game(self.enemies.level, "level")
                      pygame.quit()
                      sys.exit()
-
-
              pygame.display.update()
-
     def reset(self):
         self.enemies.shot = False
         self.direction = "right"
         if self.enemies.level == 1:
-            self.laser_y = 625
-            self.laser_y1 = 625
-            self.laser_y2 = 625
-            self.laser_y3 = 625
-            self.laser_y4 = 625
-            self.laser_y5 = 625
-            self.laser_y6 = 625
-            self.laser_y7 = 625
-            self.laser_y8 = 625
-            self.laser_y10 = 625
-            self.laser_y11 = 625
-            self.laser_y12 = 625
+            for i in range(1, 15):
+                self.laser_ys[i] = 625
             self.enemies.horde_y[0] = 20
             self.enemies.horde_y[1] = 20
             self.enemies.horde_y[2] = 20
@@ -829,7 +548,6 @@ class Game:
             self.enemies.horde_y[6] = 50 + 30
             self.enemies.horde_y[7] = 20 + 110
             self.enemies.horde_y[8] = 20 + 110
-
             self.enemies.horde_y[10] = 50 + 30
             self.enemies.horde_y[11] = 80 + 50
             self.enemies.horde_y[12] = 80 + 50
@@ -844,46 +562,16 @@ class Game:
             self.enemies.horde_x[6] = 50 + 200
             self.enemies.horde_x[7] = 50 + 310
             self.enemies.horde_x[8] = 50 + 365
-
             self.enemies.horde_x[10] = 475 + 50
             self.enemies.horde_x[11] = 250
             self.enemies.horde_x[12] = 525
-
             self.enemies.horde_x[14] = 50
-            self.enemies.laserx = 200 + 50 + 27.5
-            self.enemies.laserx1 = 255 + 50 + 27.5
-            self.enemies.laserx2 = 310 + 50 + 27.5
-            self.enemies.laserx3 = 365 + 50 + 27.5
-            self.enemies.laserx4 = 420 + 50 + 27.5
-            self.enemies.laserx5 = 475 + 50 + 27.5
-            self.enemies.laserx6 = 50 + 200 + 27.5
-            self.enemies.laserx7 = 50 + 310 + 27.5
-            self.enemies.laserx8 = 50 + 365 + 27.5
-
-            self.enemies.laserx10 = 475 + 50 + 27.5
-            self.enemies.laserx11 = 250 + 27.5
-            self.enemies.laserx12 = 525 + 27.5
-            self.enemies.laserx13 = 50 + 27.5
-            self.enemies.laserx14 = 50 + 27.5
+            for i in range(0, 15):
+                self.enemies.laserxs[i] = self.enemies.horde_x[i] + 22.5
             self.status = [True, True, True, True, True, True, True, True, True, False, True, True, True, False, True]  
         if 1.5 <= self.enemies.level <= 2:  
             self.status = [True, True, True, True, True, True, True, True, True, True, True, True, True, True, True]  
             self.shot = False
-            self.enemies.laserx = self.enemies.horde_x[0] + 22.5
-            self.enemies.laserx1 = self.enemies.horde_x[1] + 22.5
-            self.enemies.laserx2 = self.enemies.horde_x[2] + 22.5
-            self.enemies.laserx3 = self.enemies.horde_x[3] + 22.5
-            self.enemies.laserx4 = self.enemies.horde_x[4] + 22.5
-            self.enemies.laserx5 = self.enemies.horde_x[5] + 22.5
-            self.enemies.laserx6 = self.enemies.horde_x[6] + 22.5
-            self.enemies.laserx7 = self.enemies.horde_x[7] + 22.5
-            self.enemies.laserx8 = self.enemies.horde_x[8] + 22.5
-            self.enemies.laserx9 = self.enemies.horde_x[9] + 22.5
-            self.enemies.laserx10 = self.enemies.horde_x[10] + 22.5
-            self.enemies.laserx11 = self.enemies.horde_x[11] + 22.5
-            self.enemies.laserx12 = self.enemies.horde_x[12] + 22.5
-            self.enemies.laserx13 = self.enemies.horde_x[13] + 22.5
-
             self.enemies.horde_x[0] = 150
             self.enemies.horde_x[1] = 150
             self.enemies.horde_x[2] = 150
@@ -912,20 +600,10 @@ class Game:
             self.enemies.horde_y[11] = 80
             self.enemies.horde_y[12] = 20
             self.enemies.horde_y[13] = 80
-            self.laser_y = 625
-            self.laser_y1 = 625
-            self.laser_y2 = 625
-            self.laser_y3 = 625
-            self.laser_y4 = 625
-            self.laser_y5 = 625
-            self.laser_y6 = 625
-            self.laser_y7 = 625
-            self.laser_y8 = 625
-            self.laser_y9 = 625
-            self.laser_y10 = 625
-            self.laser_y11 = 625
-            self.laser_y12 = 625
-            self.laser_y13 = 625
+            for i in range(0, 14):
+                self.enemies.laserxs[i] = self.enemies.horde_x[i] + 22.5
+            for i in range(0, 14):
+                self.laser_ys[i] = 625
             self.h0 = 3
             self.h1 = 3
             self.h7 = 3
@@ -945,7 +623,6 @@ class Game:
                 self.enemies.horde_x[10] = 320
                 self.enemies.horde_x[11] = 390
                 self.enemies.horde_x[12] = 460
-
                 self.enemies.horde_y[0] = 20
                 self.enemies.horde_y[1] = 20
                 self.enemies.horde_y[2] = 300
@@ -962,44 +639,15 @@ class Game:
                 self.enemies.horde_y[13] = 300 
                 self.status = [True, True, True, True, True, True, True, True, True, True, True, True, True, True, True]  
                 self.shot = False
-                self.enemies.laserx = self.enemies.horde_x[0] + 22.5
-                self.enemies.laserx1 = self.enemies.horde_x[1] + 22.5
-                self.enemies.laserx2 = self.enemies.horde_x[2] + 22.5
-                self.enemies.laserx3 = self.enemies.horde_x[3] + 22.5
-                self.enemies.laserx4 = self.enemies.horde_x[4] + 22.5
-                self.enemies.laserx5 = self.enemies.horde_x[5] + 22.5
-                self.enemies.laserx6 = self.enemies.horde_x[6] + 22.5
-                self.enemies.laserx7 = self.enemies.horde_x[7] + 22.5
-                self.enemies.laserx8 = self.enemies.horde_x[8] + 22.5
-                self.enemies.laserx9 = self.enemies.horde_x[9] + 22.5
-                self.enemies.laserx10 = self.enemies.horde_x[10] + 22.5
-                self.enemies.laserx11 = self.enemies.horde_x[11] + 22.5
-                self.enemies.laserx12 = self.enemies.horde_x[12] + 22.5
-                self.enemies.laserx13 = self.enemies.horde_x[13] + 22.5
-                self.laser_y = 625
-                self.laser_y1 = 625
-                self.laser_y2 = 625
-                self.laser_y3 = 625
-                self.laser_y4 = 625
-                self.laser_y5 = 625
-                self.laser_y6 = 625
-                self.laser_y7 = 625
-                self.laser_y8 = 625
-                self.laser_y9 = 625
-                self.laser_y10 = 625
-                self.laser_y11 = 625
-                self.laser_y12 = 625
-                self.laser_y13 = 625
-            
-            
+                for i in range(0, 14):
+                    self.enemies.laserxs[i] = self.enemies.horde_x[i] + 22.5
+                for i in range(0, 14):
+                    self.laser_ys[i] = 625
         self.player.x = 435
         self.projectile.ys[self.projectile.num] = -25
         pygame.mixer.music.play(-1)
-
         self.enemies.status = [True, True, True, True, True, True, True, True, True, True, True, True, True, True, True]
         self.count = 0
-
-
     def play(self):
         self.player.draw_shooter()
         self.player.draw_health()
@@ -1007,485 +655,45 @@ class Game:
         if self.enemies.shot:
             a = random.randint(1, 100)
             l = 100
-            if a ==2:
-
-
-                if self.enemies.laserx - l <= self.player.x <= self.enemies.laserx + l:
-                    self.enemies.down = True
-
-            if self.enemies.down:
-                if self.laser_y == self.enemies.horde_y[0] + 30:
-                    pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("enemy laser.wav")))
-                if self.laser_y >= 625:
-
-                    self.enemies.down = False
-
-            if a ==1:
-                if self.enemies.laserx1 - l <= self.player.x <= self.enemies.laserx1 + l:
-                        self.enemies.down1 = True
-
-            if self.enemies.down1:
-                if self.laser_y1 == self.enemies.horde_y[1] + 30:
-                    pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("enemy laser.wav")))
-                if self.laser_y1 >= 625:
-
-                    self.enemies.down1 = False
-            if a ==3:
-
-                if self.enemies.laserx2 - l <= self.player.x <= self.enemies.laserx2 + l:
-
-                    self.enemies.down2 = True
-            if self.enemies.down2:
-                if self.laser_y2 == self.enemies.horde_y[2] + 30:
-                    pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("enemy laser.wav")))
-                if self.laser_y2 >= 625:
-
-                    self.enemies.down2 = False
-            if a ==4:
-
-                if self.enemies.laserx3 - l <= self.player.x <= self.enemies.laserx3 + l:
-                    self.enemies.down3 = True
-
-            if self.enemies.down3:
-                if self.laser_y3 == self.enemies.horde_y[3] + 30:
-
-                    pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("enemy laser.wav")))
-                if self.laser_y3 >= 625:
-
-                    self.enemies.down3 = False
-            if a ==5:
-
-                if self.enemies.laserx4 - l <= self.player.x <= self.enemies.laserx4 + l:
-                        self.enemies.down4 = True
-
-            if self.enemies.down4:
-                if self.laser_y4 == self.enemies.horde_y[4] + 30:
-
-                    pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("enemy laser.wav")))
-                if self.laser_y4 >= 625:
-
-                    self.enemies.down4 = False
-            if a ==6:
-
-                if self.enemies.laserx5 - l <= self.player.x <= self.enemies.laserx5 + l:
-                        self.enemies.down5 = True
-
-
-            if self.enemies.down5:
-                if self.laser_y5 == self.enemies.horde_y[5] + 30:
-
-                    pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("enemy laser.wav")))
-                if self.laser_y5 >= 625:
-
-                    self.enemies.down5 = False
-            if a ==7:
-
-                if self.enemies.laserx6 - l <= self.player.x <= self.enemies.laserx6 + l:
-                        self.enemies.down6 = True
-
-
-            if self.enemies.down6:
-                if self.laser_y6 == self.enemies.horde_y[6] + 30:
-
-                    pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("enemy laser.wav")))
-                if self.laser_y6 >= 625:
-
-                    self.enemies.down6 = False
-            if a ==8:
-
-                if self.enemies.laserx7 - l <= self.player.x <= self.enemies.laserx7 + l:
-                        self.enemies.down7 = True
-            if self.enemies.down7:
-                if self.laser_y7 == self.enemies.horde_y[7] + 30:
-
-                    pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("enemy laser.wav")))
-                if self.laser_y7 >= 625:
-
-                    self.enemies.down7 = False
-            if a ==9:
-
-                if self.enemies.laserx8 -l <= self.player.x <= self.enemies.laserx8 + l:
-                        self.enemies.down8 = True
-
-            if self.enemies.down8:
-                if self.laser_y8 == self.enemies.horde_y[8] + 30:
-
-                    pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("enemy laser.wav")))
-                if self.laser_y8 >= 625:
-                    self.enemies.down8 = False
-            if a ==10:
-
-                if self.enemies.laserx10 - l <= self.player.x <= self.enemies.laserx10 + l:
-                        self.enemies.down10 = True
-
-            if self.enemies.down10:
-                if self.laser_y10 == self.enemies.horde_y[10] + 30:
-
-                    pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("enemy laser.wav")))
-                if self.laser_y10 >= 625:
-
-                    self.enemies.down10 = False
-            if a ==11:
-
-                if self.enemies.laserx11 - l <= self.player.x <= self.enemies.laserx11 + l:
-                        self.enemies.down11 = True
-
-            if self.enemies.down11:
-                if self.laser_y11 == self.enemies.horde_y[11] + 30:
-
-                    pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("enemy laser.wav")))
-                if self.laser_y11 >= 625:
-
-                    self.enemies.down11 = False
-            if a ==12:
-
-                if self.enemies.laserx12 - l <= self.player.x <= self.enemies.laserx12 + l:
-                        self.enemies.down12 = True
-
-            if self.enemies.down12:
-                if self.laser_y12 == self.enemies.horde_y[12] + 30:
-
-                    pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("enemy laser.wav")))
-                if self.laser_y12 >= 625:
-
-                    self.enemies.down12 = False
-
-            if a == 13:
-
-                if self.enemies.laserx13 - l <= self.player.x <= self.enemies.laserx13 + l:
-                    self.enemies.down13 = True
-
-            if self.enemies.down13:
-                if self.laser_y13 == self.enemies.horde_y[13] + 30:
-
-                    pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("enemy laser.wav")))
-                if self.laser_y13 >= 625:
-                    self.enemies.down13 = False
-
-            if a == 14:
-
-                if self.enemies.laserx9 - l <= self.player.x <= self.enemies.laserx9 + l:
-                    self.enemies.down9 = True
-
-            if self.enemies.down9:
-                if self.laser_y9 == self.enemies.horde_y[9] + 30:
-
-                    pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("enemy laser.wav")))
-                if self.laser_y9 >= 625:
-                    self.enemies.down9 = False
-            
-            
-            
-            
-            
+            for i in range(0, 14):
+                if i == 9:
+                    if self.enemies.level == 1:
+                        continue
+                    else:
+                        pass
+                if i == 13:
+                    if self.enemies.level == 1:
+                        continue
+                    else:
+                        pass
+                if a == i + 1:
+                    if self.enemies.laserxs[i] - l <= self.player.x <= self.enemies.laserxs[i] + l:
+                        self.enemies.downs[i] = True
+                if self.enemies.downs[i] :
+                    if self.laser_ys[i] == self.enemies.horde_y[i] + 30:
+                        pygame.mixer.Sound.play(laser1)
+                    if self.laser_ys[i] >= 625:
+                        self.enemies.downs[i] = False
             if self.enemies.level == 0:
-                if a == 15:
-
-                    if self.enemies.laserx14 - l <= self.player.x <= self.enemies.laserx14 + l:
-                        self.enemies.down14 = True
-
-                if self.enemies.down14:
-                    if self.laser_y14 == self.enemies.horde_y[14] + 30:
-
-                        pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("enemy laser.wav")))
-                    if self.laser_y9 >= 625:
-                        self.enemies.down9 = False
-                
-                if a == 16:
-
-                    if self.enemies.laserx15 - l <= self.player.x <= self.enemies.laserx15 + l:
-                        self.enemies.down15 = True
-
-                if self.enemies.down15:
-                    if self.laser_y15 == self.enemies.horde_y[15] + 30:
-
-                        pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("enemy laser.wav")))
-                    if self.laser_y15 >= 625:
-                        self.enemies.down15 = False
-                if a == 17:
-
-                    if self.enemies.laserx16 - l <= self.player.x <= self.enemies.laserx16 + l:
-                        self.enemies.down16 = True
-
-                if self.enemies.down16:
-                    if self.laser_y16 == self.enemies.horde_y[16] + 30:
-
-                        pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("enemy laser.wav")))
-                    if self.laser_y16 >= 625:
-                        self.enemies.down16 = False
-                if a == 18:
-
-                    if self.enemies.laserx17 - l <= self.player.x <= self.enemies.laserx17 + l:
-                        self.enemies.down17 = True
-
-                if self.enemies.down17:
-                    if self.laser_y17 == self.enemies.horde_y[17] + 30:
-
-                        pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("enemy laser.wav")))
-                    if self.laser_y17 >= 625:
-                        self.enemies.down17 = False
-                if a == 19:
-
-                    if self.enemies.laserx18 - l <= self.player.x <= self.enemies.laserx18 + l:
-                        self.enemies.down18 = True
-
-                if self.enemies.down18:
-                    if self.laser_y18 == self.enemies.horde_y[9] + 30:
-
-                        pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("enemy laser.wav")))
-                    if self.laser_y18 >= 625:
-                        self.enemies.down18 = False
-                if a == 20:
-
-                    if self.enemies.laserx19 - l <= self.player.x <= self.enemies.laserx19 + l:
-                        self.enemies.down19 = True
-
-                if self.enemies.down19:
-                    if self.laser_y19 == self.enemies.horde_y[19] + 30:
-
-                        pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("enemy laser.wav")))
-                    if self.laser_y19 >= 625:
-                        self.enemies.down19 = False
-                if a == 21:
-
-                    if self.enemies.laserx20 - l <= self.player.x <= self.enemies.laserx20 + l:
-                        self.enemies.down20 = True
-
-                if self.enemies.down20:
-                    if self.laser_y20 == self.enemies.horde_y[20] + 30:
-
-                        pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("enemy laser.wav")))
-                    if self.laser_y20 >= 625:
-                        self.enemies.down20 = False
-                if a == 22:
-
-                    if self.enemies.laserx21 - l <= self.player.x <= self.enemies.laserx21 + l:
-                        self.enemies.down21 = True
-
-                if self.enemies.down21:
-                    if self.laser_y21 == self.enemies.horde_y[21] + 30:
-
-                        pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("enemy laser.wav")))
-                    if self.laser_y21 >= 625:
-                        self.enemies.down21 = False
-                if a == 23:
-
-                    if self.enemies.laserx22 - l <= self.player.x <= self.enemies.laserx22 + l:
-                        self.enemies.down22 = True
-
-                if self.enemies.down22:
-                    if self.laser_y22 == self.enemies.horde_y[22] + 30:
-
-                        pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("enemy laser.wav")))
-                    if self.laser_y22 >= 625:
-                        self.enemies.down22 = False
-                if a == 24:
-
-                    if self.enemies.laserx23 - l <= self.player.x <= self.enemies.laserx23 + l:
-                        self.enemies.down23 = True
-
-                if self.enemies.down23:
-                    if self.laser_y23 == self.enemies.horde_y[23] + 30:
-
-                        pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("enemy laser.wav")))
-                    if self.laser_y23 >= 625:
-                        self.enemies.down23 = False
-                if a == 25:
-
-                    if self.enemies.laserx24 - l <= self.player.x <= self.enemies.laserx24 + l:
-                        self.enemies.down24 = True
-
-                if self.enemies.down24:
-                    if self.laser_y24 == self.enemies.horde_y[24] + 30:
-
-                        pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("enemy laser.wav")))
-                    if self.laser_y24 >= 625:
-                        self.enemies.down24 = False
-                if a == 26:
-
-                    if self.enemies.laserx25 - l <= self.player.x <= self.enemies.laserx25 + l:
-                        self.enemies.down25 = True
-
-                if self.enemies.down25:
-                    if self.laser_y25 == self.enemies.horde_y[25] + 30:
-
-                        pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("enemy laser.wav")))
-                    if self.laser_y25 >= 625:
-                        self.enemies.down25 = False
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-            if self.enemies.down:
-                self.screen.blit(self.blast, (self.enemies.laserx, self.laser_y))
-            if not self.enemies.down:
-                self.laser_y = self.enemies.horde_y[0] + 30
-                self.enemies.laserx = self.enemies.horde_x[0] + 22.5
-
-
-            if self.enemies.down1:
-                self.screen.blit(self.blast, (self.enemies.laserx1, self.laser_y1))
-            if not self.enemies.down1:
-                self.laser_y1 = self.enemies.horde_y[1] + 30
-                self.enemies.laserx1 = self.enemies.horde_x[1] + 22.5
-
-
-            if self.enemies.down2:
-                self.screen.blit(self.blast, (self.enemies.laserx2, self.laser_y2))
-            if not self.enemies.down2:
-                self.laser_y2 = self.enemies.horde_y[2] + 30
-                self.enemies.laserx2 = self.enemies.horde_x[2] + 22.5
-
-            if self.enemies.down3:
-                self.screen.blit(self.blast, (self.enemies.laserx3, self.laser_y3))
-            if not self.enemies.down3:
-                self.laser_y3 = self.enemies.horde_y[3] + 30
-                self.enemies.laserx3 = self.enemies.horde_x[3] + 22.5
-
-
-            if self.enemies.down4:
-                self.screen.blit(self.blast, (self.enemies.laserx4, self.laser_y4))
-            if not self.enemies.down4:
-                self.laser_y4 = self.enemies.horde_y[4] + 30
-                self.enemies.laserx4 = self.enemies.horde_x[4] + 22.5
-
-            if self.enemies.down5:
-                self.screen.blit(self.blast, (self.enemies.laserx5, self.laser_y5))
-            if not self.enemies.down5:
-                self.laser_y5 = self.enemies.horde_y[5] + 30
-                self.enemies.laserx5 = self.enemies.horde_x[5] + 22.5
-
-            if self.enemies.down6:
-                self.screen.blit(self.blast, (self.enemies.laserx6, self.laser_y6))
-            if not self.enemies.down6:
-                self.laser_y6 = self.enemies.horde_y[6] + 30
-                self.enemies.laserx6 = self.enemies.horde_x[6] + 22.5
-
-            if self.enemies.down7:
-                self.screen.blit(self.blast, (self.enemies.laserx7, self.laser_y7))
-            if not self.enemies.down7:
-                self.laser_y7 = self.enemies.horde_y[7] + 30
-                self.enemies.laserx7 = self.enemies.horde_x[7] + 22.5
-
-            if self.enemies.down8:
-                self.screen.blit(self.blast, (self.enemies.laserx8, self.laser_y8))
-            if not self.enemies.down8:
-                self.laser_y8 = self.enemies.horde_y[8] + 30
-                self.enemies.laserx8 = self.enemies.horde_x[8] + 22.5
-
-            if self.enemies.down10:
-                self.screen.blit(self.blast, (self.enemies.laserx10, self.laser_y10))
-            if not self.enemies.down10:
-                self.laser_y10 = self.enemies.horde_y[10] + 30
-                self.enemies.laserx10 = self.enemies.horde_x[10] + 22.5
-
-            if self.enemies.down11:
-                self.screen.blit(self.blast, (self.enemies.laserx11, self.laser_y11))
-            if not self.enemies.down11:
-                self.laser_y11 = self.enemies.horde_y[11] + 30
-                self.enemies.laserx11 = self.enemies.horde_x[11] + 22.5
-
-            if self.enemies.down12:
-                self.screen.blit(self.blast, (self.enemies.laserx12, self.laser_y12))
-            if not self.enemies.down12:
-                self.laser_y12 = self.enemies.horde_y[12] + 30
-                self.enemies.laserx12 = self.enemies.horde_x[12] + 22.5
-            if self.enemies.level != 1:
-
-                if self.enemies.down13:
-                    self.screen.blit(self.blast, (self.enemies.laserx13, self.laser_y13))
-                if not self.enemies.down13:
-                    self.laser_y13 = self.enemies.horde_y[13] + 30
-                    self.enemies.laserx13 = self.enemies.horde_x[13] + 22.5
-            if self.enemies.level != 1:
-                if self.enemies.down9:
-                    self.screen.blit(self.blast, (self.enemies.laserx9, self.laser_y9))
-                if not self.enemies.down9:
-                    self.laser_y9 = self.enemies.horde_y[9] + 30
-                    self.enemies.laserx9 = self.enemies.horde_x[9] + 22.5
-            if self.enemies.level == 0:
-                if self.enemies.down14:
-                    self.screen.blit(self.blast, (self.enemies.laserx14, self.laser_y14))
-                if not self.enemies.down14:
-                    self.laser_y14 = self.enemies.horde_y[14] + 30
-                    self.enemies.laserx14 = self.enemies.horde_x[14] + 22.5
-                if self.enemies.down15:
-                    self.screen.blit(self.blast, (self.enemies.laserx15, self.laser_y15))
-                if not self.enemies.down15:
-                    self.laser_y15 = self.enemies.horde_y[15] + 30
-                    self.enemies.laserx15 = self.enemies.horde_x[15] + 22.5
-                if self.enemies.down16:
-                    self.screen.blit(self.blast, (self.enemies.laserx16, self.laser_y16))
-                if not self.enemies.down16:
-                    self.laser_y16 = self.enemies.horde_y[16] + 30
-                    self.enemies.laserx16 = self.enemies.horde_x[16] + 22.5
-                if self.enemies.down17:
-                    self.screen.blit(self.blast, (self.enemies.laserx17, self.laser_y17))
-                if not self.enemies.down17:
-                    self.laser_y17 = self.enemies.horde_y[17] + 30
-                    self.enemies.laserx17 = self.enemies.horde_x[17] + 22.5
-                if self.enemies.down18:
-                    self.screen.blit(self.blast, (self.enemies.laserx18l, self.laser_y9))
-                if not self.enemies.down18:
-                    self.laser_y18 = self.enemies.horde_y[18] + 30
-                    self.enemies.laserx18 = self.enemies.horde_x[18] + 22.5
-                if self.enemies.down19:
-                    self.screen.blit(self.blast, (self.enemies.laserx19, self.laser_y19))
-                if not self.enemies.down19:
-                    self.laser_y19 = self.enemies.horde_y[19] + 30
-                    self.enemies.laserx19 = self.enemies.horde_x[19] + 22.5
-                if self.enemies.down20:
-                    self.screen.blit(self.blast, (self.enemies.laserx20, self.laser_y20))
-                if not self.enemies.down20:
-                    self.laser_y20 = self.enemies.horde_y[20] + 30
-                    self.enemies.laserx20 = self.enemies.horde_x[20] + 22.5
-                if self.enemies.down21:
-                    self.screen.blit(self.blast, (self.enemies.laserx21, self.laser_y21))
-                if not self.enemies.down21:
-                    self.laser_y21 = self.enemies.horde_y[21] + 30
-                    self.enemies.laserx21 = self.enemies.horde_x[21] + 22.5
-                if self.enemies.down22:
-                    self.screen.blit(self.blast, (self.enemies.laserx22, self.laser_y22))
-                if not self.enemies.down22:
-                    self.laser_y22 = self.enemies.horde_y[22] + 30
-                    self.enemies.laserx22 = self.enemies.horde_x[22] + 22.5
-                if self.enemies.down23:
-                    self.screen.blit(self.blast, (self.enemies.laserx23, self.laser_y23))
-                if not self.enemies.down23:
-                    self.laser_y23 = self.enemies.horde_y[23] + 30
-                    self.enemies.laserx23 = self.enemies.horde_x[23] + 22.5
-                if self.enemies.down24:
-                    self.screen.blit(self.blast, (self.enemies.laserx24, self.laser_y24))
-                if not self.enemies.down24:
-                    self.laser_y24 = self.enemies.horde_y[24] + 30
-                    self.enemies.laserx24 = self.enemies.horde_x[24] + 22.5
-                if self.enemies.down25:
-                    self.screen.blit(self.blast, (self.enemies.laserx25, self.laser_y25))
-                if not self.enemies.down25:
-                    self.laser_y25 = self.enemies.horde_y[25] + 30
-                    self.enemies.laserx25 = self.enemies.horde_x[25] + 22.5
-                
-
-
-
+                for i in range(0, 14):
+                    if a == i + 1:
+                        if self.enemies.laserxs[i] - l <= self.player.x <= self.enemies.laserxs[i] + l:
+                            self.enemies.downs[i] = True
+                    if self.enemies.downs[i]:
+                        if self.laser_ys[i] == self.enemies.horde_y[i] + 30:
+                            pygame.mixer.Sound.play(laser1)
+                        if self.laser_ys[i] >= 625:
+                            self.enemies.downs[i] = False
+            for i in range(0, 26):
+                if self.enemies.downs[i]:
+                    self.screen.blit(self.blast, (self.enemies.laserxs[i], self.laser_ys[i]))
+                if not self.enemies.downs[i] :
+                    self.laser_ys[i] = self.enemies.horde_y[i] + 30
+                    self.enemies.laserxs[i] = self.enemies.horde_x[i] + 22.5
         if self.up:
             self.projectile.draw_projectile()
-
-
             if self.projectile.ys[self.projectile.num] > -25:
-                self.projectile.ys[self.projectile.num] -= 4
+                self.projectile.ys[self.projectile.num] -= self.projectile_speed
         if self.projectile.num >= 9:
             self.projectile.num = 0
         self.enemies.level1()
@@ -1495,189 +703,32 @@ class Game:
             if self.projectile.num < self.projectile.num + 1:
                 self.projectile.num += 1
                 self.projectile.ys[self.projectile.num - 1] = 520
-
         self.enemies.level1()
         if self.player.health == 0:
             raise GameOver
         #Level 1 enemy blast on player collision
         if 1 == 1:
-                if self.red_laser_collision(self.player.x, self.player.y, self.enemies.laserx, self.laser_y):
-                    self.player.health -= 1
-                    self.col = False
-                    self.laser_y = 625
-                    pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("hit.wav")))
-
-                if self.red_laser_collision(self.player.x, self.player.y, self.enemies.laserx1, self.laser_y1):
-                    self.player.health -= 1
-                    self.col = False
-                    self.laser_y1 = 625
-                    pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("hit.wav")))
-
-                if self.red_laser_collision(self.player.x, self.player.y, self.enemies.laserx2, self.laser_y2):
-                    self.player.health -= 1
-                    self.col = False
-                    self.laser_y2 = 625
-                    pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("hit.wav")))
-
-                if self.red_laser_collision(self.player.x, self.player.y, self.enemies.laserx3, self.laser_y3):
-                    self.player.health -= 1
-                    self.col = False
-                    self.laser_y3 = 625
-                    pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("hit.wav")))
-
-                if self.red_laser_collision(self.player.x, self.player.y, self.enemies.laserx4, self.laser_y4):
-                    self.player.health -= 1
-                    self.col = False
-                    self.laser_y4 = 625
-                    pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("hit.wav")))
-
-                if self.red_laser_collision(self.player.x, self.player.y, self.enemies.laserx5, self.laser_y5):
-                    self.player.health -= 1
-                    self.col = False
-                    self.laser_y5 = 625
-                    pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("hit.wav")))
-
-                if self.red_laser_collision(self.player.x, self.player.y, self.enemies.laserx6, self.laser_y6):
-                    self.player.health -= 1
-                    self.col = False
-                    self.laser_y6 = 625
-                    pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("hit.wav")))
-
-                if self.red_laser_collision(self.player.x, self.player.y, self.enemies.laserx7, self.laser_y7):
-                    self.player.health -= 1
-                    self.col = False
-                    self.laser_y7 = 625
-                    pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("hit.wav")))
-
-                if self.red_laser_collision(self.player.x, self.player.y, self.enemies.laserx8, self.laser_y8):
-                    self.player.health -= 1
-                    self.col = False
-                    self.laser_y8 = 625
-                    pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("hit.wav")))
-
-                if self.red_laser_collision(self.player.x, self.player.y, self.enemies.laserx10, self.laser_y10):
-                    self.player.health -= 1
-                    self.col = False
-                    self.laser_y10 = 625
-                    pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("hit.wav")))
-
-                if self.red_laser_collision(self.player.x, self.player.y, self.enemies.laserx11, self.laser_y11):
-                    self.player.health -= 1
-                    self.col = False
-                    self.laser_y11 = 625
-                    pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("hit.wav")))
-
-                if self.red_laser_collision(self.player.x, self.player.y, self.enemies.laserx12, self.laser_y12):
-                    self.player.health -= 1
-                    self.col = False
-                    self.laser_y12 = 625
-                    pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("hit.wav")))
-
-
-                
-
+                for i in range(0, 13):
+                    if i == 9:
+                        continue
+                    if self.red_laser_collision(self.player.x, self.player.y, self.enemies.laserxs[i], self.laser_ys[i]):
+                        self.player.health -= 1
+                        self.laser_ys[i] = 625
                 pygame.display.update()
-
-
         if self.enemies.level == 1:
-
                 #Enemy fire on barrier collision
-                if self.red_white_collision(200, 300, self.enemies.laserx, self.laser_y, 90):
-                    self.laser_y = 625
-                    pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("white barrier.wav")))
-
-                if self.red_white_collision(200, 300, self.enemies.laserx1, self.laser_y1, 90):
-                    self.laser_y1 = 625
-                    pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("white barrier.wav")))
-
-                if self.red_white_collision(200, 300, self.enemies.laserx2, self.laser_y2, 90):
-                    self.laser_y2 = 625
-                    pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("white barrier.wav")))
-
-                if self.red_white_collision(200, 300, self.enemies.laserx3, self.laser_y3, 90):
-                    self.laser_y3 = 625
-                    pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("white barrier.wav")))
-
-                if self.red_white_collision(200, 300, self.enemies.laserx4, self.laser_y4, 90):
-                    self.laser_y4 = 625
-                    pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("white barrier.wav")))
-
-                if self.red_white_collision(200, 300, self.enemies.laserx5, self.laser_y5, 90):
-                    self.laser_y5 = 625
-                    pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("white barrier.wav")))
-
-                if self.red_white_collision(200, 300, self.enemies.laserx6, self.laser_y6, 90):
-                    self.laser_y6 = 625
-                    pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("white barrier.wav")))
-
-                if self.red_white_collision(200, 300, self.enemies.laserx7, self.laser_y7, 90):
-                    self.laser_y7 = 625
-                    pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("white barrier.wav")))
-
-                if self.red_white_collision(200, 300, self.enemies.laserx8, self.laser_y8, 90):
-                    self.laser_y8 = 625
-                    pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("white barrier.wav")))
-
-                if self.red_white_collision(200, 300, self.enemies.laserx10, self.laser_y10, 90):
-                    self.laser_y10 = 625
-                    pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("white barrier.wav")))
-
-                if self.red_white_collision(200, 300, self.enemies.laserx11, self.laser_y11, 90):
-                    self.laser_y11 = 625
-                    pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("white barrier.wav")))
-
-                if self.red_white_collision(200, 300, self.enemies.laserx12, self.laser_y12, 90):
-                    self.laser_y12 = 625
-                    pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("white barrier.wav")))
-
-                if self.red_white_collision(650, 300, self.enemies.laserx, self.laser_y, 90):
-                    self.laser_y = 625
-                    pygame.mixer.Sound.play(pygame.mixer.Sound("Space invaders stuff/white barrier.wav"))
-                if self.red_white_collision(650, 300, self.enemies.laserx1, self.laser_y1, 90):
-                    self.laser_y1 = 625
-                    pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("white barrier.wav")))
-
-                if self.red_white_collision(650, 300, self.enemies.laserx2, self.laser_y2, 90):
-                    self.laser_y2 = 625
-                    pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("white barrier.wav")))
-
-                if self.red_white_collision(650, 300, self.enemies.laserx3, self.laser_y3, 90):
-                    self.laser_y3 = 625
-                    pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("white barrier.wav")))
-
-                if self.red_white_collision(650, 300, self.enemies.laserx4, self.laser_y4, 90):
-                    self.laser_y4 = 625
-                    pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("white barrier.wav")))
-
-                if self.red_white_collision(650, 300, self.enemies.laserx5, self.laser_y5, 90):
-                    self.laser_y5 = 625
-                    pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("white barrier.wav")))
-
-                if self.red_white_collision(650, 300, self.enemies.laserx6, self.laser_y6, 90):
-                    self.laser_y6 = 625
-                    pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("white barrier.wav")))
-
-                if self.red_white_collision(650, 300, self.enemies.laserx7, self.laser_y7, 90):
-                    self.laser_y7 = 625
-                    pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("white barrier.wav")))
-
-                if self.red_white_collision(650, 300, self.enemies.laserx8, self.laser_y8, 90):
-                    self.laser_y8 = 625
-                    pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("white barrier.wav")))
-
-                if self.red_white_collision(650, 300, self.enemies.laserx10, self.laser_y10, 90):
-                    self.laser_y10 = 625
-                    pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("white barrier.wav")))
-
-                if self.red_white_collision(650, 300, self.enemies.laserx11, self.laser_y11, 90):
-                    self.laser_y11 = 625
-                    pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("white barrier.wav")))
-
-                if self.red_white_collision(650, 300, self.enemies.laserx12, self.laser_y12, 90):
-                    self.laser_y12 = 625
-                    pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("white barrier.wav")))
-
-
+                for i in range(0,13):
+                    if i ==9:
+                        continue
+                    if self.red_white_collision(200, 300, self.enemies.laserxs[i], self.laser_ys[i], 90):
+                        self.laser_ys[i] = 625
+                        pygame.mixer.Sound.play(white_barrier)
+                for i in range(0,13):
+                    if i ==9:
+                        continue
+                    if self.red_white_collision(650, 300, self.enemies.laserxs[i], self.laser_ys[i], 90):
+                        self.laser_ys[i] = 625
+                        pygame.mixer.Sound.play(white_barrier)
                 #Player fire on barrier collision
                 if self.blue_light_collision(200, 300, 435 + self.projectile.difference, self.projectile.ys[self.projectile.num], 90):
                     self.projectile.ys[self.projectile.num] = -25
@@ -1686,314 +737,112 @@ class Game:
                 if self.blue_light_collision(650, 300, 435 + self.projectile.difference, self.projectile.ys[self.projectile.num], 90):
                     self.projectile.ys[self.projectile.num] = -25
                     pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("white barrier.wav")))
-
-
-
-
-        
-
                 #Level 1 Player fire on enemy hitboxes
-                if self.alien_laser_collision(435 + self.projectile.difference, self.projectile.ys[self.projectile.num], self.enemies.horde_x[0], self.enemies.horde_y[0]):
-                    self.enemies.horde_y[0] = -100
-                    self.enemies.horde_x[0] = -3999
-                    self.enemies.status[0] = False
-                    self.projectile.ys[self.projectile.num] = -26
-                    pygame.mixer.Sound.play(explosion)
-                if self.alien_laser_collision(435 + self.projectile.difference, self.projectile.ys[self.projectile.num], self.enemies.horde_x[1], self.enemies.horde_y[1]):
-                    self.enemies.horde_y[1] = -100
-                    self.enemies.status[1] = False
-                    self.enemies.horde_x[1] = -3999
-                    pygame.mixer.Sound.play(explosion)
-                    self.projectile.ys[self.projectile.num] = -26
-                if self.alien_laser_collision(435 + self.projectile.difference, self.projectile.ys[self.projectile.num], self.enemies.horde_x[2], self.enemies.horde_y[2]):
-                    self.enemies.horde_y[2] = -100
-                    self.enemies.status[2] = False
-                    self.enemies.horde_x[2] = -3999
-                    self.projectile.ys[self.projectile.num] = -26
-                    pygame.mixer.Sound.play(explosion)
-                if self.alien_laser_collision(435 + self.projectile.difference, self.projectile.ys[self.projectile.num], self.enemies.horde_x[3], self.enemies.horde_y[3]):
-                    self.enemies.horde_y[3] = -100
-                    self.enemies.horde_x[3] = -4000
-                    self.enemies.status[3] = False
-                    self.projectile.ys[self.projectile.num] = -26
-                    pygame.mixer.Sound.play(explosion)
-                if self.alien_laser_collision(435 + self.projectile.difference, self.projectile.ys[self.projectile.num], self.enemies.horde_x[4], self.enemies.horde_y[4]):
-                    self.enemies.horde_y[4] = -100
-                    self.enemies.status[4] = False
-                    self.enemies.horde_x[4] = -4000
-                    self.projectile.ys[self.projectile.num] = -26
-                    pygame.mixer.Sound.play(explosion)
-                if self.alien_laser_collision(435 + self.projectile.difference, self.projectile.ys[self.projectile.num], self.enemies.horde_x[5], self.enemies.horde_y[5]):
-                    self.enemies.horde_y[5] = -100
-                    self.enemies.horde_x[5] = -4000
-                    self.enemies.status[5] = False
-                    self.projectile.ys[self.projectile.num] = -26
-                    pygame.mixer.Sound.play(explosion)
-                if self.alien_laser_collision(435 + self.projectile.difference, self.projectile.ys[self.projectile.num], self.enemies.horde_x[6], self.enemies.horde_y[6]):
-                    self.enemies.horde_y[6] = -100
-                    self.enemies.horde_x[6] = -4000
-                    self.enemies.status[6] = False
-                    self.projectile.ys[self.projectile.num] = -26
-                    pygame.mixer.Sound.play(explosion)
-                if self.alien_laser_collision(435 + self.projectile.difference, self.projectile.ys[self.projectile.num], self.enemies.horde_x[7], self.enemies.horde_y[7]):
-                    self.enemies.horde_x[7] = -4000
-                    self.enemies.horde_y[7] = -100
-                    self.enemies.status[7] = False
-                    self.projectile.ys[self.projectile.num] = -26
-                    pygame.mixer.Sound.play(explosion)
-                if self.alien_laser_collision(435 + self.projectile.difference, self.projectile.ys[self.projectile.num], self.enemies.horde_x[8], self.enemies.horde_y[8]):
-                    self.enemies.horde_x[8] = -4000
-                    self.enemies.horde_y[8] = -100
-                    self.enemies.status[8] = False
-                    self.projectile.ys[self.projectile.num] = -26
-                    pygame.mixer.Sound.play(explosion)
-                if self.alien_laser_collision(435 + self.projectile.difference, self.projectile.ys[self.projectile.num], self.enemies.horde_x[10], self.enemies.horde_y[10]):
-                    self.enemies.horde_x[10] = -4000
-                    self.enemies.horde_y[10] = -100
-                    self.enemies.status[10] = False
-                    self.projectile.ys[self.projectile.num] = -26
-                    pygame.mixer.Sound.play(explosion)
-                if self.alien_laser_collision(435 + self.projectile.difference, self.projectile.ys[self.projectile.num], self.enemies.horde_x[11], self.enemies.horde_y[11]):
-                    self.enemies.horde_x[11] = -4000
-                    self.enemies.horde_y[11] = -100
-                    self.enemies.status[11] = False
-                    self.projectile.ys[self.projectile.num] = -26
-                    pygame.mixer.Sound.play(explosion)
-                if self.alien_laser_collision(435 + self.projectile.difference, self.projectile.ys[self.projectile.num], self.enemies.horde_x[12], self.enemies.horde_y[12]):
-                    self.enemies.horde_x[12] = -4000
-                    self.enemies.status[12] = False
-                    self.projectile.ys[self.projectile.num] = -26
-                    self.enemies.horde_y[12] = -100
-                    pygame.mixer.Sound.play(explosion)
+                for i in range(0, 13):
+                    if i ==9:
+                        continue
+                    if self.alien_laser_collision(435 + self.projectile.difference, self.projectile.ys[self.projectile.num], self.enemies.horde_x[i], self.enemies.horde_y[i]):
+                        self.enemies.horde_y[i] = 1000
+                        self.enemies.horde_x[i] = -3999
+                        self.enemies.status[i] = False
+                        self.projectile.ys[self.projectile.num] = -26
+                        pygame.mixer.Sound.play(explosion)
                 value = False
                 self.count = 0
-
                 for f in [self.enemies.status[0], self.enemies.status[1], self.enemies.status[2], self.enemies.status[3], self.enemies.status[4], self.enemies.status[5], self.enemies.status[6], self.enemies.status[7], self.enemies.status[8], self.enemies.status[10], self.enemies.status[11], self.enemies.status[12]]:
 
-                    if f == False:
+                    if not f:
                         self.count += 1
-
-
-
                 if self.count == 12:
                     self.reset()
                     self.enemies.level += 0.5
                     self.reset()
                     self.count = 0
                     self.player.health = 5
-        
         if self.enemies.level == 2:
-            if self.red_white_collision(550, 250, self.enemies.laserx, self.laser_y, 120):
-                    self.laser_y = 625
-                    pygame.mixer.Sound.play(pygame.mixer.Sound("Space invaders stuff/white barrier.wav"))
-            if self.red_white_collision(550, 250, self.enemies.laserx1, self.laser_y1, 120):
-                    self.laser_y1 = 625
-                    pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("white barrier.wav")))
-
-            if self.red_white_collision(550, 250, self.enemies.laserx2, self.laser_y2, 120):
-                    self.laser_y2 = 625
-                    pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("white barrier.wav")))
-
-            if self.red_white_collision(550, 250, self.enemies.laserx3, self.laser_y3, 120):
-                    self.laser_y3 = 625
-                    pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("white barrier.wav")))
-
-            if self.red_white_collision(550, 250, self.enemies.laserx4, self.laser_y4, 120):
-                    self.laser_y4 = 625
-                    pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("white barrier.wav")))
-
-            if self.red_white_collision(550, 250, self.enemies.laserx5, self.laser_y5, 120):
-                    self.laser_y5 = 625
-                    pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("white barrier.wav")))
-
-            if self.red_white_collision(550, 250, self.enemies.laserx6, self.laser_y6, 120):
-                    self.laser_y6 = 625
-                    pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("white barrier.wav")))
-
-            if self.red_white_collision(550, 250, self.enemies.laserx7, self.laser_y7, 120):
-                    self.laser_y7 = 625
-                    pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("white barrier.wav")))
-                
-            if self.red_white_collision(550, 250, self.enemies.laserx8, self.laser_y8, 120):
-                    self.laser_y8 = 625
-                    pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("white barrier.wav")))
-
-
-            if self.red_white_collision(550, 250, self.enemies.laserx9, self.laser_y9, 120):
-                    self.laser_y9 = 625
-                    pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("white barrier.wav")))
-
-            if self.red_white_collision(550, 250, self.enemies.laserx10, self.laser_y10, 120):
-                    self.laser_y10 = 625
-                    pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("white barrier.wav")))
-
-            if self.red_white_collision(550, 250, self.enemies.laserx11, self.laser_y11, 120):
-                    self.laser_y11 = 625
-                    pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("white barrier.wav")))
-
-            if self.red_white_collision(550, 250, self.enemies.laserx12, self.laser_y12, 120):
-                    self.laser_y12 = 625
-                    pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("white barrier.wav")))
-
-            if self.red_white_collision(550, 250, self.enemies.laserx13, self.laser_y13, 120):
-                    self.laser_y13 = 625
-                    pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("white barrier.wav")))
-
-
+            for i in range(0,14):
+                if self.red_white_collision(550, 250, self.enemies.laserxs[i], self.laser_ys[i], 120):
+                        self.laser_ys[i] = 625
+                        pygame.mixer.Sound.play(white_barrier)
             if self.blue_light_collision(100, 250, 435 + self.projectile.difference,self.projectile.ys[self.projectile.num], 150 ):
                 self.projectile.ys[self.projectile.num] = -25
             if self.blue_light_collision(550, 250, 435 + self.projectile.difference,self.projectile.ys[self.projectile.num], 120): 
                 self.projectile.ys[self.projectile.num] = -25
-            if self.red_laser_collision(self.player.x, self.player.y, self.enemies.laserx9, self.laser_y9):
+            if self.red_laser_collision(self.player.x, self.player.y, self.enemies.laserxs[9], self.laser_ys[9]):
                 self.player.health -= 1
                 self.col = False
-                self.laser_y9 = 625
-                pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("hit.wav")))
-            if self.red_laser_collision(self.player.x, self.player.y, self.enemies.laserx13, self.laser_y13):
+                self.laser_ys[9] = 625
+                pygame.mixer.Sound.play(hit)
+            if self.red_laser_collision(self.player.x, self.player.y, self.enemies.laserxs[13], self.laser_ys[13]):
                 self.player.health -= 1
                 self.col = False
-                self.laser_y13 = 625
-                pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("hit.wav")))
-            if self.alien_laser_collision(435 + self.projectile.difference, self.projectile.ys[self.projectile.num],
-                                          self.enemies.horde_x[0], self.enemies.horde_y[0]):
-                if self.h0 == 1:
-                    self.h0 -= 1
-                    self.enemies.horde_y[0] = -100
-                    self.enemies.horde_x[0] = -399900
-                    self.enemies.status[0] = False
-                    self.projectile.ys[self.projectile.num] = -26
-                    pygame.mixer.Sound.play(explosion)
-                if self.h0 > 1:
-                    self.h0 -= 1
-                    self.projectile.ys[self.projectile.num] = -26
-
-                    pygame.mixer.Sound.play(hurt)
-            if self.alien_laser_collision(435 + self.projectile.difference, self.projectile.ys[self.projectile.num],
-                                          self.enemies.horde_x[1], self.enemies.horde_y[1]):
-
-                if self.h1 == 1:
-                    self.h1 -= 1
-                    self.enemies.horde_y[1] = -100
-                    self.enemies.horde_x[1] = -399900
-                    self.enemies.status[1] = False
-                    self.projectile.ys[self.projectile.num] = -26
-                    pygame.mixer.Sound.play(explosion)
-                if self.h1 > 1:
-                    self.h1 -= 1
-                    self.projectile.ys[self.projectile.num] = -26
-                    pygame.mixer.Sound.play(hurt)
-            if self.alien_laser_collision(435 + self.projectile.difference, self.projectile.ys[self.projectile.num],
-                                          self.enemies.horde_x[2], self.enemies.horde_y[2]):
-                self.enemies.horde_y[2] = -100
-                self.enemies.status[2] = False
-                self.enemies.horde_x[2] = -399900
-                self.projectile.ys[self.projectile.num] = -26
-                pygame.mixer.Sound.play(explosion)
-            if self.alien_laser_collision(435 + self.projectile.difference, self.projectile.ys[self.projectile.num],
-                                          self.enemies.horde_x[3], self.enemies.horde_y[3]):
-                self.enemies.horde_y[3] = -100
-                self.enemies.horde_x[3] = -400000
-                self.enemies.status[3] = False
-                self.projectile.ys[self.projectile.num] = -26
-                pygame.mixer.Sound.play(explosion)
-            if self.alien_laser_collision(435 + self.projectile.difference, self.projectile.ys[self.projectile.num],
-                                          self.enemies.horde_x[4], self.enemies.horde_y[4]):
-                self.enemies.horde_y[4] = -100
-                self.enemies.status[4] = False
-                self.enemies.horde_x[4] = -400000
-                self.projectile.ys[self.projectile.num] = -26
-                pygame.mixer.Sound.play(explosion)
-            if self.alien_laser_collision(435 + self.projectile.difference, self.projectile.ys[self.projectile.num],
-                                          self.enemies.horde_x[5], self.enemies.horde_y[5]):
-                self.enemies.horde_y[5] = -100
-                self.enemies.horde_x[5] = -400000
-                self.enemies.status[5] = False
-                self.projectile.ys[self.projectile.num] = -26
-                pygame.mixer.Sound.play(explosion)
-            if self.alien_laser_collision(435 + self.projectile.difference, self.projectile.ys[self.projectile.num],
-                                          self.enemies.horde_x[6], self.enemies.horde_y[6]):
-                self.enemies.horde_y[6] = -100
-                self.enemies.horde_x[6] = -400000
-                self.enemies.status[6] = False
-                self.projectile.ys[self.projectile.num] = -26
-                pygame.mixer.Sound.play(explosion)
-            if self.alien_laser_collision(435 + self.projectile.difference, self.projectile.ys[self.projectile.num],
-                                          self.enemies.horde_x[7], self.enemies.horde_y[7]):
-                
-                if self.h7 == 1:
-                    self.h7 -= 1
-                    self.enemies.horde_y[7] = -100
-                    self.enemies.horde_x[7] = -399900
-                    self.enemies.status[7] = False
-                    self.projectile.ys[self.projectile.num] = -26
-                    pygame.mixer.Sound.play(explosion)
-                if self.h7 > 1:
-                    self.h7-= 1
-                    self.projectile.ys[self.projectile.num] = -26
-                    pygame.mixer.Sound.play(hurt)
-            if self.alien_laser_collision(435 + self.projectile.difference, self.projectile.ys[self.projectile.num],
-                                          self.enemies.horde_x[8], self.enemies.horde_y[8]):
-              
-                if self.h8 == 1:
-                    self.h8 -= 1
-                    self.enemies.horde_y[8] = -100
-                    self.enemies.horde_x[8] = -399900
-                    self.enemies.status[8] = False
-                    self.projectile.ys[self.projectile.num] = -26
-                    pygame.mixer.Sound.play(explosion)
-                if self.h8 > 1:
-                    self.h8 -= 1
-                    self.projectile.ys[self.projectile.num] = -26
-                    pygame.mixer.Sound.play(hurt)
-            if self.alien_laser_collision(435 + self.projectile.difference, self.projectile.ys[self.projectile.num],
-                                          self.enemies.horde_x[9], self.enemies.horde_y[9]):
-                self.enemies.horde_y[9] = -100
-                self.enemies.horde_x[9] = -400000
-                self.enemies.status[9] = False
-                self.projectile.ys[self.projectile.num] = -26
-                pygame.mixer.Sound.play(explosion)
-            if self.alien_laser_collision(435 + self.projectile.difference, self.projectile.ys[self.projectile.num],
-                                          self.enemies.horde_x[10], self.enemies.horde_y[10]):
-                self.enemies.horde_x[10] = -400000
-                self.enemies.horde_y[10] = -100
-                self.enemies.status[10] = False
-                self.projectile.ys[self.projectile.num] = -26
-                pygame.mixer.Sound.play(explosion)
-            if self.alien_laser_collision(435 + self.projectile.difference, self.projectile.ys[self.projectile.num],
-                                          self.enemies.horde_x[11], self.enemies.horde_y[11]):
-                self.enemies.horde_x[11] = -400000
-                self.enemies.horde_y[11] = -100
-                self.enemies.status[11] = False
-                self.projectile.ys[self.projectile.num] = -26
-                pygame.mixer.Sound.play(explosion)
-            if self.alien_laser_collision(435 + self.projectile.difference, self.projectile.ys[self.projectile.num],
-                                          self.enemies.horde_x[12], self.enemies.horde_y[12]):
-                self.enemies.horde_x[12] = -400000
-                self.enemies.status[12] = False
-                self.projectile.ys[self.projectile.num] = -26
-                self.enemies.horde_y[12] = -100
-                pygame.mixer.Sound.play(explosion)
-            if self.alien_laser_collision(435 + self.projectile.difference, self.projectile.ys[self.projectile.num],
-                                          self.enemies.horde_x[13], self.enemies.horde_y[13]):
-                self.enemies.horde_x[13] = -400000
-                self.enemies.status[13] = False
-                self.projectile.ys[self.projectile.num] = -26
-                self.enemies.horde_y[13] = -100
-                pygame.mixer.Sound.play(explosion)
-            
-
+                self.laser_ys[13] = 625
+                pygame.mixer.Sound.play(hit)
+            for i in range(0, 14):
+                if self.alien_laser_collision(435 + self.projectile.difference, self.projectile.ys[self.projectile.num],
+                                          self.enemies.horde_x[i], self.enemies.horde_y[i]):
+                    if i ==0:
+                        if self.h0 == 1:
+                            self.h0 -= 1
+                            self.enemies.horde_y[i] = 1000
+                            self.enemies.horde_x[i] = -399900
+                            self.enemies.status[i] = False
+                            self.projectile.ys[self.projectile.num] = -26
+                            pygame.mixer.Sound.play(explosion)
+                        if self.h0 > 1:
+                            self.h0 -= 1
+                            self.projectile.ys[self.projectile.num] = -26
+                            pygame.mixer.Sound.play(hurt)
+                    elif i ==1:
+                        if self.h1 == 1:
+                            self.h1 -= 1
+                            self.enemies.horde_y[i] = 1000
+                            self.enemies.horde_x[i] = -399900
+                            self.enemies.status[i] = False
+                            self.projectile.ys[self.projectile.num] = -26
+                            pygame.mixer.Sound.play(explosion)
+                        if self.h1 > 1:
+                            self.h1 -= 1
+                            self.projectile.ys[self.projectile.num] = -26
+                            pygame.mixer.Sound.play(hurt)
+                    elif i ==7:
+                        if self.h7 == 1:
+                            self.h7 -= 1
+                            self.enemies.horde_y[i] = 1000
+                            self.enemies.horde_x[i] = -399900
+                            self.enemies.status[i] = False
+                            self.projectile.ys[self.projectile.num] = -26
+                            pygame.mixer.Sound.play(explosion)
+                        if self.h7 > 1:
+                            self.h7 -= 1
+                            self.projectile.ys[self.projectile.num] = -26
+                            pygame.mixer.Sound.play(hurt)
+                    elif i ==8:
+                        if self.h8 == 1:
+                            self.h8 -= 1
+                            self.enemies.horde_y[i] = 1000
+                            self.enemies.horde_x[i] = -399900
+                            self.enemies.status[i] = False
+                            self.projectile.ys[self.projectile.num] = -26
+                            pygame.mixer.Sound.play(explosion)
+                        if self.h8 > 1:
+                            self.h8 -= 1
+                            self.projectile.ys[self.projectile.num] = -26
+                            pygame.mixer.Sound.play(hurt)
+                    else:
+                        self.enemies.horde_y[i] = 1000
+                        self.enemies.status[i] = False
+                        self.enemies.horde_x[i] = -399900
+                        self.projectile.ys[self.projectile.num] = -26
+                        pygame.mixer.Sound.play(explosion)
             pygame.display.update()
-
-
             value = False
             self.count = 0
-
             for f in [self.enemies.status[0], self.enemies.status[1], self.enemies.status[2], self.enemies.status[3],
                       self.enemies.status[4], self.enemies.status[5], self.enemies.status[6], self.enemies.status[7],
                       self.enemies.status[8],self.enemies.status[9], self.enemies.status[10], self.enemies.status[11],
                       self.enemies.status[12],  self.enemies.status[13]]:
-
-                if f == False:
+                if not f:
                     self.count += 1
                 if self.count == 14:
                     self.reset()
@@ -2004,171 +853,91 @@ class Game:
         if self.enemies.level == 3:
             if self.blue_light_collision(0, 150, 435 + self.projectile.difference, self.projectile.ys[self.projectile.num], 200):
                     self.projectile.ys[self.projectile.num] = -25
-                    pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("white barrier.wav")))
-
+                    pygame.mixer.Sound.play(white_barrier)
             if self.blue_light_collision(700, 150, 435 + self.projectile.difference, self.projectile.ys[self.projectile.num], 200):
                     self.projectile.ys[self.projectile.num] = -25
-                    pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("white barrier.wav")))
-
-
-            if self.red_laser_collision(self.player.x, self.player.y, self.enemies.laserx9, self.laser_y9):
+                    pygame.mixer.Sound.play(white_barrier)
+            if self.red_laser_collision(self.player.x, self.player.y, self.enemies.laserxs[9], self.laser_ys[9]):
                 self.player.health -= 1
                 self.col = False
-                self.laser_y9 = 625
-                pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("hit.wav")))
-            if self.red_laser_collision(self.player.x, self.player.y, self.enemies.laserx13, self.laser_y13):
+                self.laser_ys[9] = 625
+                pygame.mixer.Sound.play(hit)
+            if self.red_laser_collision(self.player.x, self.player.y, self.enemies.laserxs[13], self.laser_ys[13]):
                 self.player.health -= 1
                 self.col = False
-                self.laser_y13 = 625
-                pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("hit.wav")))
-            if self.alien_laser_collision(435 + self.projectile.difference, self.projectile.ys[self.projectile.num],
-                                          self.enemies.horde_x[0], self.enemies.horde_y[0]):
-                if self.h0 == 1:
-                    self.h0 -= 1
-                    self.enemies.horde_y[0] = -100
-                    self.enemies.horde_x[0] = -399900
-                    self.enemies.status[0] = False
-                    self.projectile.ys[self.projectile.num] = -26
-                    pygame.mixer.Sound.play(explosion)
-                if self.h0 > 1:
-                    self.h0 -= 1
-                    self.projectile.ys[self.projectile.num] = -26
-
-                    pygame.mixer.Sound.play(hurt)
-            if self.alien_laser_collision(435 + self.projectile.difference, self.projectile.ys[self.projectile.num],
-                                          self.enemies.horde_x[1], self.enemies.horde_y[1]):
-
-                if self.h1 == 1:
-                    self.h1 -= 1
-                    self.enemies.horde_y[1] = -100
-                    self.enemies.horde_x[1] = -399900
-                    self.enemies.status[1] = False
-                    self.projectile.ys[self.projectile.num] = -26
-                    pygame.mixer.Sound.play(explosion)
-                if self.h1 > 1:
-                    self.h1 -= 1
-                    self.projectile.ys[self.projectile.num] = -26
-                    pygame.mixer.Sound.play(hurt)
-            if self.alien_laser_collision(435 + self.projectile.difference, self.projectile.ys[self.projectile.num],
-                                          self.enemies.horde_x[2], self.enemies.horde_y[2]):
-                self.enemies.horde_y[2] = -100
-                self.enemies.status[2] = False
-                self.enemies.horde_x[2] = -399900
-                self.projectile.ys[self.projectile.num] = -26
-                pygame.mixer.Sound.play(explosion)
-            if self.alien_laser_collision(435 + self.projectile.difference, self.projectile.ys[self.projectile.num],
-                                          self.enemies.horde_x[3], self.enemies.horde_y[3]):
-                self.enemies.horde_y[3] = -100
-                self.enemies.horde_x[3] = -400000
-                self.enemies.status[3] = False
-                self.projectile.ys[self.projectile.num] = -26
-                pygame.mixer.Sound.play(explosion)
-            if self.alien_laser_collision(435 + self.projectile.difference, self.projectile.ys[self.projectile.num],
-                                          self.enemies.horde_x[4], self.enemies.horde_y[4]):
-                self.enemies.horde_y[4] = -100
-                self.enemies.status[4] = False
-                self.enemies.horde_x[4] = -400000
-                self.projectile.ys[self.projectile.num] = -26
-                pygame.mixer.Sound.play(explosion)
-            if self.alien_laser_collision(435 + self.projectile.difference, self.projectile.ys[self.projectile.num],
-                                          self.enemies.horde_x[5], self.enemies.horde_y[5]):
-                self.enemies.horde_y[5] = -100
-                self.enemies.horde_x[5] = -400000
-                self.enemies.status[5] = False
-                self.projectile.ys[self.projectile.num] = -26
-                pygame.mixer.Sound.play(explosion)
-            if self.alien_laser_collision(435 + self.projectile.difference, self.projectile.ys[self.projectile.num],
-                                          self.enemies.horde_x[6], self.enemies.horde_y[6]):
-                self.enemies.horde_y[6] = -100
-                self.enemies.horde_x[6] = -400000
-                self.enemies.status[6] = False
-                self.projectile.ys[self.projectile.num] = -26
-                pygame.mixer.Sound.play(explosion)
-            if self.alien_laser_collision(435 + self.projectile.difference, self.projectile.ys[self.projectile.num],
-                                          self.enemies.horde_x[7], self.enemies.horde_y[7]):
-                
-                if self.h7 == 1:
-                    self.h7 -= 1
-                    self.enemies.horde_y[7] = -100
-                    self.enemies.horde_x[7] = -399900
-                    self.enemies.status[7] = False
-                    self.projectile.ys[self.projectile.num] = -26
-                    pygame.mixer.Sound.play(explosion)
-                if self.h7 > 1:
-                    self.h7-= 1
-                    self.projectile.ys[self.projectile.num] = -26
-                    pygame.mixer.Sound.play(hurt)
-            if self.alien_laser_collision(435 + self.projectile.difference, self.projectile.ys[self.projectile.num],
-                                          self.enemies.horde_x[8], self.enemies.horde_y[8]):
-              
-                if self.h8 == 1:
-                    self.h8 -= 1
-                    self.enemies.horde_y[8] = -100
-                    self.enemies.horde_x[8] = -399900
-                    self.enemies.status[8] = False
-                    self.projectile.ys[self.projectile.num] = -26
-                    pygame.mixer.Sound.play(explosion)
-                if self.h8 > 1:
-                    self.h8 -= 1
-                    self.projectile.ys[self.projectile.num] = -26
-                    pygame.mixer.Sound.play(hurt)
-            if self.alien_laser_collision(435 + self.projectile.difference, self.projectile.ys[self.projectile.num],
-                                          self.enemies.horde_x[9], self.enemies.horde_y[9]):
-                self.enemies.horde_y[9] = -100
-                self.enemies.horde_x[9] = -400000
-                self.enemies.status[9] = False
-                self.projectile.ys[self.projectile.num] = -26
-                pygame.mixer.Sound.play(explosion)
-            if self.alien_laser_collision(435 + self.projectile.difference, self.projectile.ys[self.projectile.num],
-                                          self.enemies.horde_x[10], self.enemies.horde_y[10]):
-                self.enemies.horde_x[10] = -400000
-                self.enemies.horde_y[10] = -100
-                self.enemies.status[10] = False
-                self.projectile.ys[self.projectile.num] = -26
-                pygame.mixer.Sound.play(explosion)
-            if self.alien_laser_collision(435 + self.projectile.difference, self.projectile.ys[self.projectile.num],
-                                          self.enemies.horde_x[11], self.enemies.horde_y[11]):
-                self.enemies.horde_x[11] = -400000
-                self.enemies.horde_y[11] = -100
-                self.enemies.status[11] = False
-                self.projectile.ys[self.projectile.num] = -26
-                pygame.mixer.Sound.play(explosion)
-            if self.alien_laser_collision(435 + self.projectile.difference, self.projectile.ys[self.projectile.num],
-                                          self.enemies.horde_x[12], self.enemies.horde_y[12]):
-                self.enemies.horde_x[12] = -400000
-                self.enemies.status[12] = False
-                self.projectile.ys[self.projectile.num] = -26
-                self.enemies.horde_y[12] = -100
-                pygame.mixer.Sound.play(explosion)
-            if self.alien_laser_collision(435 + self.projectile.difference, self.projectile.ys[self.projectile.num],
-                                          self.enemies.horde_x[13], self.enemies.horde_y[13]):
-                self.enemies.horde_x[13] = -400000
-                self.enemies.status[13] = False
-                self.projectile.ys[self.projectile.num] = -26
-                self.enemies.horde_y[13] = -100
-                pygame.mixer.Sound.play(explosion)
+                self.laser_ys[13] = 625
+                pygame.mixer.Sound.play(hit)
+            for i in range(0, 14):
+                if self.alien_laser_collision(435 + self.projectile.difference, self.projectile.ys[self.projectile.num],
+                                          self.enemies.horde_x[i], self.enemies.horde_y[i]):
+                    if i ==0:
+                        if self.h0 == 1:
+                            self.h0 -= 1
+                            self.enemies.horde_y[i] = 1000
+                            self.enemies.horde_x[i] = -399900
+                            self.enemies.status[i] = False
+                            self.projectile.ys[self.projectile.num] = -26
+                            pygame.mixer.Sound.play(explosion)
+                        if self.h0 > 1:
+                            self.h0 -= 1
+                            self.projectile.ys[self.projectile.num] = -26
+                            pygame.mixer.Sound.play(hurt)
+                    elif i ==1:
+                        if self.h1 == 1:
+                            self.h1 -= 1
+                            self.enemies.horde_y[i] = 1000
+                            self.enemies.horde_x[i] = -399900
+                            self.enemies.status[i] = False
+                            self.projectile.ys[self.projectile.num] = -26
+                            pygame.mixer.Sound.play(explosion)
+                        if self.h1 > 1:
+                            self.h1 -= 1
+                            self.projectile.ys[self.projectile.num] = -26
+                            pygame.mixer.Sound.play(hurt)
+                    elif i ==7:
+                        if self.h7 == 1:
+                            self.h7 -= 1
+                            self.enemies.horde_y[i] = 1000
+                            self.enemies.horde_x[i] = -399900
+                            self.enemies.status[i] = False
+                            self.projectile.ys[self.projectile.num] = -26
+                            pygame.mixer.Sound.play(explosion)
+                        if self.h7 > 1:
+                            self.h7 -= 1
+                            self.projectile.ys[self.projectile.num] = -26
+                            pygame.mixer.Sound.play(hurt)
+                    elif i ==8:
+                        if self.h8 == 1:
+                            self.h8 -= 1
+                            self.enemies.horde_y[i] = 1000
+                            self.enemies.horde_x[i] = -399900
+                            self.enemies.status[i] = False
+                            self.projectile.ys[self.projectile.num] = -26
+                            pygame.mixer.Sound.play(explosion)
+                        if self.h8 > 1:
+                            self.h8 -= 1
+                            self.projectile.ys[self.projectile.num] = -26
+                            pygame.mixer.Sound.play(hurt)
+                    else:
+                        self.enemies.horde_y[i] = 1000
+                        self.enemies.status[i] = False
+                        self.enemies.horde_x[i] = -399900
+                        self.projectile.ys[self.projectile.num] = -26
+                        pygame.mixer.Sound.play(explosion)
             if self.blue_light_collision(660, 280, 435 + self.projectile.difference,self.projectile.ys[self.projectile.num], 60 ):
                 self.projectile.ys[self.projectile.num] = 100
                 self.projectile.difference = 800 - 435
-                
-                
             if self.blue_light_collision(220, 280, 435 + self.projectile.difference,self.projectile.ys[self.projectile.num], 60 ):
                 self.projectile.ys[self.projectile.num] = 100
                 self.projectile.difference = 100 - 435
-            
-
             pygame.display.update()
-
-
             value = False
             self.count = 0
-
             for f in [self.enemies.status[0], self.enemies.status[1], self.enemies.status[2], self.enemies.status[3],
                       self.enemies.status[4], self.enemies.status[5], self.enemies.status[6], self.enemies.status[7],
                       self.enemies.status[8],self.enemies.status[9], self.enemies.status[10], self.enemies.status[11],
                       self.enemies.status[12],  self.enemies.status[13]]:
-
-                if f == False:
+                if not f :
                     self.count += 1
                 if self.count == 14:
                     self.reset()
@@ -2177,168 +946,140 @@ class Game:
                     self.count = 0
                     self.player.health = 5
         if self.enemies.level == 0:
-                if self.red_laser_collision(self.player.x, self.player.y, self.enemies.laserx14, self.laser_y14):
-                    self.player.health -= 1
-                    self.col = False
-                    self.laser_y14 = 625
-                    pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("hit.wav")))
-                if self.red_laser_collision(self.player.x, self.player.y, self.enemies.laserx15, self.laser_y15):
-                    self.player.health -= 1
-                    self.col = False
-                    self.laser_y15 = 625
-                    pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("hit.wav")))
-                if self.red_laser_collision(self.player.x, self.player.y, self.enemies.laserx16, self.laser_y16):
-                    self.player.health -= 1
-                    self.col = False
-                    self.laser_y16 = 625
-                    pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("hit.wav")))
-                if self.red_laser_collision(self.player.x, self.player.y, self.enemies.laserx17, self.laser_y17):
-                    self.player.health -= 1
-                    self.col = False
-                    self.laser_y17 = 625
-                    pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("hit.wav")))
-                if self.red_laser_collision(self.player.x, self.player.y, self.enemies.laserx18, self.laser_y18):
-                    self.player.health -= 1
-                    self.col = False
-                    self.laser_y18 = 625
-                    pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("hit.wav")))
-                if self.red_laser_collision(self.player.x, self.player.y, self.enemies.laserx19, self.laser_y19):
-                    self.player.health -= 1
-                    self.col = False
-                    self.laser_y19 = 625
-                    pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("hit.wav")))
-                if self.red_laser_collision(self.player.x, self.player.y, self.enemies.laserx20, self.laser_y20):
-                    self.player.health -= 1
-                    self.col = False
-                    self.laser_y20 = 625
-                    pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("hit.wav")))
-                if self.red_laser_collision(self.player.x, self.player.y, self.enemies.laserx21, self.laser_y21):
-                    self.player.health -= 1
-                    self.col = False
-                    self.laser_y21 = 625
-                    pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("hit.wav")))
-                if self.red_laser_collision(self.player.x, self.player.y, self.enemies.laserx22, self.laser_y22):
-                    self.player.health -= 1
-                    self.col = False
-                    self.laser_y22 = 625
-                    pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("hit.wav")))
-                if self.red_laser_collision(self.player.x, self.player.y, self.enemies.laserx23, self.laser_y23):
-                    self.player.health -= 1
-                    self.col = False
-                    self.laser_y23 = 625
-                    pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("hit.wav")))
-                if self.red_laser_collision(self.player.x, self.player.y, self.enemies.laserx24, self.laser_y24):
-                    self.player.health -= 1
-                    self.col = False
-                    self.laser_y24 = 625
-                    pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("hit.wav")))
-                if self.red_laser_collision(self.player.x, self.player.y, self.enemies.laserx25, self.laser_y25):
-                    self.player.health -= 1
-                    self.col = False
-                    self.laser_y25 = 625
-                    pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("hit.wav")))
-                if self.alien_laser_collision(435 + self.projectile.difference, self.projectile.ys[self.projectile.num],self.enemies.horde_x[13], self.enemies.horde_y[13]):
-                    self.enemies.horde_y[13] = -100
-                    self.enemies.horde_x[13] = -400000
-                    self.enemies.line2[13] = False
-                    self.projectile.ys[self.projectile.num] = -26
-                    pygame.mixer.Sound.play(explosion)
-                
-                if self.alien_laser_collision(435 + self.projectile.difference, self.projectile.ys[self.projectile.num],self.enemies.horde_x[14], self.enemies.horde_y[14]):
-                    self.enemies.horde_y[14] = -100
-                    self.enemies.horde_x[14] = -400000
-                    self.enemies.line2[14] = False
-                    self.projectile.ys[self.projectile.num] = -26
-                    pygame.mixer.Sound.play(explosion)
-                    
-                if self.alien_laser_collision(435 + self.projectile.difference, self.projectile.ys[self.projectile.num],self.enemies.horde_x[15], self.enemies.horde_y[15]):
-                    self.enemies.horde_y[15] = -100
-                    self.enemies.horde_x[15] = -400000
-                    self.enemies.line2[15] = False
-                    self.projectile.ys[self.projectile.num] = -26
-                    pygame.mixer.Sound.play(explosion)
-                if self.alien_laser_collision(435 + self.projectile.difference, self.projectile.ys[self.projectile.num],self.enemies.horde_x[16], self.enemies.horde_y[16]):
-                    self.enemies.horde_y[16] = -100
-                    self.enemies.horde_x[16] = -400000
-                    self.enemies.line2[16] = False
-                    self.projectile.ys[self.projectile.num] = -26
-                    pygame.mixer.Sound.play(explosion)
-                if self.alien_laser_collision(435 + self.projectile.difference, self.projectile.ys[self.projectile.num],self.enemies.horde_x[17], self.enemies.horde_y[17]):
-                    self.enemies.horde_y[17] = -100
-                    self.enemies.horde_x[17] = -400000
-                    self.enemies.line2[17] = False
-                    self.projectile.ys[self.projectile.num] = -26
-                    pygame.mixer.Sound.play(explosion)
-                if self.alien_laser_collision(435 + self.projectile.difference, self.projectile.ys[self.projectile.num],self.enemies.horde_x[18], self.enemies.horde_y[18]):
-                    self.enemies.horde_y[18] = -100
-                    self.enemies.horde_x[18] = -400000
-                    self.enemies.line2[18] = False
-                    self.projectile.ys[self.projectile.num] = -26
-                    pygame.mixer.Sound.play(explosion)
-                if self.alien_laser_collision(435 + self.projectile.difference, self.projectile.ys[self.projectile.num],self.enemies.horde_x[19], self.enemies.horde_y[19]):
-                    self.enemies.horde_y[19] = -100
-                    self.enemies.horde_x[19] = -400000
-                    self.enemies.line2[19] = False
-                    self.projectile.ys[self.projectile.num] = -26
-                    pygame.mixer.Sound.play(explosion)
-                if self.alien_laser_collision(435 + self.projectile.difference, self.projectile.ys[self.projectile.num],self.enemies.horde_x[20], self.enemies.horde_y[20]):
-                    self.enemies.horde_y[20] = -100
-                    self.enemies.horde_x[20] = -400000
-                    self.enemies.line2[20] = False
-                    self.projectile.ys[self.projectile.num] = -26
-                    pygame.mixer.Sound.play(explosion)
-                if self.alien_laser_collision(435 + self.projectile.difference, self.projectile.ys[self.projectile.num],self.enemies.horde_x[21], self.enemies.horde_y[21]):
-                    self.enemies.horde_y[21] = -100
-                    self.enemies.horde_x[21] = -400000
-                    self.enemies.line2[21] = False
-                    self.projectile.ys[self.projectile.num] = -26
-                    pygame.mixer.Sound.play(explosion)
-                if self.alien_laser_collision(435 + self.projectile.difference, self.projectile.ys[self.projectile.num],self.enemies.horde_x[22], self.enemies.horde_y[22]):
-                    self.enemies.horde_y[22] = -100
-                    self.enemies.horde_x[22] = -400000
-                    self.enemies.line2[22] = False
-                    self.projectile.ys[self.projectile.num] = -26
-                    pygame.mixer.Sound.play(explosion)
-                if self.alien_laser_collision(435 + self.projectile.difference, self.projectile.ys[self.projectile.num],self.enemies.horde_x[23], self.enemies.horde_y[23]):
-                    self.enemies.horde_y[23] = -100
-                    self.enemies.horde_x[23] = -400000
-                    self.enemies.line2[23] = False
-                    self.projectile.ys[self.projectile.num] = -26
-                    pygame.mixer.Sound.play(explosion)
-                if self.alien_laser_collision(435 + self.projectile.difference, self.projectile.ys[self.projectile.num],self.enemies.horde_x[24], self.enemies.horde_y[24]):
-                    self.enemies.horde_y[24] = -100
-                    self.enemies.horde_x[24] = -400000
-                    self.enemies.line2[24] = False
-                    self.projectile.ys[self.projectile.num] = -26
-                    pygame.mixer.Sound.play(explosion)
-                if self.alien_laser_collision(435 + self.projectile.difference, self.projectile.ys[self.projectile.num],self.enemies.horde_x[25], self.enemies.horde_y[25]):
-                    self.enemies.horde_y[25] = -100
-                    self.enemies.horde_x[25] = -400000
-                    self.enemies.line2[25] = False
-                    self.projectile.ys[self.projectile.num] = -26
-                    pygame.mixer.Sound.play(explosion)
+                for i in range(14, 26):
+                    if self.red_laser_collision(self.player.x, self.player.y, self.enemies.laserxs[i], self.laser_ys[i]):
+                        self.player.health -= 1
+                        self.col = False
+                        self.laser_ys[i] = 625
+                        pygame.mixer.Sound.play(hit)
+                for i in range(0, 26):
+                    if self.alien_laser_collision(435 + self.projectile.difference, self.projectile.ys[self.projectile.num],self.enemies.horde_x[i], self.enemies.horde_y[i]):
+                        if i ==0:
+                            if self.h0 == 1:
+                                self.h0 -= 1
+                                self.enemies.horde_y[i] = 1000
+                                self.enemies.horde_x[i] = -399900
+                                self.enemies.line[self.enemies.horde_y[i]] = False
+                                self.projectile.ys[self.projectile.num] = -26
+                                pygame.mixer.Sound.play(explosion)
+                            if self.h0 > 1:
+                                self.h0 -= 1
+                                self.projectile.ys[self.projectile.num] = -26
+                                pygame.mixer.Sound.play(hurt)
+                        elif i ==1:
+                            if self.h1 == 1:
+                                self.h1 -= 1
+                                self.enemies.horde_y[i] = 1000
+                                self.enemies.horde_x[i] = -399900
+                                self.enemies.line[self.enemies.horde_y[i]] = False
+                                self.projectile.ys[self.projectile.num] = -26
+                                pygame.mixer.Sound.play(explosion)
+                            if self.h1 > 1:
+                                self.h1 -= 1
+                                self.projectile.ys[self.projectile.num] = -26
+                                pygame.mixer.Sound.play(hurt)
+                        elif i ==7:
 
-
-
-
-
-
-
-
-
-
-
+                            if self.h7 == 1:
+                                self.h7 -= 1
+                                self.enemies.horde_y[i] = 1000
+                                self.enemies.horde_x[i] = -399900
+                                self.enemies.line[self.enemies.horde_y[i]] = False
+                                self.projectile.ys[self.projectile.num] = -26
+                                pygame.mixer.Sound.play(explosion)
+                            if self.h7 > 1:
+                                self.h7 -= 1
+                                self.projectile.ys[self.projectile.num] = -26
+                                pygame.mixer.Sound.play(hurt)
+                        elif i ==8:
+                            if self.h8 == 1:
+                                self.h8 -= 1
+                                self.enemies.horde_y[i] = 1000
+                                self.enemies.horde_x[i] = -399900
+                                self.enemies.line[self.enemies.horde_y[i]] = False
+                                self.projectile.ys[self.projectile.num] = -26
+                                pygame.mixer.Sound.play(explosion)
+                            if self.h8 > 1:
+                                self.h8 -= 1
+                                self.projectile.ys[self.projectile.num] = -26
+                                pygame.mixer.Sound.play(hurt)
+                        elif i <= 12:
+                            self.enemies.horde_y[i] = 1000
+                            self.enemies.line[self.enemies.horde_y[i]] = False
+                            self.enemies.horde_x[i] = -399900
+                            self.projectile.ys[self.projectile.num] = -26
+                            pygame.mixer.Sound.play(explosion)
+                        else:
+                            self.enemies.horde_y[i] = 1000
+                            self.enemies.line2[self.enemies.horde_y[i]] = False
+                            self.enemies.horde_x[i] = -399900
+                            self.projectile.ys[self.projectile.num] = -26
+                            pygame.mixer.Sound.play(explosion)
+                pygame.display.update()
+                self.count = 0
+                self.count2 = 0
+                for enemy_y in self.enemies.line:
+                    if not self.enemies.line[enemy_y]:
+                        self.count += 1
+                    if self.enemies.line[enemy_y]:
+                        self.count = 0
+                        break
+                for enemy_y in self.enemies.line2:
+                    if not self.enemies.line2[enemy_y]:
+                        self.count2 += 1
+                    if self.enemies.line2[enemy_y]:
+                        self.count2 = 0
+                        break
+                standard = 80
+                if self.count == 13:
+                    l = 0
+                    for i in range(13, 26):
+                        if self.enemies.horde_y < 900:
+                            if self.enemies.horde_y[i] == 80 or self.enemies.horde_y[i] == 20:
+                                l= self.enemies.horde_y
+                                break
+                    for i in range(0, 13):
+                        self.enemies.horde_x[i] = standard
+                        standard += 60
+                    for i in range(0, 13):
+                        self.enemies.line[self.enemies.horde_y[i]] =True
+                        if l ==80:
+                            self.enemies.horde_y[i] = 20
+                        if l == 20:
+                            self.enemies.horde_y[i] = 20
+                            if self.enemies.horde_y[i + 13] < 900:
+                                self.enemies.horde_y[i + 13] = 80
+                    self.count = 0
+                if self.count2 == 13:
+                    l = 0
+                    standard = 80
+                    for i in range(0, 13):
+                        if self.enemies.line[self.enemies.horde_y[i]]:
+                            if self.enemies.horde_y[i] == 80 or self.enemies.horde_y[i] == 20:
+                                l= self.enemies.horde_y
+                                break
+                    for i in range(13, 26):
+                        self.enemies.horde_x[i] = standard
+                        standard += 60
+                    for i in range(13, 26):
+                        self.enemies.line2[self.enemies.horde_y[i]] =True
+                        if l ==80:
+                            self.enemies.horde_y[i] = 20
+                        if l == 20:
+                            self.enemies.horde_y[i] = 20
+                            if self.enemies.horde_y[i - 13] <900:
+                                self.enemies.horde_y[i - 13] = 80
+                    self.count2 = 0
+                pygame.display.update()                
     def game_over(self):
         over = True
         while over:
             self.screen.fill((0,0,0))
-            self.screen.blit(self.background, (0, 0))
             font1 = pygame.font.SysFont("Typeface Mario World Pixel Filled", 150, bold=False, italic=False)
             font2 = pygame.font.SysFont("Typeface Mario World Pixel Filled", 75, bold=False, italic=False)
             line = font1.render("Game Over", False, (200, 0, 0))
             line1 = font2.render("Restart?", False, (200, 0, 0))
             color = (200, 0, 0)
-
             self.screen.blit(line, (165, 80))
             self.screen.blit(line1, (350, 280))
             mouse_x, mouse_y = pygame.mouse.get_pos()
@@ -2347,1000 +1088,347 @@ class Game:
                 if pygame.mouse.get_pressed() == (1, 0, 0):
                     over = False
             pygame.draw.rect(self.screen, color, [330, 260, 250, 90], 5, 10 )
-
             pygame.display.update()
             pygame.mixer.music.stop()
             for event in pygame.event.get():
                 if event.type == QUIT:
                     pygame.quit()
                     sys.exit()
-
-
+    def switch_left1(self, target, num,):
+                    if self.enemies.horde_y[num] < 900:
+                        if self.enemies.horde_x[num]  >= target:
+                            self.direction = "left"
+    def switch_right1(self, target, num):
+        if self.enemies.horde_y[num] < 900:
+                if self.enemies.horde_x[num] <= target:
+                    self.direction = "right"
+    def switch_left2(self, target, num):
+            if self.enemies.horde_y[num] < 900:
+                if num <7:
+                    if self.enemies.horde_x[num] >= target:
+                        self.direction = "left"
+                if num >=7:
+                    if self.enemies.horde_x[num] <= target:
+                        self.direction = "left"
+    def switch_right2(self, target, num):
+            if self.enemies.horde_y[num] < 900:
+                if num <7:
+                    if self.enemies.horde_x[num] <= target:
+                        self.direction = "right"
+                if num >=7:
+                    if self.enemies.horde_x[num] >= target:
+                        self.direction = "right"
     def run(self):
-        speed = 1
         run = True
         pause = False
         while run:
-
-            r = random.randint(3, 9)
-            if self.enemies.level == 3:
-                f = 1.7
+            clock.tick_busy_loop()
+            fps = clock.get_fps()
+            if self.up:
+                if fps >0:
+                    self.projectile.ys[self.projectile.num] += self.projectile_speed
+                    self.projectile.ys[self.projectile.num] -= self.projectile_speed * self.enemies.intended_fps/fps
             else:
-                f = 1.5
-            if self.enemies.down:
-                        if self.laser_y < 625:
-
-                                self.laser_y +=  f
-                                self.enemies.laserx = self.enemies.laserx
-            if self.enemies.down1:
-                        if self.laser_y1 < 625:
-
-                                self.laser_y1 +=  f
-                                self.enemies.laserx1 = self.enemies.laserx1
-            if self.enemies.down2:
-                        if self.laser_y2 < 625:
-
-                                self.laser_y2 +=  f
-                                self.enemies.laserx2 = self.enemies.laserx2
-            if self.enemies.down3:
-                        if self.laser_y3 < 625:
-
-                                self.laser_y3 +=  f
-                                self.enemies.laserx3 = self.enemies.laserx3
-            if self.enemies.down4:
-                        if self.laser_y4 < 625:
-
-                                self.laser_y4 +=  f
-                                self.enemies.laserx4 = self.enemies.laserx4
-            if self.enemies.down5:
-                        if self.laser_y5 < 625:
-
-                                self.laser_y5 +=  f
-                                self.enemies.laserx5 = self.enemies.laserx5
-            if self.enemies.down6:
-                        if self.laser_y6 < 625:
-
-                                self.laser_y6 +=  f
-                                self.enemies.laserx6 = self.enemies.laserx6
-            if self.enemies.down7:
-                        if self.laser_y7 < 625:
-
-                                self.laser_y7 +=  f
-                                self.enemies.laserx7 = self.enemies.laserx7
-            if self.enemies.down8:
-                        if self.laser_y8 < 625:
-
-                                self.laser_y8 +=  f
-                                self.enemies.laserx8 = self.enemies.laserx8
-            if self.enemies.down9:
-                        if self.laser_y9 < 625:
-
-                                self.laser_y9 +=  f
-                                self.enemies.laserx9 = self.enemies.laserx9
-            if self.enemies.down10:
-                        if self.laser_y10 < 625:
-
-                                self.laser_y10 +=  f
-                                self.enemies.laserx10 = self.enemies.laserx10
-            if self.enemies.down11:
-                        if self.laser_y11 < 625:
-
-                                self.laser_y11 +=  f
-                                self.enemies.laserx11 = self.enemies.laserx11
-            if self.enemies.down12:
-                        if self.laser_y12 < 625:
-
-                                self.laser_y12 +=  f
-                                self.enemies.laserx12 = self.enemies.laserx12
-            if self.enemies.down13:
-                        if self.laser_y13 < 625:
-                                self.laser_y13 +=  f
-                                self.enemies.laserx13 = self.enemies.laserx13
-            if self.enemies.down14:
-                        if self.laser_y14 < 625:
-
-                                self.laser_y14 +=  f
-                                self.enemies.laserx14 = self.enemies.laserx14
-            if self.enemies.down15:
-                        if self.laser_y15 < 625:
-
-                                self.laser_y15 +=  f
-                                self.enemies.laserx15 = self.enemies.laserx15
-            if self.enemies.down16:
-                        if self.laser_y16 < 625:
-
-                                self.laser_y16 +=  f
-                                self.enemies.laserx16 = self.enemies.laserx16
-            if self.enemies.down17:
-                        if self.laser_y17 < 625:
-
-                                self.laser_y17 +=  f
-                                self.enemies.laserx17 = self.enemies.laserx17
-            if self.enemies.down18:
-                        if self.laser_y18 < 625:
-
-                                self.laser_y18 +=  f
-                                self.enemies.laserx18 = self.enemies.laserx18
-            if self.enemies.down19:
-                        if self.laser_y19 < 625:
-
-                                self.laser_y19 +=  f
-                                self.enemies.laserx19 = self.enemies.laserx19
-            if self.enemies.down20:
-                        if self.laser_y20 < 625:
-
-                                self.laser_y20 +=  f
-                                self.enemies.laserx20 = self.enemies.laserx20
-            if self.enemies.down21:
-                        if self.laser_y21 < 625:
-
-                                self.laser_y21 +=  f
-                                self.enemies.laserx21 = self.enemies.laserx21
-            if self.enemies.down22:
-                        if self.laser_y22 < 625:
-
-                                self.laser_y22 +=  f
-                                self.enemies.laserx22 = self.enemies.laserx22
-            if self.enemies.down23:
-                        if self.laser_y23 < 625:
-
-                                self.laser_y23 +=  f
-                                self.enemies.laserx23 = self.enemies.laserx23
-            if self.enemies.down24:
-                        if self.laser_y24 < 625:
-
-                                self.laser_y24 +=  f
-                                self.enemies.laserx24 = self.enemies.laserx24
-            if self.enemies.down25:
-                        if self.laser_y25 < 625:
-
-                                self.laser_y25 +=  f
-                                self.enemies.laserx25 = self.enemies.laserx25
-
-
-
-
-
+                pass
+            if fps > 0:
+                speed = 1 * self.enemies.intended_fps/fps
+            else:
+                speed = 1
+            if fps > 0:
+                if self.enemies.level == 3:
+                    f = (2.1 * self.enemies.intended_fps/fps)
+                elif self.enemies.level == 0:
+                    f = 2.9 * self.enemies.intended_fps/fps
+                else:
+                    f = 1.9  * self.enemies.intended_fps/fps
+            else:
+                if self.enemies.level == 3:
+                    f = 2.1 
+                elif self.enemies.level == 0:
+                    f = 2.9 
+                else:
+                    f = 1.9
+            for i in range(0,26):
+                if self.enemies.downs[i]:
+                    if self.laser_ys[i] < 625:
+                                self.laser_ys[i] +=  f
+                                self.enemies.laserxs[i] = self.enemies.laserxs[i]
             if self.enemies.level ==1:
-
                 #Movement  in level 1 (to the right)
                 if self.direction == "right":
-                    if self.enemies.status[0]:
-                        if self.enemies.horde_x[0] < 525:
-                            if self.enemies.down:
-                                self.enemies.horde_x[0] += speed
-                            if not self.enemies.down:
-                                self.enemies.horde_x[0] += speed
-                                self.enemies.laserx += speed
-                if self.direction == "right":
-                    if self.enemies.status[1]:
-                        if self.enemies.horde_x[1]  < 580:
-                            if self.enemies.down1:
-                                self.enemies.horde_x[1] += speed
-                            if not self.enemies.down1:
-                                self.enemies.horde_x[1] += speed
-                                self.enemies.laserx1 += speed
-                if self.direction == "right":
-                    if self.enemies.status[2]:
-                        if self.enemies.horde_x[2]  < 635:
-                            if self.enemies.down2:
-                                self.enemies.horde_x[2] += speed
-                            if not self.enemies.down2:
-                                self.enemies.horde_x[2] += speed
-                                self.enemies.laserx2 += speed
-                if self.direction == "right":
-                    if self.enemies.status[3]:
-                        if self.enemies.horde_x[3]  < 690:
-                            if self.enemies.down3:
-                                self.enemies.horde_x[3] += speed
-                            if not self.enemies.down3:
-                                self.enemies.horde_x[3] += speed
-                                self.enemies.laserx3 += speed
-                if self.direction == "right":
-                    if self.enemies.status[4]:
-                        if self.enemies.horde_x[4]  < 745:
-                            if self.enemies.down4:
-                                self.enemies.horde_x[4] += speed
-                            if not self.enemies.down4:
-                                self.enemies.horde_x[4] += speed
-                                self.enemies.laserx4 += speed
-                if self.direction == "right":
-                    if self.enemies.status[5]:
-                        if self.enemies.horde_x[5]  < 800:
-                            if self.enemies.down5:
-                                self.enemies.horde_x[5] += speed
-                            if not self.enemies.down5:
-                                self.enemies.horde_x[5] += speed
-                                self.enemies.laserx5 += speed
-                if self.direction == "right":
-                    if self.enemies.status[6]:
-                        if self.enemies.horde_x[6]  < 525:
-                            if self.enemies.down6:
-                                self.enemies.horde_x[6] += speed
-                            if not self.enemies.down6:
-                                self.enemies.horde_x[6] += speed
-                                self.enemies.laserx6 += speed
-                if self.direction == "right":
-                    if self.enemies.status[7]:
-                        if self.enemies.horde_x[7]  < 635:
-                            if self.enemies.down7:
-                                self.enemies.horde_x[7] += speed
-                            if not self.enemies.down7:
-                                self.enemies.horde_x[7] += speed
-                                self.enemies.laserx7 += speed
-                if self.direction == "right":
-                    if self.enemies.status[8]:
-                        if self.enemies.horde_x[8]  < 690:
-                            if self.enemies.down8:
-                                self.enemies.horde_x[8] += speed
-                            if not self.enemies.down8:
-                                self.enemies.horde_x[8] += speed
-                                self.enemies.laserx8 += speed
-                if self.direction == "right":
-                    if self.enemies.status[10]:
-                        if self.enemies.horde_x[10]  < 800:
-                            if self.enemies.down10:
-                                self.enemies.horde_x[10] += speed
-                            if not self.enemies.down10:
-                                self.enemies.horde_x[10] += speed
-                                self.enemies.laserx10 += speed
-                if self.direction == "right":
-                    if self.enemies.status[11]:
-                        if self.enemies.horde_x[11]  < 525:
-                            if self.enemies.down11:
-                                self.enemies.horde_x[11] += speed
-                            if not self.enemies.down11:
-                                self.enemies.horde_x[11] += speed
-                                self.enemies.laserx11 += speed
-                if self.direction == "right":
-                    if self.enemies.status[12]:
-                        if self.enemies.horde_x[12]  < 800:
-                            if self.enemies.down12:
-                                self.enemies.horde_x[12] += speed
-                            if not self.enemies.down12:
-                                self.enemies.horde_x[12] += speed
-                                self.enemies.laserx12 += speed
-
+                    for i in range(0, 13):
+                        if i ==9:
+                            continue
+                        if self.enemies.status:
+                            if self.enemies.downs[i]:
+                                self.enemies.horde_x[i] += speed
+                            if not self.enemies.downs[i]:
+                                self.enemies.horde_x[i] += speed
+                                self.enemies.laserxs[i] += speed
                 #Switching Direction1= level 1 (from right to left)
                 if self.direction == "right":
-                    if self.enemies.status[0]:
-                        if self.enemies.horde_x[0]  == 525:
-                            self.direction = "left"
-                if self.direction == "right":
-                    if self.enemies.status[1]:
-                        if self.enemies.horde_x[1]  == 580:
-                            self.direction = "left"
-                if self.direction == "right":
-                    if self.enemies.status[2]:
-                        if self.enemies.horde_x[2]  == 635:
-                            self.direction = "left"
-                if self.direction == "right":
-                    if self.enemies.status[3]:
-                        if self.enemies.horde_x[3]  ==690:
-                            self.direction = "left"
-                if self.direction == "right":
-                    if self.enemies.status[4]:
-                        if self.enemies.horde_x[4]  ==745:
-                            self.direction = "left"
-                if self.direction == "right":
-                    if self.enemies.status[5]:
-                        if self.enemies.horde_x[5]  ==800:
-                            self.direction = "left"
-                if self.direction == "right":
-                    if self.enemies.status[6]:
-                        if self.enemies.horde_x[6]  ==525:
-                            self.direction = "left"
-                if self.direction == "right":
-                    if self.enemies.status[7]:
-                        if self.enemies.horde_x[7]  ==635:
-                            self.direction = "left"
-                if self.direction == "right":
-                    if self.enemies.status[8]:
-                        if self.enemies.horde_x[8]  ==690:
-                            self.direction = "left"
-                if self.direction == "right":
-                    if self.enemies.status[10]:
-                        if self.enemies.horde_x[10]  == 800:
-                            self.direction = "left"
-                if self.direction == "right":
-                    if self.enemies.status[11]:
-                        if self.enemies.horde_x[11]  ==525:
-                            self.direction = "left"
-                if self.direction == "right":
-                    if self.enemies.status[12]:
-                        if self.enemies.horde_x[12]  ==800:
-                            self.direction = "left"
-
+                    self.switch_left1(525, 0)
+                    self.switch_left1(580, 1)
+                    self.switch_left1(635, 2)
+                    self.switch_left1(690, 3)
+                    self.switch_left1(745, 4)
+                    self.switch_left1(800, 5)
+                    self.switch_left1(525, 6)
+                    self.switch_left1(635, 7)
+                    self.switch_left1(690, 8)
+                    self.switch_left1(800, 10)
+                    self.switch_left1(525, 11)
+                    self.switch_left1(800, 12)
                 #Movement  in level 1 (to the left)
                 if self.direction == "left":
-                    if self.enemies.horde_x[0] > 70:
-                        if self.enemies.down:
-                            self.enemies.horde_x[0] -= speed
-                        if not self.enemies.down:
-                            self.enemies.horde_x[0] -= speed
-                            self.enemies.laserx -= speed
-                    if self.enemies.horde_x[1] > 125:
-                        if self.enemies.down1:
-                            self.enemies.horde_x[1] -= speed
-                        if not self.enemies.down1:
-                            self.enemies.horde_x[1] -= speed
-                            self.enemies.laserx1 -= speed
-                    if self.enemies.horde_x[2] > 180:
-                        if self.enemies.down2:
-                            self.enemies.horde_x[2] -= speed
-                        if not self.enemies.down2:
-                            self.enemies.horde_x[2] -= speed
-                            self.enemies.laserx2 -= speed
-                    if self.enemies.horde_x[3] > 235:
-                        if self.enemies.down3:
-                            self.enemies.horde_x[3] -= speed
-                        if not self.enemies.down3:
-                            self.enemies.horde_x[3] -= speed
-                            self.enemies.laserx3 -= speed
-                    if self.enemies.horde_x[4] > 290:
-                        if self.enemies.down4:
-                            self.enemies.horde_x[4] -= speed
-                        if not self.enemies.down4:
-                            self.enemies.horde_x[4] -= speed
-                            self.enemies.laserx4 -= speed
-                    if self.enemies.horde_x[5] > 345:
-                        if self.enemies.down5:
-                            self.enemies.horde_x[5] -= speed
-                        if not self.enemies.down5:
-                            self.enemies.horde_x[5] -= speed
-                            self.enemies.laserx5 -= speed
-                    if self.enemies.horde_x[6] > 70:
-                        if self.enemies.down6:
-                            self.enemies.horde_x[6] -= speed
-                        if not self.enemies.down6:
-                            self.enemies.horde_x[6] -= speed
-                            self.enemies.laserx6 -= speed
-                    if self.enemies.horde_x[7] > 180:
-                        if self.enemies.down7:
-                            self.enemies.horde_x[7] -= speed
-                        if not self.enemies.down7:
-                            self.enemies.horde_x[7] -= speed
-                            self.enemies.laserx7 -= speed
-                    if self.enemies.horde_x[8] > 235:
-                        if self.enemies.down8:
-                            self.enemies.horde_x[8] -= speed
-                        if not self.enemies.down8:
-                            self.enemies.horde_x[8] -= speed
-                            self.enemies.laserx8 -= speed
-                    if self.enemies.horde_x[10] > 345:
-                        if self.enemies.down10:
-                            self.enemies.horde_x[10] -= speed
-                        if not self.enemies.down10:
-                            self.enemies.horde_x[10] -= speed
-                            self.enemies.laserx10 -= speed
-                    if self.enemies.horde_x[11] > 70:
-                        if self.enemies.down11:
-                            self.enemies.horde_x[11] -= speed
-                        if not self.enemies.down11:
-                            self.enemies.horde_x[11] -= speed
-                            self.enemies.laserx11 -= speed
-                    if self.enemies.horde_x[12] > 345:
-                        if self.enemies.down12:
-                            self.enemies.horde_x[12] -= speed
-                        if not self.enemies.down12:
-                            self.enemies.horde_x[12] -= speed
-                            self.enemies.laserx12 -= speed
+                    for i in range(0, 13):
+                        if i ==9:
+                            continue
+                        if self.enemies.status:
+                            if self.enemies.downs[i]:
+                                self.enemies.horde_x[i] -= speed
+                            if not self.enemies.downs[i]:
+                                self.enemies.horde_x[i] -= speed
+                                self.enemies.laserxs[i] -= speed
                 #Switching directions in level 1 (from left to right)
                 if self.direction == "left":
-                    if self.enemies.horde_x[0] == 70:
-                        self.direction = "right"
-                    if self.enemies.horde_x[1] == 125:
-                        self.direction = "right"
-                    if self.enemies.horde_x[2] == 180:
-                        self.direction = "right"
-                    if self.enemies.horde_x[3] == 235:
-                        self.direction = "right"
-                    if self.enemies.horde_x[4] == 290:
-                        self.direction = "right"
-                    if self.enemies.horde_x[5] == 345:
-                        self.direction = "right"
-                    if self.enemies.horde_x[6] ==70:
-                        self.direction = "right"
-                    if self.enemies.horde_x[7] ==180:
-                        self.direction = "right"
-                    if self.enemies.horde_x[8] ==235:
-                        self.direction = "right"
-                    if self.enemies.horde_x[10] == 345:
-                        self.direction = "right"
-                    if self.enemies.horde_x[11] ==70:
-                        self.direction = "right"
-                    if self.enemies.horde_x[12] ==345:
-                        self.direction = "right"
+                    self.switch_right1(70, 0)
+                    self.switch_right1(125, 1)
+                    self.switch_right1(180, 2)
+                    self.switch_right1(235, 3)
+                    self.switch_right1(290, 4)
+                    self.switch_right1(345, 5)
+                    self.switch_right1(70, 6)
+                    self.switch_right1(180, 7)
+                    self.switch_right1(235, 8)
+                    self.switch_right1(345, 10)
+                    self.switch_right1(70, 11)
+                    self.switch_right1(345, 12)
             if self.enemies.level == 2:
                  #Movement  in level 2 (to the right)
                 if self.direction == "right":
-                    if self.enemies.status[0]:
-                        if self.enemies.horde_x[0] < 740:
-                            if self.enemies.down:
-                                self.enemies.horde_x[0] += speed
-                            if not self.enemies.down:
-                                self.enemies.horde_x[0] += speed
-                                self.enemies.laserx += speed
-
-                    if self.enemies.status[1]:
-                        if self.enemies.horde_x[1]  < 740:
-                            if self.enemies.down1:
-                                self.enemies.horde_x[1] += speed
-                            if not self.enemies.down1:
-                                self.enemies.horde_x[1] += speed
-                                self.enemies.laserx1 += speed
-
-                    if self.enemies.status[2]:
-                        if self.enemies.horde_x[2]  < 740:
-                            if self.enemies.down2:
-                                self.enemies.horde_x[2] += speed
-                            if not self.enemies.down2:
-                                self.enemies.horde_x[2] += speed
-                                self.enemies.laserx2 += speed
-
-                    if self.enemies.status[3]:
-                        if self.enemies.horde_x[3]  < 795:
-                            if self.enemies.down3:
-                                self.enemies.horde_x[3] += speed
-                            if not self.enemies.down3:
-                                self.enemies.horde_x[3] += speed
-                                self.enemies.laserx3 += speed
-
-                    if self.enemies.status[4]:
-                        if self.enemies.horde_x[4]  < 795:
-                            if self.enemies.down4:
-                                self.enemies.horde_x[4] += speed
-                            if not self.enemies.down4:
-                                self.enemies.horde_x[4] += speed
-                                self.enemies.laserx4 += speed
-
-                    if self.enemies.status[5]:
-                        if self.enemies.horde_x[5]  < 850:
-                            if self.enemies.down5:
-                                self.enemies.horde_x[5] += speed
-                            if not self.enemies.down5:
-                                self.enemies.horde_x[5] += speed
-                                self.enemies.laserx5 += speed
-
-                    if self.enemies.status[6]:
-                        if self.enemies.horde_x[6]  < 850:
-                            if self.enemies.down6:
-                                self.enemies.horde_x[6] += speed
-                            if not self.enemies.down6:
-                                self.enemies.horde_x[6] += speed
-                                self.enemies.laserx6 += speed
-
-                    if self.enemies.status[7]:
-                        if self.enemies.horde_x[7]  > 205:
-                            if self.enemies.down7:
-                                self.enemies.horde_x[7] -= speed
-                            if not self.enemies.down7:
-                                self.enemies.horde_x[7] -= speed
-                                self.enemies.laserx7 -= speed
-
-                    if self.enemies.status[8]:
-                        if self.enemies.horde_x[8]  > 205:
-                            if self.enemies.down8:
-                                self.enemies.horde_x[8] -= speed
-                            if not self.enemies.down8:
-                                self.enemies.horde_x[8] -= speed
-                                self.enemies.laserx8 -= speed
-                    if self.enemies.status[9]:
-                        if self.enemies.horde_x[9]  > 205:
-                            if self.enemies.down8:
-                                self.enemies.horde_x[9] -= speed
-                            if not self.enemies.down8:
-                                self.enemies.horde_x[9] -= speed
-                                self.enemies.laserx8 -= speed
-
-                    if self.enemies.status[10]:
-                        if self.enemies.horde_x[10]  > 150:
-                            if self.enemies.down10:
-                                self.enemies.horde_x[10] -= speed
-                            if not self.enemies.down10:
-                                self.enemies.horde_x[10] -= speed
-                                self.enemies.laserx10 -= speed
-
-                    if self.enemies.status[11]:
-                        if self.enemies.horde_x[11]  > 150:
-                            if self.enemies.down11:
-                                self.enemies.horde_x[11] -= speed
-                            if not self.enemies.down11:
-                                self.enemies.horde_x[11] -= speed
-                                self.enemies.laserx11 -= speed
-
-                    if self.enemies.status[12]:
-                        if self.enemies.horde_x[12]  > 95:
-                            if self.enemies.down12:
-                                self.enemies.horde_x[12] -= speed
-                            if not self.enemies.down12:
-                                self.enemies.horde_x[12] -= speed
-                                self.enemies.laserx12 -= speed
-                    if self.enemies.status[13]:
-                        if self.enemies.horde_x[13]  > 95:
-                            if self.enemies.down12:
-                                self.enemies.horde_x[13] -= speed
-                            if not self.enemies.down12:
-                                self.enemies.horde_x[13] -= speed
-                                self.enemies.laserx12 -= speed
-
-
+                    for i in range(0, 7):
+                        if self.enemies.horde_x[i] > -5:
+                            if self.enemies.downs[i]:
+                                self.enemies.horde_x[i] += speed
+                            if not self.enemies.downs[i]:
+                                self.enemies.horde_x[i] += speed
+                                self.enemies.laserxs[i] += speed
+                    for i in range(7, 14):
+                        if self.enemies.horde_x[i] > -5:
+                            if self.enemies.downs[i]:
+                                self.enemies.horde_x[i] -= speed
+                            if not self.enemies.downs[i]:
+                                self.enemies.horde_x[i] -= speed
+                                self.enemies.laserxs[i] -= speed
                 #Switching Direction1= level 2 (from right to left)
                 if self.direction == "right":
-                    if self.enemies.status[0]:
-                        if self.enemies.horde_x[0]  == 740:
-                            self.direction = "left"
-                if self.direction == "right":
-                    if self.enemies.status[1]:
-                        if self.enemies.horde_x[1]  == 740:
-                            self.direction = "left"
-                if self.direction == "right":
-                    if self.enemies.status[2]:
-                        if self.enemies.horde_x[2]  == 740:
-                            self.direction = "left"
-                if self.direction == "right":
-                    if self.enemies.status[3]:
-                        if self.enemies.horde_x[3]  ==795:
-                            self.direction = "left"
-                if self.direction == "right":
-                    if self.enemies.status[4]:
-                        if self.enemies.horde_x[4]  ==795:
-                            self.direction = "left"
-                if self.direction == "right":
-                    if self.enemies.status[5]:
-                        if self.enemies.horde_x[5]  ==850:
-                            self.direction = "left"
-                if self.direction == "right":
-                    if self.enemies.status[6]:
-                        if self.enemies.horde_x[6]  ==850:
-                            self.direction = "left"
-                if self.direction == "right":
-                    if self.enemies.status[7]:
-                        if self.enemies.horde_x[7]  ==205:
-                            self.direction = "left"
-                if self.direction == "right":
-                    if self.enemies.status[8]:
-                        if self.enemies.horde_x[8]  ==205:
-                            self.direction = "left"
-                if self.direction == "right":
-                    if self.enemies.status[9]:
-                        if self.enemies.horde_x[9]  ==205:
-                            self.direction = "left"
-                if self.direction == "right":
-                    if self.enemies.status[10]:
-                        if self.enemies.horde_x[10]  == 150:
-                            self.direction = "left"
-                if self.direction == "right":
-                    if self.enemies.status[11]:
-                        if self.enemies.horde_x[11]  ==150:
-                            self.direction = "left"
-                if self.direction == "right":
-                    if self.enemies.status[12]:
-                        if self.enemies.horde_x[12]  ==95:
-                            self.direction = "left"
-                if self.direction == "right":
-                    if self.enemies.status[13]:
-                        if self.enemies.horde_x[13]  ==95:
-                            self.direction = "left"
-
+                    self.switch_left2(740, 0)
+                    self.switch_left2(740, 1)
+                    self.switch_left2(740, 2)
+                    self.switch_left2(795, 3)
+                    self.switch_left2(795, 4)
+                    self.switch_left2(850, 5)
+                    self.switch_left2(850, 6)
+                    self.switch_left2(205, 7)
+                    self.switch_left2(205, 8)
+                    self.switch_left2(205, 9)
+                    self.switch_left2(150, 10)
+                    self.switch_left2(150, 11)
+                    self.switch_left2(95, 12)
+                    self.switch_left2(95, 13)
                 #Movement  in level 2 (to the left)
                 if self.direction == "left":
-                    if self.enemies.horde_x[0] > 150:
-                        if self.enemies.down:
-                            self.enemies.horde_x[0] -= speed
-                        if not self.enemies.down:
-                            self.enemies.horde_x[0] -= speed
-                            self.enemies.laserx -= speed
-                    if self.enemies.horde_x[1] > 150:
-                        if self.enemies.down1:
-                            self.enemies.horde_x[1] -= speed
-                        if not self.enemies.down1:
-                            self.enemies.horde_x[1] -= speed
-                            self.enemies.laserx1 -= speed
-                    if self.enemies.horde_x[2] > 150:
-                        if self.enemies.down2:
-                            self.enemies.horde_x[2] -= speed
-                        if not self.enemies.down2:
-                            self.enemies.horde_x[2] -= speed
-                            self.enemies.laserx2 -= speed
-                    if self.enemies.horde_x[3] > 205:
-                        if self.enemies.down3:
-                            self.enemies.horde_x[3] -= speed
-                        if not self.enemies.down3:
-                            self.enemies.horde_x[3] -= speed
-                            self.enemies.laserx3 -= speed
-                    if self.enemies.horde_x[4] > 205:
-                        if self.enemies.down4:
-                            self.enemies.horde_x[4] -= speed
-                        if not self.enemies.down4:
-                            self.enemies.horde_x[4] -= speed
-                            self.enemies.laserx4 -= speed
-                    if self.enemies.horde_x[5] > 260:
-                        if self.enemies.down5:
-                            self.enemies.horde_x[5] -= speed
-                        if not self.enemies.down5:
-                            self.enemies.horde_x[5] -= speed
-                            self.enemies.laserx5 -= speed
-                    if self.enemies.horde_x[6] > 260:
-                        if self.enemies.down6:
-                            self.enemies.horde_x[6] -= speed
-                        if not self.enemies.down6:
-                            self.enemies.horde_x[6] -= speed
-                            self.enemies.laserx6 -= speed
-                    if self.enemies.horde_x[7] < 795:
-                        if self.enemies.down7:
-                            self.enemies.horde_x[7] += speed
-                        if not self.enemies.down7:
-                            self.enemies.horde_x[7] += speed
-                            self.enemies.laserx7 += speed
-                    if self.enemies.horde_x[8] < 795:
-                        if self.enemies.down8:
-                            self.enemies.horde_x[8] += speed
-                        if not self.enemies.down8:
-                            self.enemies.horde_x[8] += speed
-                            self.enemies.laserx8 += speed
-                    if self.enemies.horde_x[9] < 795:
-                        if self.enemies.down8:
-                            self.enemies.horde_x[9] += speed
-                        if not self.enemies.down8:
-                            self.enemies.horde_x[9] += speed
-                            self.enemies.laserx8 += speed
-                    if self.enemies.horde_x[10] < 205 + 535:
-                        if self.enemies.down10:
-                            self.enemies.horde_x[10] += speed
-                        if not self.enemies.down10:
-                            self.enemies.horde_x[10] += speed
-                            self.enemies.laserx10 += speed
-                    if self.enemies.horde_x[11] < 205 + 535:
-                        if self.enemies.down11:
-                            self.enemies.horde_x[11] += speed
-                        if not self.enemies.down11:
-                            self.enemies.horde_x[11] += speed
-                            self.enemies.laserx11 += speed
-                    if self.enemies.horde_x[12] < 150 + 535:
-                        if self.enemies.down12:
-                            self.enemies.horde_x[12] += speed
-                        if not self.enemies.down12:
-                            self.enemies.horde_x[12] += speed
-                            self.enemies.laserx12 += speed
-                    if self.enemies.horde_x[13] < 150 + 535:
-                        if self.enemies.down12:
-                            self.enemies.horde_x[13] += speed
-                        if not self.enemies.down12:
-                            self.enemies.horde_x[13] += speed
-                            self.enemies.laserx12 += speed
+                    for i in range(0, 7):
+                        if self.enemies.status:
+                            if self.enemies.downs[i]:
+                                self.enemies.horde_x[i] -= speed
+                            if not self.enemies.downs[i]:
+                                self.enemies.horde_x[i] -= speed
+                                self.enemies.laserxs[i] -= speed
+                    for i in range(7, 14):
+                        if self.enemies.status:
+                            if self.enemies.downs[i]:
+                                self.enemies.horde_x[i] += speed
+                            if not self.enemies.downs[i]:
+                                self.enemies.horde_x[i] += speed
+                                self.enemies.laserxs[i] += speed
                 #Switching directions in level 2 (from left to right)
                 if self.direction == "left":
-                    if self.enemies.horde_x[0] == 150:
-                        self.direction = "right"
-                    if self.enemies.horde_x[1] == 150:
-                        self.direction = "right"
-                    if self.enemies.horde_x[2] == 150:
-                        self.direction = "right"
-                    if self.enemies.horde_x[3] == 205:
-                        self.direction = "right"
-                    if self.enemies.horde_x[4] == 205:
-                        self.direction = "right"
-                    if self.enemies.horde_x[5] == 260:
-                        self.direction = "right"
-                    if self.enemies.horde_x[6] ==260:
-                        self.direction = "right"
-                    if self.enemies.horde_x[7] ==795:
-                        self.direction = "right"
-                    if self.enemies.horde_x[8] ==795:
-                        self.direction = "right"
-                    if self.enemies.horde_x[9] ==795:
-                        self.direction = "right"
-                    if self.enemies.horde_x[10] == 740:
-                        self.direction = "right"
-                    if self.enemies.horde_x[11] == 740:
-                        self.direction = "right"
-                    if self.enemies.horde_x[12] ==695:
-                        self.direction = "right"
-                    if self.enemies.horde_x[13] ==695:
-                        self.direction = "right"
+                    self.switch_right2(150, 0)
+                    self.switch_right2(150, 1)
+                    self.switch_right2(150, 2)
+                    self.switch_right2(205, 3)
+                    self.switch_right2(205, 4)
+                    self.switch_right2(260, 5)
+                    self.switch_right2(260, 6)
+                    self.switch_right2(795, 7)
+                    self.switch_right2(795, 8)
+                    self.switch_right2(795, 9)
+                    self.switch_right2(740, 10)
+                    self.switch_right2(740, 11)
+                    self.switch_right2(695, 12)
+                    self.switch_right2(695, 13)
             if self.enemies.level == 3:
                  #Movement  in level 2 (to the right)
                 if self.direction == "right":
-                    if self.enemies.status[0]:
-                        if self.enemies.horde_x[0] < 200:
-                            if self.enemies.down:
+                    if self.enemies.horde_y[0] < 900:
+                            if self.enemies.downs[0]:
                                 self.enemies.horde_x[0] += speed
-                            if not self.enemies.down:
+                            if not self.enemies.downs[0]:
                                 self.enemies.horde_x[0] += speed
-                                self.enemies.laserx += speed
-
-                    if self.enemies.status[1]:
+                                self.enemies.laserxs[0] += speed
+                    if self.enemies.horde_y[1] < 900:
                         if self.enemies.horde_x[1]  > 700:
-                            if self.enemies.down1:
+                            if self.enemies.downs[1]:
                                 self.enemies.horde_x[1] -= speed
-                            if not self.enemies.down1:
+                            if not self.enemies.downs[1]:
                                 self.enemies.horde_x[1] -= speed
-                                self.enemies.laserx1 -= speed
+                                self.enemies.laserxs[1] -= speed
                 if self.direction2 == "right":
-                    if self.enemies.status[2]:
-                        if self.enemies.horde_x[2]  < 590:
-                            if self.enemies.down2:
-                                self.enemies.horde_x[2] += speed
-                            if not self.enemies.down2:
-                                self.enemies.horde_x[2] += speed
-                                self.enemies.laserx2 += speed
-
-                    if self.enemies.status[3]:
-                        if self.enemies.horde_x[3]  < 645:
-                            if self.enemies.down3:
-                                self.enemies.horde_x[3] += speed
-                            if not self.enemies.down3:
-                                self.enemies.horde_x[3] += speed
-                                self.enemies.laserx3 += speed
-
-                    if self.enemies.status[4]:
-                        if self.enemies.horde_x[4]  < 700:
-                            if self.enemies.down4:
-                                self.enemies.horde_x[4] += speed
-                            if not self.enemies.down4:
-                                self.enemies.horde_x[4] += speed
-                                self.enemies.laserx4 += speed
+                    for i in range(2, 5):
+                        if self.enemies.status[i]:
+                                if self.enemies.downs[i]:
+                                    self.enemies.horde_x[i] += speed
+                                if not self.enemies.downs[i]:
+                                    self.enemies.horde_x[i] += speed
+                                    self.enemies.laserxs[i] += speed
                 if self.direction3 == "right":
-
-                    if self.enemies.status[5]:
-                        if self.enemies.horde_x[5]  > 310:
-                            if self.enemies.down5:
-                                self.enemies.horde_x[5] -= speed
-                            if not self.enemies.down5:
-                                self.enemies.horde_x[5] -= speed
-                                self.enemies.laserx5 -= speed
-
-                    if self.enemies.status[6]:
-                        if self.enemies.horde_x[6]  > 255:
-                            if self.enemies.down6:
-                                self.enemies.horde_x[6] -= speed
-                            if not self.enemies.down6:
-                                self.enemies.horde_x[6] -= speed
-                                self.enemies.laserx6 -= speed
-                    if self.enemies.status[13]:
-                        if self.enemies.horde_x[13]  > 200:
-                            if self.enemies.down12:
-                                self.enemies.horde_x[13] -= speed
-                            if not self.enemies.down12:
-                                self.enemies.horde_x[13] -= speed
-                                self.enemies.laserx12 -= speed
+                    for i in range(5, 14):
+                        if 7 <= i <= 12:
+                            continue
+                        if self.enemies.status[i]:
+                                if self.enemies.downs[i]:
+                                    self.enemies.horde_x[i] -= speed
+                                if not self.enemies.downs[i]:
+                                    self.enemies.horde_x[i] -= speed
+                                    self.enemies.laserxs[i] -= speed
                 if self.direction1 == "right":
-
-                    if self.enemies.status[7]:
-                        if self.enemies.horde_x[7]  < 575:
-                            if self.enemies.down7:
-                                self.enemies.horde_x[7] += speed
-                            if not self.enemies.down7:
-                                self.enemies.horde_x[7] += speed
-                                self.enemies.laserx7 += speed
-
-                    if self.enemies.status[8]:
-                        if self.enemies.horde_x[8]  < 630:
-                            if self.enemies.down8:
-                                self.enemies.horde_x[8] += speed
-                            if not self.enemies.down8:
-                                self.enemies.horde_x[8] += speed
-                                self.enemies.laserx8 += speed
-                    if self.enemies.status[9]:
-                        if self.enemies.horde_x[9]  < 490:
-                            if self.enemies.down8:
-                                self.enemies.horde_x[9] += speed
-                            if not self.enemies.down8:
-                                self.enemies.horde_x[9] += speed
-                                self.enemies.laserx8 += speed
-
-                    if self.enemies.status[10]:
-                        if self.enemies.horde_x[10]  < 560:
-                            if self.enemies.down10:
-                                self.enemies.horde_x[10] += speed
-                            if not self.enemies.down10:
-                                self.enemies.horde_x[10] += speed
-                                self.enemies.laserx10 += speed
-
-                    if self.enemies.status[11]:
-                        if self.enemies.horde_x[11]  < 630:
-                            if self.enemies.down11:
-                                self.enemies.horde_x[11] += speed
-                            if not self.enemies.down11:
-                                self.enemies.horde_x[11] += speed
-                                self.enemies.laserx11 += speed
-
-                    if self.enemies.status[12]:
-                        if self.enemies.horde_x[12]  < 700:
-                            if self.enemies.down12:
-                                self.enemies.horde_x[12] += speed
-                            if not self.enemies.down12:
-                                self.enemies.horde_x[12] += speed
-                                self.enemies.laserx12 += speed
-                    
-
-
+                    for i in range(7, 13):
+                        if self.enemies.status[i]:
+                                if self.enemies.downs[i]:
+                                    self.enemies.horde_x[i] += speed
+                                if not self.enemies.downs[i]:
+                                    self.enemies.horde_x[i] += speed
+                                    self.enemies.laserxs[i] += speed
                 #Switching Direction1= level 2 (from right to left)
                 if self.direction == "right":
                     if self.enemies.status[0]:
-                        if self.enemies.horde_x[0]  == 200:
+                        if self.enemies.horde_x[0]  >= 200:
                             self.direction = "left"
                 if self.direction == "right":
                     if self.enemies.status[1]:
-                        if self.enemies.horde_x[1]  == 700:
+                        if self.enemies.horde_x[1]  <= 700:
                             self.direction = "left"
                 if self.direction2 == "right":
-                    if self.enemies.status[2]:
-                        if self.enemies.horde_x[2]  == 590:
-                            self.direction2 = "left"
-                if self.direction2 == "right":
-                    if self.enemies.status[3]:
-                        if self.enemies.horde_x[3]  ==645:
-                            self.direction2 = "left"
-                if self.direction2 == "right":
-                    if self.enemies.status[4]:
-                        if self.enemies.horde_x[4]  ==700:
-                            self.direction2 = "left"
+                    standard = 590
+                    for i in range(2, 5):
+                        if self.enemies.horde_y[i] < 900:
+                            if self.enemies.horde_x[i]  >= standard:
+                                self.direction2 = "left"
+                        standard += 55
                 if self.direction3 == "right":
-                    if self.enemies.status[5]:
-                        if self.enemies.horde_x[5]  ==310:
-                            self.direction3 = "left"
-                if self.direction3 == "right":
-                    if self.enemies.status[6]:
-                        if self.enemies.horde_x[6]  ==255:
-                            self.direction3 = "left"
+                    standard = 310
+                    for i in range(5, 14):
+                        if 7<= i <= 12:
+                            continue
+                        if self.enemies.horde_y[i] < 900:
+                            if self.enemies.horde_x[i] <= standard:
+                                self.direction3 ="left"
+                        standard -= 55
                 if self.direction1 == "right":
                     if self.enemies.status[7]:
-                        if self.enemies.horde_x[7]  ==575:
+                        if self.enemies.horde_x[7]  >=575:
                             self.direction1 = "left"
                 if self.direction1 == "right":
                     if self.enemies.status[8]:
-                        if self.enemies.horde_x[8]  ==630:
+                        if self.enemies.horde_x[8]  >=630:
                             self.direction1 = "left"
-                if self.direction1 == "right":
-                    if self.enemies.status[9]:
-                        if self.enemies.horde_x[9]  ==490:
-                            self.direction1 = "left"
-                if self.direction1 == "right":
-                    if self.enemies.status[10]:
-                        if self.enemies.horde_x[10]  == 560:
-                            self.direction1 = "left"
-                if self.direction1 == "right":
-                    if self.enemies.status[11]:
-                        if self.enemies.horde_x[11]  ==630:
-                            self.direction1 = "left"
-                if self.direction1 == "right":
-                    if self.enemies.status[12]:
-                        if self.enemies.horde_x[12]  ==700:
-                            self.direction1 = "left"
-                if self.direction3 == "right":
-                    if self.enemies.status[13]:
-                        if self.enemies.horde_x[13]  == 200:
-                            self.direction3 = "left"
-
+                if self.direction1 == "right":                    
+                    standard = 490
+                    for i in range(9, 13):
+                        if self.enemies.horde_y[i] <900:
+                            if self.enemies.horde_x[i]  >= standard:
+                                self.direction1 = "left"
+                        standard += 70
                 #Movement  in level 2 (to the left)
                 if self.direction == "left":
-                    if self.enemies.horde_x[0] > 40:
-                        if self.enemies.down:
-                            self.enemies.horde_x[0] -= speed
-                        if not self.enemies.down:
-                            self.enemies.horde_x[0] -= speed
-                            self.enemies.laserx -= speed
-                    if self.enemies.horde_x[1] < 860:
-                        if self.enemies.down1:
-                            self.enemies.horde_x[1] += speed
-                        if not self.enemies.down1:
-                            self.enemies.horde_x[1] += speed
-                            self.enemies.laserx1 += speed
+                    if self.enemies.status[0]:
+                            if self.enemies.downs[0]:
+                                self.enemies.horde_x[0] -= speed
+                            if not self.enemies.downs[0]:
+                                self.enemies.horde_x[0] -= speed
+                                self.enemies.laserxs[0] -= speed
+                    if self.enemies.status[1]:
+                            if self.enemies.downs[1]:
+                                self.enemies.horde_x[1] += speed
+                            if not self.enemies.downs[1]:
+                                self.enemies.horde_x[1] += speed
+                                self.enemies.laserxs[1] += speed
                 if self.direction2 == "left":
-                    if self.enemies.horde_x[2] > 150:
-                        if self.enemies.down2:
-                            self.enemies.horde_x[2] -= speed
-                        if not self.enemies.down2:
-                            self.enemies.horde_x[2] -= speed
-                            self.enemies.laserx2 -= speed
-                    if self.enemies.horde_x[3] > 205:
-                        if self.enemies.down3:
-                            self.enemies.horde_x[3] -= speed
-                        if not self.enemies.down3:
-                            self.enemies.horde_x[3] -= speed
-                            self.enemies.laserx3 -= speed
-                    if self.enemies.horde_x[4] > 260:
-                        if self.enemies.down4:
-                            self.enemies.horde_x[4] -= speed
-                        if not self.enemies.down4:
-                            self.enemies.horde_x[4] -= speed
-                            self.enemies.laserx4 -= speed
+                    for i in range(2, 5):
+                        if self.enemies.status[i]:
+                                if self.enemies.downs[i]:
+                                    self.enemies.horde_x[i] -= speed
+                                if not self.enemies.downs[i]:
+                                    self.enemies.horde_x[i] -= speed
+                                    self.enemies.laserxs[i] -= speed
                 if self.direction3 == "left":
-                    if self.enemies.horde_x[5] < 745:
-                        if self.enemies.down5:
-                            self.enemies.horde_x[5] += speed
-                        if not self.enemies.down5:
-                            self.enemies.horde_x[5] += speed
-                            self.enemies.laserx5 += speed
-                    if self.enemies.horde_x[6] < 690:
-                        if self.enemies.down6:
-                            self.enemies.horde_x[6] += speed
-                        if not self.enemies.down6:
-                            self.enemies.horde_x[6] += speed
-                            self.enemies.laserx6 += speed
-                    if self.enemies.horde_x[13] < 635:
-                        if self.enemies.down7:
-                            self.enemies.horde_x[13] += speed
-                        if not self.enemies.down7:
-                            self.enemies.horde_x[13] += speed
-                            self.enemies.laserx7 += speed
+                    for i in range(5, 14):
+                        if 7 <= i <= 12:
+                            continue
+                        if self.enemies.status[i]:
+                                if self.enemies.downs[i]:
+                                    self.enemies.horde_x[i] += speed
+                                if not self.enemies.downs[i]:
+                                    self.enemies.horde_x[i] += speed
+                                    self.enemies.laserxs[i] += speed
                 if self.direction1 == "left":
-                    if self.enemies.horde_x[7] > 335:
-                        if self.enemies.down7:
-                            self.enemies.horde_x[7] -= speed
-                        if not self.enemies.down7:
-                            self.enemies.horde_x[7] -= speed
-                            self.enemies.laserx7 -= speed
-                    if self.enemies.horde_x[8] > 390:
-                        if self.enemies.down8:
-                            self.enemies.horde_x[8] -= speed
-                        if not self.enemies.down8:
-                            self.enemies.horde_x[8] -= speed
-                            self.enemies.laserx8 -= speed
-                    if self.enemies.horde_x[9] > 250:
-                        if self.enemies.down8:
-                            self.enemies.horde_x[9] -= speed
-                        if not self.enemies.down8:
-                            self.enemies.horde_x[9] -= speed
-                            self.enemies.laserx8 -= speed
-                    if self.enemies.horde_x[10]  >320:
-                        if self.enemies.down10:
-                            self.enemies.horde_x[10] -= speed
-                        if not self.enemies.down10:
-                            self.enemies.horde_x[10] -= speed
-                            self.enemies.laserx10 -= speed
-                    if self.enemies.horde_x[11] > 390:
-                        if self.enemies.down11:
-                            self.enemies.horde_x[11] -= speed
-                        if not self.enemies.down11:
-                            self.enemies.horde_x[11] -= speed
-                            self.enemies.laserx11 -= speed
-                    if self.enemies.horde_x[12] > 460:
-                        if self.enemies.down12:
-                            self.enemies.horde_x[12] -= speed
-                        if not self.enemies.down12:
-                            self.enemies.horde_x[12] -= speed
-                            self.enemies.laserx12 -= speed
+                    for i in range(7, 13):
+                        if self.enemies.status[i]:
+                                if self.enemies.downs[i]:
+                                    self.enemies.horde_x[i] -= speed
+                                if not self.enemies.downs[i]:
+                                    self.enemies.horde_x[i] -= speed
+                                    self.enemies.laserxs[i] -= speed
 
                 #Switching directions in level 2 (from left to right)
                 if self.direction == "left":
-                    if self.enemies.horde_x[0] == 40:
-                        self.direction = "right"
-                    if self.enemies.horde_x[1] == 860:
-                        self.direction = "right"
+                    if self.enemies.horde_y[0] <900:
+                        if self.enemies.horde_x[0] <= 40:
+                            self.direction = "right"
+                    if self.enemies.horde_y[1]:
+                        if self.enemies.horde_x[1] >= 860:
+                            self.direction = "right"
                 if self.direction2 == "left":
-                    if self.enemies.horde_x[2] == 150:
-                        self.direction2 = "right"
-                    if self.enemies.horde_x[3] == 205:
-                        self.direction2 = "right"
-                    if self.enemies.horde_x[4] == 260:
-                        self.direction2 = "right"
-                    
+                    standard_left = 150
+                    for i in range(2, 5):
+                        if self.enemies.horde_y[i] <900:
+                            if self.enemies.horde_x[i] <= standard_left:
+                                self.direction2 = "right"
+                        standard_left += 55
                 if self.direction3 == "left":
-                    if self.enemies.horde_x[5] == 745:
-                        self.direction3 = "right"
-                    if self.enemies.horde_x[6] == 690:
-                        self.direction3 = "right"
-                    if self.enemies.horde_x[13] ==635:
-                        self.direction3 = "right"
+                    standard_left = 745
+                    for i in range(5, 14):
+                        if 7 <= i <= 12:
+                            continue
+                        if self.enemies.horde_y[i] < 900:
+                            if self.enemies.horde_x[i] >= standard_left:
+                                self.direction3 = "right"
+                        standard_left -= 55
                 if self.direction1 == "left":
-                    if self.enemies.horde_x[7] == 335:
-                        self.direction1 = "right"
-                    if self.enemies.horde_x[8] ==390:
-                        self.direction1 = "right"
-                    if self.enemies.horde_x[9] ==250 :
-                        self.direction1 = "right"
-                    if self.enemies.horde_x[10] == 320:
-                        self.direction1 = "right"
-                    if self.enemies.horde_x[11] == 390:
-                        self.direction1 = "right"
-                    if self.enemies.horde_x[12] == 460:
-                        self.direction1 = "right"
-                    
-            
-            
+                    standard_left = 250
+                    for i in range(9, 13):
+                        if self.enemies.horde_y[i] < 900:
+                            if self.enemies.horde_x[i] <= standard_left:
+                                self.direction1 = "right"
+                        standard_left += 70
+                    if self.enemies.horde_x[7] <= 335:
+                        if self.enemies.horde_y[7] <900:
+                            self.direction1 = "right"
+                    if self.enemies.horde_x[8] <=390:
+                        if self.enemies.horde_y[8] <900:
+                            self.direction1 = "right"
             keys = pygame.key.get_pressed()
             for event in pygame.event.get():
                 if event.type == QUIT:
@@ -3352,38 +1440,88 @@ class Game:
                 pygame.key.set_repeat(1, 1)
                 if event.type == KEYDOWN:
                     if  self.enemies.level == 1  or self.enemies.level == 2  or self.enemies.level == 3 or self.enemies.level == 4 or self.enemies.level == 0:   
-
                         if event.key == K_a or event.key == K_LEFT or event.key == CONTROLLER_BUTTON_DPAD_LEFT:
-
-                            if 1 <= self.player.x <= 830:
+                            if not keys[K_SPACE]:
                                 self.enemies.shot = True
-                                if not self.up:
-                                    self.projectile.difference -= 1
+                                if self.player.x <= 0:
+                                    if not self.up:
+                                        self.projectile.difference = 850 - 435
+                                        self.player.x = 850
+                                    if self.up:
+                                        self.player.x = 850
+                                else:
+                                    if not self.up:
+                                        self.projectile.difference -= 1
 
-                                    self.player.x -= 1
-                                if self.up:
-                                    self.player.x -= 1
-                                    self.backup -= 1
+                                        self.player.x -= 1
+                                    if self.up:
+                                        self.player.x -= 1
+                                        self.backup -= 1
                         if event.key == K_d or event.key == K_RIGHT or event.key == CONTROLLER_BUTTON_DPAD_RIGHT:
-                            if 0 <= self.player.x <= 829:
+                            if not keys[K_SPACE]:
                                 self.enemies.shot= True
-                                if not self.up:
-                                    self.projectile.difference += 1
-
-                                    self.player.x += 1
-                                if self.up:
-                                    self.player.x += 1
-                                    self.backup += 1
-
+                                if self.player.x >= 830:
+                                    if not self.up:
+                                        self.projectile.difference = 0 - 435
+                                        self.player.x = 0
+                                    if self.up:
+                                        self.player.x = 0
+                                else:
+                                    if not self.up:
+                                        self.projectile.difference += 1
+                                        self.player.x += 1
+                                    if self.up:
+                                        self.player.x += 1
+                                        self.backup += 1
                         if event.key == K_SPACE or CONTROLLER_BUTTON_A:
-                            pygame.key.set_repeat(1, 10)
                             self.enemies.shot = True
                             if not self.up:
                                 pygame.mixer.Sound.play(laser)
                                 self.projectile.difference = self.player.x - self.projectile.four + 25
                             self.up = True
+                        if keys[K_d] and keys[K_SPACE] or keys[K_RIGHT] and keys[K_SPACE]:
+                                self.enemies.shot= True
+                                if self.player.x >= 830:
+                                    if not self.up:
+                                        self.projectile.difference = 0 - 435
+                                        self.player.x = 0
+                                        pygame.mixer.Sound.play(laser)
+                                        self.projectile.difference = self.player.x - self.projectile.four + 25
+                                        self.up = True
+                                    if self.up:
+                                        self.player.x = 0
+                                else:
+                                    if not self.up:
+                                        self.projectile.difference += 1
+                                        self.player.x += 1
+                                        pygame.mixer.Sound.play(laser)
+                                        self.projectile.difference = self.player.x - self.projectile.four + 25
+                                        self.up = True
+                                    if self.up:
+                                        self.player.x += 1
+                                        self.backup += 1
+                        if keys[K_SPACE] and keys[K_a] or keys[K_SPACE] and keys[K_LEFT]:
+                                self.enemies.shot = True
+                                if self.player.x <= 0:
+                                    if not self.up:
+                                        self.projectile.difference = 850 - 435
+                                        self.player.x = 850
+                                        pygame.mixer.Sound.play(laser)
+                                        self.projectile.difference = self.player.x - self.projectile.four + 25
+                                        self.up = True
+                                    if self.up:
+                                        self.player.x = 850
+                                else: 
+                                    if not self.up:
+                                        self.projectile.difference -= 1
+                                        pygame.mixer.Sound.play(laser)
+                                        self.projectile.difference = self.player.x - self.projectile.four + 25
+                                        self.up = True
+                                        self.player.x -= 1
+                                    if self.up:
+                                        self.player.x -= 1
+                                        self.backup -= 1
                 if event.type == KEYUP:
-
                         if event.key == K_ESCAPE:
                             pygame.key.set_repeat(1, 1)
                             pause = True
@@ -3404,43 +1542,15 @@ class Game:
                                 save.save_game(self.enemies.level, "level")
                             pygame.quit()
                             sys.exit()
-
-
-
-
-
-
-
-                    #if keys[K_d] and keys[K_a]:
-                     #   pygame.key.set_repeat(1, 1000000)
-                      #  if 0 <= self.player.x <= 829:
-                       #     self.player.x -= 1
-
-
-
-
-
-
-
             try:
                     self.play()
-
+                    pygame.display.update()
             except Exception as e:
                if self.player.health <= 0: 
-
                     self.game_over()
                     self.reset()
                     self.player.health = 5
-
-
-
-
-
-
-
-
 if __name__ == '__main__':
     game = Game()
     game.title()
     game.run()
-
