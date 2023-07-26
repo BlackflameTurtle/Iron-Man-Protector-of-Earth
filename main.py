@@ -10,7 +10,7 @@ from SaveSystem import SaveandLoad
 import os
 clock = pygame.time.Clock()
 
-
+#Function to get the app to compile to an exe properly
 def resource_path(relative_path):
     """ Get absolute path to resource, works for dev and for PyInstaller """
     try:
@@ -20,6 +20,7 @@ def resource_path(relative_path):
         base_path = os.path.abspath(".")
 
     return os.path.join(base_path, relative_path)
+#Sounds and images I use later
 laser = pygame.mixer.Sound(resource_path("Player laser.wav"))
 explosion = pygame.mixer.Sound(resource_path("explosion.wav"))
 laser1 = pygame.mixer.Sound(resource_path("enemy laser.wav"))
@@ -28,17 +29,19 @@ red = pygame.image.load(resource_path(r"red.png"))
 hit = pygame.mixer.Sound(resource_path("hit.wav"))
 white_barrier = pygame.mixer.Sound(resource_path("white barrier.wav"))
 
-
+#Instance of the savesystem I built using a guide
 save = SaveandLoad(".level_data", "Space invaders stuff" )
+#Game over class to call game over when the player's health hits 0
 class GameOver(Exception):
     pass
 class Projectile:
     def __init__(self, screen,  y):
-
+        #Color of the health
         self.color = (30, 30, 30)
         self.difference = 0
         self.num = 0
         self.four = 435
+        #Y values for the projectiles of the player
         self.y = y
         self.y1 = y
         self.y2 = y
@@ -49,8 +52,10 @@ class Projectile:
         self.y7 = y
         self.y8 = y
         self.y9 = y
+        #Y values in a list so I can iterate through them
         self.ys = [self.y, self.y1, self.y2, self.y3, self.y4, self.y5, self.y6, self.y7, self.y8, self.y9]
         self.screen = screen
+        #Player projectile model
         self.laser_sideways = pygame.image.load(resource_path("laser.png"))
         self.laser = pygame.transform.rotate(self.laser_sideways, 90)
 
@@ -62,32 +67,34 @@ class Projectile:
 
 class Player:
     def __init__(self, x, y, screen):
-        self.background =pygame.image.load(resource_path("Background.png"))
+        #player health
         self.health = 5
         self.screen = screen
+        #Player model
         self.shooter = pygame.image.load(resource_path("Space-Invaders-Ship-PNG-Photo.png"))
         self.x = x
         self.y = y
     def draw_shooter(self):
-
+        #Blits the player to the screen. The screen fill also serves to delete all previous instances of all images used in the game
         self.screen.fill((0, 0, 0))
-
         self.screen.blit(self.shooter, (self.x, self.y))
     def draw_health(self):
-
-        font1 = pygame.font.SysFont("Typeface Mario World Pixel Filled", 400, bold=False, italic=False)
+        #Draw health and change color when it gets low
+        font1 = pygame.font.SysFont("Comic Sans", 250, bold=False, italic=False)
         if self.health <= 2:
             self.color = (50, 0, 0)
         else:
             self.color = (30, 30, 30)
         line = font1.render(str(self.health), False, self.color)
-        self.screen.blit(line, (375, 200))
+        self.screen.blit(line, (375, 100))
 
 
 class Enemies:
     def __init__(self, screen):
         dimensions = [28, 45]
+        #Variable that allows player to shoot
         self.shot = False
+        #State of enemy lasers. If true, they cause the lasers to go downward
         self.down = False
         self.down1 = False
         self.down2 = False
@@ -114,13 +121,14 @@ class Enemies:
         self.down23 = False
         self.down24 = False
         self.down25 = False
-
         self.difference = 00
         self.direction = "right"
+        #Loading the level(chceking if a save exists)
         if save.check_file("level"):
             self.level = save.load("level")
         else:
-            self.level = 0
+            self.level = 1
+        #This inteneded fps is used to make the speeds of everything in the game constant, regardless of framerate
         if self.level >0:
             self.intended_fps = 180
         else:
@@ -128,6 +136,7 @@ class Enemies:
 
         self.screen = screen
         self.ship = pygame.image.load(resource_path("Alien.png"))
+        #ys of the enemies
         self.y = 20
         self.y1 = 20
         self.y2 = 20
@@ -154,6 +163,7 @@ class Enemies:
         self.y23 = 80
         self.y24 = 80
         self.y25 = 80
+        #xs of the enemies
         self.x = 200 + 50
         self.x1 = 255 + 50
         self.x2 = 310 + 50
@@ -180,7 +190,7 @@ class Enemies:
         self.x23 =  -400000000000000
         self.x24 =  -400000000000000
         self.x25 =  -400000000000000
-
+        #the xs of enemy projectiles
         self.laserx = 200 + 50 + 27.5
         self.laserx1 = 255 + 50 + 27.5
         self.laserx2 = 310 + 50 + 27.5
@@ -207,17 +217,19 @@ class Enemies:
         self.laserx23 = -40000000
         self.laserx24 = -40000000
         self.laserx25 = -40000000
+        #Putting everything in the game so I can iterate through them late
         self.horde_y = [self.y, self.y1, self.y2, self.y3, self.y4 , self.y5, self.y6 , self.y7 ,self.y8, self.y9, self.y10,self.y11, self.y12, self.y13, self.y14, self.y15, self.y16, self.y17, self.y18,self.y19,self.y20,self.y21, self.y22, self.y23, self.y24, self.y25]
         self.horde_x = [self.x, self.x1, self.x2, self.x3, self.x4, self.x5, self.x6, self.x7, self.x8, self.x9,self.x10, self.x11, self.x12, self.x13, self.x14, self.x15, self.x16, self.x17, self.x18,self.x19,self.x20,self.x21, self.x22, self.x23, self.x24, self.x25]
         self.laserxs= [self.laserx, self.laserx1, self.laserx2, self.laserx3, self.laserx4, self.laserx5, self.laserx5, self.laserx6, self.laserx7, self.laserx8, self.laserx9, self.laserx10, self.laserx11, self.laserx12, self.laserx13, self.laserx14, self.laserx15, self.laserx16, self.laserx17, self.laserx18, self.laserx19, self.laserx20, self.laserx21, self.laserx22, self.laserx23, self.laserx24, self.laserx25]
         self.downs = [self.down, self.down1, self.down2, self.down3, self.down4, self.down5, self.down6, self.down7, self.down8, self.down9, self.down10, self.down11, self.down12, self.down13, self.down14, self.down15, self.down16, self.down17, self.down18, self.down19, self.down20, self.down21, self.down22, self.down22, self.down23, self.down24, self.down25]
         self.status = [True, True, True, True, True, True, True, True, True, True, True, True, True, True, True]
+        #These dictionaries are used specifically in the endless mode to get the enemies to respawn after their whole group is defeated.They aren't working at the moment.
         self.line= {self.horde_y[0]: True, self.horde_y[1]: True, self.horde_y[2]:True, self.horde_y[3]:True, self.horde_y[4]:True, self.horde_y[5]:True, self.horde_y[6]:True, self.horde_y[7]:True, self.horde_y[8]:True, self.horde_y[9]:True, self.horde_y[10]:True, self.horde_y[11]:True, self.horde_y[12]:True}
         self.line2={self.horde_y[13]:True, self.horde_y[14]:True, self.horde_y[15]:True, self.horde_y[16]:True, self.horde_y[17]:True, self.horde_y[18]:True, self.horde_y[19]:True, self.horde_y[20]:True, self.horde_y[21]: True, self.horde_y[22]: True, self.horde_y[23]: True, self.horde_y[24]:True, self.horde_y[25]:True}
 
 
 
-
+        #Loading enemy positions for level 2
         if self.level == 2:  
             if 1 == 1:
                 self.horde_x[0] = 150
@@ -260,10 +272,13 @@ class Enemies:
                 self.horde_y[11] = 80
                 self.horde_y[12] = 20
                 self.horde_y[13] = 80
+                #Resetting enemy status and making it so they can't shoot the moment the level starts
                 self.status = [True, True, True, True, True, True, True, True, True, True, True, True, True, True, True]  
                 self.shot = False
+                #setting enemy laser xs
                 for i in range(0, 26):
                     self.laserxs[i] = self.horde_x[i] + 22.5
+        #Doing the same for level 3
         if self.level ==3:
                 self.horde_x[0] = 100
                 self.horde_x[1] = 800
@@ -309,6 +324,7 @@ class Enemies:
                 self.shot = False
                 for i in range(0, 26):
                     self.laserxs[i] = self.horde_x[i] + 22.5
+        #Doing the same for endless mode, which the game recognizes as level 0
         if self.level == 0:
             standard = 80
             self.shot = False
@@ -323,6 +339,7 @@ class Enemies:
                 self.horde_x[i] = self.horde_x[i - 13]
             for i in range(0, 26):
                 self.laserxs[i] = self.horde_x[i]
+    #functions for drawing all the objects and enemies
     def ship_placement(self, ship, x, y):
         self.screen.blit(ship, (x, y))
     def platform_placement(self, x1, y1, x_extension, y_extension):
@@ -332,6 +349,7 @@ class Enemies:
     def portal_placement(self, color, x1, y1, x_extension, y_extension):
         pygame.draw.rect(self.screen, color , [x1, y1, x_extension, y_extension])
     def level1(self):
+        #Drawing level 1 to the screen
         if self.level == 1:
             for i in range(0, 13):
                 if i ==9:
@@ -341,45 +359,50 @@ class Enemies:
             self.platform_placement(200, 300, 90, 5)
             self.platform_placement(650, 300, 90, 5)
             pygame.display.update()
+        #Intermission screen 1
         if self.level == 1.5:
             green = (0, 255, 0)
             self.screen.fill((0,0,0))
-            font1 = pygame.font.SysFont("Typeface Mario World Pixel Filled", 100, bold=False, italic=False)
+            font1 = pygame.font.SysFont("Comic Sans", 100, bold=False, italic=False)
             line = font1.render("Success", False, (0, 255, 0))
             self.screen.blit(line, (300, 50))
+            #Button color changes if you mouse over it. You eneter the next level if you click on it
             mouse_x, mouse_y = pygame.mouse.get_pos()
-            if 310 <= mouse_x <= 610 and 235 <= mouse_y <= 315:
+            if 320 <= mouse_x <= 610 + 50 and 235 <= mouse_y <= 315:
                 green = (173,216, 230)
                 if pygame.mouse.get_rel():
                     if pygame.mouse.get_pressed() == (1, 0, 0):
                         Game().reset()
                         self.level = 2
                         Game().reset()
-            font2 = pygame.font.SysFont("Typeface Mario World Pixel Filled", 75, bold=False, italic=False)
+            font2 = pygame.font.SysFont("Comic Sans", 75, bold=False, italic=False)
             line2 = font2.render("Continue?", False, (0, 255, 0))
-            self.screen.blit(line2, (350 - 20, 50 + 200))
-            pygame.draw.rect(self.screen, green, [330 - 20, 35 + 200, 300, 80], 1, 5)
+            self.screen.blit(line2, (350 - 20, 50 + 200 - 30))
+            pygame.draw.rect(self.screen, green, [330 - 10, 35 + 200, 320 + 20, 80], 1, 5)
+        #Intermission screen 2. Its the same thing as the last one but leads to level 3 instead of level 2
         if self.level == 2.5:
             green = (0, 255, 0)
             self.screen.fill((0,0,0))
-            font1 = pygame.font.SysFont("Typeface Mario World Pixel Filled", 100, bold=False, italic=False)
+            font1 = pygame.font.SysFont("Comic Sans", 100, bold=False, italic=False)
             line = font1.render("Success", False, (0, 255, 0))
             self.screen.blit(line, (300, 50))
             mouse_x, mouse_y = pygame.mouse.get_pos()
-            if 310 <= mouse_x <= 610 and 235 <= mouse_y <= 315:
+            if 320 <= mouse_x <= 610 + 50 and 235 <= mouse_y <= 315:
                 green = (173,216, 230)
                 if pygame.mouse.get_rel():
                     if pygame.mouse.get_pressed() == (1, 0, 0):
                         Game().reset()
                         self.level = 3
                         Game.reset()
-            font2 = pygame.font.SysFont("Typeface Mario World Pixel Filled", 75, bold=False, italic=False)
+            font2 = pygame.font.SysFont("Comic Sans", 75, bold=False, italic=False)
             line2 = font2.render("Continue?", False, (0, 255, 0))
-            self.screen.blit(line2, (350 - 20, 50 + 200))
-            pygame.draw.rect(self.screen, green, [330 - 20, 35 + 200, 300, 80], 1, 5)
+            self.screen.blit(line2, (350 - 20, 50 + 200 - 300))
+            pygame.draw.rect(self.screen, green, [330 - 10, 35 + 200, 300 + 40, 80], 1, 5)
             pygame.display.update()
         if self.level == 2:
+            #Drawing level 2 to the screen
             for i in range(0, 14):
+                #The statement below checks if the enemy is on screen(aka still in play)
                 if self.horde_y[i] < 900:
                     if i ==7 or i ==8 or i ==0 or i== 1:
                         self.ship_placement(red, self.horde_x[i], self.horde_y[i])
@@ -387,9 +410,11 @@ class Enemies:
                         self.ship_placement(self.ship, self.horde_x[i], self.horde_y[i])
             self.green_platform_placement(100, 250, 150, 5)
             self.platform_placement(550, 250, 120, 5)
+        #Drawing level 3 to the screen
         if self.level ==3:
             for i in range(0, 14):
                 if self.horde_y[i] < 900:
+                 #The statement above checks if the enemy is on screen(aka still in play)
                     if i ==7 or i ==8 or i ==0 or i== 1:
                         self.ship_placement(red, self.horde_x[i], self.horde_y[i])
                     else:
@@ -400,8 +425,10 @@ class Enemies:
                 self.portal_placement( (0,191,255),770, 100, 60, 5,)
                 self.portal_placement( (0,0,139),220, 280, 60, 5,)
                 self.portal_placement( (0,0,139),110, 100, 60, 5,)
+        #Drawing endless mode to the screen
         if self.level == 0:
             for i in range(0, 26):
+                #The statement below checks if the enemy is on screen(aka still in play)
                 if self.horde_y[i] < 900:
                     if i ==7 or i ==8 or i ==0 or i== 1:
                         self.ship_placement(red, self.horde_x[i], self.horde_y[i])
@@ -410,36 +437,43 @@ class Enemies:
             pygame.display.update()
 class Game:
     def __init__(self):
+        #Health for enemies which take multiple hits to kill
         self.h0 = 3
         self.h1 = 3
         self.h7 = 3
         self.h8 = 3
+        #Variables used to check the amount of enemies defeated. When they reach the required number the level ends
         self.count = 0
         self.count2 = 0
-        self.state = "none"
-        self.background = pygame.image.load(resource_path("Background.png"))
+        #Game music
         pygame.mixer.music.load(resource_path("Music.mp3"))
         pygame.mixer.music.set_volume(0.35)
         pygame.mixer.music.play(-1)
         self.col = False
+        #The direction variables. Usually only the first is used but occassionally the others are used
         self.direction = "right"
         self.direction1 = "right"
         self.direction2 = "right"
         self.direction3 = "right"
+        #Enemy projectile model
         self.blastssss = pygame.image.load(resource_path("red laser.png"))
         self.blast = pygame.transform.rotate(self.blastssss, 270)
-        self.explosion = False
         self.backup = 0
+        #Variable which causes player projectile to move upwards so long as it is true
         self.up = False
+        #Window size
         self.screen_x = 900
         self.screen_y = 600
+        #Game window formatting
         self.screen = pygame.display.set_mode((self.screen_x, self.screen_y))
         icon = pygame.image.load(resource_path("title.png"))
         pygame.display.set_caption("Space Invaders")
         pygame.display.set_icon(icon)
+        #Instances of the above classes
         self.player = Player(self.screen_x/2 - 40, self.screen_y - 80, self.screen)
         self.projectile = Projectile(self.screen, self.player.y - 35)
         self.enemies = Enemies(self.screen)
+        #ys of the enemy projectiles
         self.laser_y = self.enemies.horde_y[0] + 30
         self.laser_y1 = self.enemies.horde_y[1] + 30
         self.laser_y2 = self.enemies.horde_y[2] + 30
@@ -466,11 +500,14 @@ class Game:
         self.laser_y23 = self.enemies.horde_y[23]+ 30
         self.laser_y24 = self.enemies.horde_y[24]+ 30
         self.laser_y25 = self.enemies.horde_y[25]+ 30
+        #list of said ys
         self.laser_ys = [self.laser_y, self.laser_y1, self.laser_y2, self.laser_y3, self.laser_y4, self.laser_y5, self.laser_y6, self.laser_y7, self.laser_y8, self.laser_y9, self.laser_y10, self.laser_y11, self.laser_y12, self.laser_y13, self.laser_y14, self.laser_y15, self.laser_y16, self.laser_y17, self.laser_y18, self.laser_y19, self.laser_y20, self.laser_y21, self.laser_y22, self.laser_y23, self.laser_y24, self.laser_y25]
+        #Player projectile speed
         if self.enemies.level > 0:
             self.projectile_speed = 4
         else:
             self.projectile_speed = 4.5
+    #All the collision functions of the game
     def alien_laser_collision(self, x1, y1, x2, y2):
             if x2 - 20 <= x1 <= x2 + 40:
                 if y1 - 20 <= y2 <= y1 + 20:
@@ -493,15 +530,19 @@ class Game:
         return False
     def title(self):
         title = True
+        #Title screen
         while title:
              green = (0, 255, 0)
              color = (0, 255, 0)
-             font1 = pygame.font.SysFont("Typeface Mario World Pixel Filled", 100, bold=False, italic=False)
+             font1 = pygame.font.SysFont("Comic Sans", 100, bold=False, italic=False)
+             font2 = pygame.font.SysFont("Comic Sans", 75, bold=False, italic=False)
              line = font1.render("Space Invaders", False, (0, 255, 0))
-             line1 = font1.render("New Game", False, (green))
-             line2 = font1.render("Continue", False, (green))
+             line1 = font2.render("New Game", False, (green))
+             line2 = font2.render("Continue", False, (green))
              red = pygame.image.load(resource_path("title1.jpg"))
+             #These buttons function the same as the ones from before
              mouse_x, mouse_y = pygame.mouse.get_pos()
+             #Button collision
              if 250 <= mouse_x <= 250 + 400 and 280 <= mouse_y <= 430 - 50:
                  green = (173, 216, 230)
                  if pygame.mouse.get_pressed() != (0,0,0):
@@ -512,28 +553,30 @@ class Game:
                     title = False
              else:
                  green = (0, 255, 0)
-            
+            #The continue butto is only drawn if a save file exists
              if save.check_file("level"):
                 if 280 <= mouse_x <= 280 + 350 and 400 <= mouse_y <= 500:
                     color= (173, 216, 230)
                     if pygame.mouse.get_pressed() != (0,0,0):
                         title = False
                 pygame.draw.rect(self.screen, color, [280, 400, 350, 100], 5, 10)
-                self.screen.blit(line2, (300, 420))
+                self.screen.blit(line2, (300, 390))
              pygame.draw.rect(self.screen, green, [250, 280, 400, 100], 5, 10)
-             self.screen.blit(line1, (270, 300))
-             self.screen.blit(line, (200, 50))
+             self.screen.blit(line1, (270, 270))
+             self.screen.blit(line, (100, 0))
              self.screen.blit(red, (350, 150))
              for event in pygame.event.get():
                  if event.type == QUIT:
                      if self.enemies.level != 1 and self.enemies.level != 0:
                         if self.enemies.level == 1.5 or self.enemies.level == 2.5:
                             self.enemies.level += 0.5
+                        #saves the level number when the player quits the game
                         save.save_game(self.enemies.level, "level")
                      pygame.quit()
                      sys.exit()
              pygame.display.update()
     def reset(self):
+        #Resets the positions and states of everything. Said positions depend on the level number
         self.enemies.shot = False
         self.direction = "right"
         if self.enemies.level == 1:
@@ -648,10 +691,11 @@ class Game:
         pygame.mixer.music.play(-1)
         self.enemies.status = [True, True, True, True, True, True, True, True, True, True, True, True, True, True, True]
         self.count = 0
+    #This method is where almost everything is called for the game to actually happen. It itself is called at the end of the main while loop
     def play(self):
         self.player.draw_shooter()
         self.player.draw_health()
-        #Enemy shooting for all levels
+        #Enemy shooting for all levels other than endless mode
         if self.enemies.shot:
             a = random.randint(1, 100)
             l = 100
@@ -674,6 +718,7 @@ class Game:
                         pygame.mixer.Sound.play(laser1)
                     if self.laser_ys[i] >= 625:
                         self.enemies.downs[i] = False
+
             if self.enemies.level == 0:
                 for i in range(0, 14):
                     if a == i + 1:
@@ -684,18 +729,21 @@ class Game:
                             pygame.mixer.Sound.play(laser1)
                         if self.laser_ys[i] >= 625:
                             self.enemies.downs[i] = False
+            #Drawing enemy projectiles on the screen if their moving
             for i in range(0, 26):
                 if self.enemies.downs[i]:
                     self.screen.blit(self.blast, (self.enemies.laserxs[i], self.laser_ys[i]))
                 if not self.enemies.downs[i] :
                     self.laser_ys[i] = self.enemies.horde_y[i] + 30
                     self.enemies.laserxs[i] = self.enemies.horde_x[i] + 22.5
+        #Drawing player projectile if it is moving
         if self.up:
             self.projectile.draw_projectile()
             if self.projectile.ys[self.projectile.num] > -25:
                 self.projectile.ys[self.projectile.num] -= self.projectile_speed
         if self.projectile.num >= 9:
             self.projectile.num = 0
+        #Contrary to what the name suggests, this method is how the posisitons of all things are decided in each level
         self.enemies.level1()
         if self.projectile.ys[self.projectile.num] <= -25:
             self.up = False
@@ -747,6 +795,7 @@ class Game:
                         self.enemies.status[i] = False
                         self.projectile.ys[self.projectile.num] = -26
                         pygame.mixer.Sound.play(explosion)
+                #Promotion from level one to intermission screen
                 value = False
                 self.count = 0
                 for f in [self.enemies.status[0], self.enemies.status[1], self.enemies.status[2], self.enemies.status[3], self.enemies.status[4], self.enemies.status[5], self.enemies.status[6], self.enemies.status[7], self.enemies.status[8], self.enemies.status[10], self.enemies.status[11], self.enemies.status[12]]:
@@ -760,14 +809,18 @@ class Game:
                     self.count = 0
                     self.player.health = 5
         if self.enemies.level == 2:
+            #Collision for the enemy fire and the white barrier
             for i in range(0,14):
                 if self.red_white_collision(550, 250, self.enemies.laserxs[i], self.laser_ys[i], 120):
                         self.laser_ys[i] = 625
                         pygame.mixer.Sound.play(white_barrier)
+            #Collision for enemies tand the white barrier
             if self.blue_light_collision(100, 250, 435 + self.projectile.difference,self.projectile.ys[self.projectile.num], 150 ):
                 self.projectile.ys[self.projectile.num] = -25
+            #Collision for enemies and the green barrier (which enenmy fire intentionally does not collide with)
             if self.blue_light_collision(550, 250, 435 + self.projectile.difference,self.projectile.ys[self.projectile.num], 120): 
                 self.projectile.ys[self.projectile.num] = -25
+            #Collision for enemy projectiles that did not exist in the previous level
             if self.red_laser_collision(self.player.x, self.player.y, self.enemies.laserxs[9], self.laser_ys[9]):
                 self.player.health -= 1
                 self.col = False
@@ -778,10 +831,12 @@ class Game:
                 self.col = False
                 self.laser_ys[13] = 625
                 pygame.mixer.Sound.play(hit)
+            #Player fire on enemy collision
             for i in range(0, 14):
                 if self.alien_laser_collision(435 + self.projectile.difference, self.projectile.ys[self.projectile.num],
                                           self.enemies.horde_x[i], self.enemies.horde_y[i]):
                     if i ==0:
+                        #Subtracting from enenmy health upon collison. For enemies that have health that is. This is repeated a couple of times with different coordinates
                         if self.h0 == 1:
                             self.h0 -= 1
                             self.enemies.horde_y[i] = 1000
@@ -836,6 +891,7 @@ class Game:
                         self.projectile.ys[self.projectile.num] = -26
                         pygame.mixer.Sound.play(explosion)
             pygame.display.update()
+            #level promotion once more
             value = False
             self.count = 0
             for f in [self.enemies.status[0], self.enemies.status[1], self.enemies.status[2], self.enemies.status[3],
@@ -851,6 +907,7 @@ class Game:
                     self.count = 0
                     self.player.health = 5
         if self.enemies.level == 3:
+            #Collisions with barriers and enemies that did not exist in level 1
             if self.blue_light_collision(0, 150, 435 + self.projectile.difference, self.projectile.ys[self.projectile.num], 200):
                     self.projectile.ys[self.projectile.num] = -25
                     pygame.mixer.Sound.play(white_barrier)
@@ -868,6 +925,7 @@ class Game:
                 self.laser_ys[13] = 625
                 pygame.mixer.Sound.play(hit)
             for i in range(0, 14):
+                #Player fire on enemies collision. They include the health thing from before
                 if self.alien_laser_collision(435 + self.projectile.difference, self.projectile.ys[self.projectile.num],
                                           self.enemies.horde_x[i], self.enemies.horde_y[i]):
                     if i ==0:
@@ -924,6 +982,7 @@ class Game:
                         self.enemies.horde_x[i] = -399900
                         self.projectile.ys[self.projectile.num] = -26
                         pygame.mixer.Sound.play(explosion)
+            #Player on portal (blue barrier) collison
             if self.blue_light_collision(660, 280, 435 + self.projectile.difference,self.projectile.ys[self.projectile.num], 60 ):
                 self.projectile.ys[self.projectile.num] = 100
                 self.projectile.difference = 800 - 435
@@ -931,6 +990,7 @@ class Game:
                 self.projectile.ys[self.projectile.num] = 100
                 self.projectile.difference = 100 - 435
             pygame.display.update()
+            #Promotion from level 3. No more levels exist at the time of commenting
             value = False
             self.count = 0
             for f in [self.enemies.status[0], self.enemies.status[1], self.enemies.status[2], self.enemies.status[3],
@@ -946,6 +1006,7 @@ class Game:
                     self.count = 0
                     self.player.health = 5
         if self.enemies.level == 0:
+                #Collisions in endless mode
                 for i in range(14, 26):
                     if self.red_laser_collision(self.player.x, self.player.y, self.enemies.laserxs[i], self.laser_ys[i]):
                         self.player.health -= 1
@@ -1018,6 +1079,7 @@ class Game:
                 pygame.display.update()
                 self.count = 0
                 self.count2 = 0
+                #Resetting system for endless mode. Its the bit that doesn't work right now
                 for enemy_y in self.enemies.line:
                     if not self.enemies.line[enemy_y]:
                         self.count += 1
@@ -1072,28 +1134,30 @@ class Game:
                     self.count2 = 0
                 pygame.display.update()                
     def game_over(self):
+        #Game over screen. Buttons follow the same logic as before
         over = True
         while over:
             self.screen.fill((0,0,0))
-            font1 = pygame.font.SysFont("Typeface Mario World Pixel Filled", 150, bold=False, italic=False)
-            font2 = pygame.font.SysFont("Typeface Mario World Pixel Filled", 75, bold=False, italic=False)
+            font1 = pygame.font.SysFont("Comic Sans", 110, bold=False, italic=False)
+            font2 = pygame.font.SysFont("Comic Sans", 75, bold=False, italic=False)
             line = font1.render("Game Over", False, (200, 0, 0))
             line1 = font2.render("Restart?", False, (200, 0, 0))
             color = (200, 0, 0)
-            self.screen.blit(line, (165, 80))
-            self.screen.blit(line1, (350, 280))
+            self.screen.blit(line, (175, 60))
+            self.screen.blit(line1, (350 - 10, 250))
             mouse_x, mouse_y = pygame.mouse.get_pos()
-            if 330 <= mouse_x <= 580 and 260 <= mouse_y <= 350:
+            if 330 - 10 <= mouse_x <= 580 + 90 and 260 <= mouse_y <= 350:
                 color = (173, 216, 230)
                 if pygame.mouse.get_pressed() == (1, 0, 0):
                     over = False
-            pygame.draw.rect(self.screen, color, [330, 260, 250, 90], 5, 10 )
+            pygame.draw.rect(self.screen, color, [330 - 10, 260, 340, 90], 5, 10 )
             pygame.display.update()
             pygame.mixer.music.stop()
             for event in pygame.event.get():
                 if event.type == QUIT:
                     pygame.quit()
                     sys.exit()
+    #Methods that will be filled later for the movement of enemies
     def switch_left1(self, target, num,):
                     if self.enemies.horde_y[num] < 900:
                         if self.enemies.horde_x[num]  >= target:
@@ -1122,15 +1186,20 @@ class Game:
         run = True
         pause = False
         while run:
+            #Calculating current fps
             clock.tick_busy_loop()
             fps = clock.get_fps()
+            #Adjusting the speeds of everything depending on current fps
             if self.up:
                 if fps >0:
+                    
                     self.projectile.ys[self.projectile.num] += self.projectile_speed
+                    #This is an example of the aforementioned adjustment calculations. The division by current fps and multiplication by intended fps keeps the speeds of everthing constant regardless of the currnet fps
                     self.projectile.ys[self.projectile.num] -= self.projectile_speed * self.enemies.intended_fps/fps
             else:
                 pass
             if fps > 0:
+                #Speed of enemy movement
                 speed = 1 * self.enemies.intended_fps/fps
             else:
                 speed = 1
@@ -1142,6 +1211,7 @@ class Game:
                 else:
                     f = 1.9  * self.enemies.intended_fps/fps
             else:
+                #Speed of enemy projectiles
                 if self.enemies.level == 3:
                     f = 2.1 
                 elif self.enemies.level == 0:
@@ -1165,7 +1235,7 @@ class Game:
                             if not self.enemies.downs[i]:
                                 self.enemies.horde_x[i] += speed
                                 self.enemies.laserxs[i] += speed
-                #Switching Direction1= level 1 (from right to left)
+                #Switching Direction level 1 (from right to left)
                 if self.direction == "right":
                     self.switch_left1(525, 0)
                     self.switch_left1(580, 1)
@@ -1270,7 +1340,7 @@ class Game:
                     self.switch_right2(695, 12)
                     self.switch_right2(695, 13)
             if self.enemies.level == 3:
-                 #Movement  in level 2 (to the right)
+                 #Movement  in level 3 (to the right). 
                 if self.direction == "right":
                     if self.enemies.horde_y[0] < 900:
                             if self.enemies.downs[0]:
@@ -1311,7 +1381,7 @@ class Game:
                                 if not self.enemies.downs[i]:
                                     self.enemies.horde_x[i] += speed
                                     self.enemies.laserxs[i] += speed
-                #Switching Direction1= level 2 (from right to left)
+                #Switching Direction1= level 3 (from right to left) Due to the different direction variables, this is quite a bit more complicated than the previous ones, and could not be done with a method
                 if self.direction == "right":
                     if self.enemies.status[0]:
                         if self.enemies.horde_x[0]  >= 200:
@@ -1351,7 +1421,7 @@ class Game:
                             if self.enemies.horde_x[i]  >= standard:
                                 self.direction1 = "left"
                         standard += 70
-                #Movement  in level 2 (to the left)
+                #Movement  in level 3 (to the left).
                 if self.direction == "left":
                     if self.enemies.status[0]:
                             if self.enemies.downs[0]:
@@ -1392,7 +1462,7 @@ class Game:
                                     self.enemies.horde_x[i] -= speed
                                     self.enemies.laserxs[i] -= speed
 
-                #Switching directions in level 2 (from left to right)
+                #Switching directions in level 3 (from left to right) Also complicated because of the direction variables
                 if self.direction == "left":
                     if self.enemies.horde_y[0] <900:
                         if self.enemies.horde_x[0] <= 40:
@@ -1429,15 +1499,18 @@ class Game:
                     if self.enemies.horde_x[8] <=390:
                         if self.enemies.horde_y[8] <900:
                             self.direction1 = "right"
+            
             keys = pygame.key.get_pressed()
             for event in pygame.event.get():
                 if event.type == QUIT:
+                    #Saving level when the game quits
                     run = False
                     if self.enemies.level == 1.5 or self.enemies.level == 2.5:
                             self.enemies.level += 0.5
                     if self.enemies.level != 0:
                         save.save_game(self.enemies.level, "level")
                 pygame.key.set_repeat(1, 1)
+                #Controls of the game
                 if event.type == KEYDOWN:
                     if  self.enemies.level == 1  or self.enemies.level == 2  or self.enemies.level == 3 or self.enemies.level == 4 or self.enemies.level == 0:   
                         if event.key == K_a or event.key == K_LEFT or event.key == CONTROLLER_BUTTON_DPAD_LEFT:
@@ -1526,7 +1599,8 @@ class Game:
                             pygame.key.set_repeat(1, 1)
                             pause = True
             while pause:
-                font1 = pygame.font.SysFont("Typeface Mario World Pixel Filled", 70, bold=False, italic=False)
+                #Pause screen while loop
+                font1 = pygame.font.SysFont("Comic Sans", 70, bold=False, italic=False)
                 line = font1.render("Paused", False, (255, 255, 255))
                 self.screen.blit(line, (700, 10))
                 pygame.display.update()
@@ -1542,6 +1616,7 @@ class Game:
                                 save.save_game(self.enemies.level, "level")
                             pygame.quit()
                             sys.exit()
+            # The previously mentioned Try/ except statement at the end of the while loop. The exception is meant to catch the game over and nothing else
             try:
                     self.play()
                     pygame.display.update()
@@ -1552,5 +1627,7 @@ class Game:
                     self.player.health = 5
 if __name__ == '__main__':
     game = Game()
+    #Calling the loop for the title screen
     game.title()
+    #Calling the main loop of the game
     game.run()
