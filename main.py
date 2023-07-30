@@ -548,24 +548,27 @@ class Game:
                 if 280 <= mouse_x <= 280 + 350 and 400 <= mouse_y <= 500:
                     color= (173, 216, 230)
                     if pygame.mouse.get_pressed() != (0,0,0):
+                        self.reset()
                         self.enemies.level = save.load("level")
+                        self.reset()
                         title = False
                 line2 = font2.render("Continue", True, (color))
                 self.screen.blit(line2, (300, y3))
                 if 320 <= mouse_x <= 320 + 300 and 490 + 10 <= mouse_y <= 590:
                     color1= (173, 216, 230)
                     if pygame.mouse.get_pressed() != (0,0,0):
-                        if self.enemies.level != 0:
-                            self.enemies.level = 0
-                            self.reset()
+                        self.enemies.level = 0
                         title = False
+                        self.reset()
+
              else:
                 if 320 <= mouse_x <= 320 + 300 and 380 + 10 <= mouse_y <= 590:
                     color1= (173, 216, 230)
                     if pygame.mouse.get_pressed() != (0,0,0):
                         if self.enemies.level != 0:
                             self.enemies.level = 0
-                            self.reset()             
+                            self.reset()
+                        title = False             
              line3 = font2.render("Endless",True, (color1))
              self.screen.blit(line1, (270, y2))
              self.screen.blit(line, (100, y))
@@ -1274,7 +1277,7 @@ class Game:
             color = (200, 0, 0)
             color1 = (200, 0, 0)
             self.screen.fill((0,0,0))
-            if self.enemies.level != 0:
+            if self.enemies.level != 0: 
                 x = 155 + 10
             else:
                 x= 135
@@ -1282,15 +1285,19 @@ class Game:
             font2 = pygame.font.SysFont("Comic Sans", 75, bold=False, italic=False)
             if self.enemies.level != 0:
                 line = font1.render("Game Over", True,(200, 0, 0))
-                self.screen.blit(line, (x, sine(100, 1280, 10,60)))
+                            
 
             else:
                 line = font1.render(f"Highscore: {str(save_highscore.load('highscore'))}", True, (200, 0, 0))
+            self.screen.blit(line, (x, sine(100, 1280, 10,60)))
+
 
             if 280 <=mouse_x <= 650 and 350 <= mouse_y <= 450:
                     color1 = (173, 216, 230)
                     if pygame.mouse.get_pressed() != (0, 0, 0):
                                 pygame.mouse.set_pos(700, 450)
+                                if self.enemies.level > 0:
+                                    save.save_game(self.enemies.level, "level")
                                 self.title()
                                 over = False
 
@@ -1800,13 +1807,31 @@ class Game:
                         if event.key == K_ESCAPE:
                             pygame.key.set_repeat(1, 1)
                             pause = True
+            
             while pause:
                 clock.tick_busy_loop(165)
                 #Pause screen while loop
-                y = 30
+                y = sine(100, 1280, 0,10)
                 font1 = pygame.font.SysFont("Comic Sans", 50, bold=False, italic=False)
                 line = font1.render("Paused", True, (255, 255, 255))
-                self.screen.blit(line, (700, y))
+                self.screen.blit(line, (700 - 65, y))
+                color = 255, 255, 255
+                font8 = pygame.font.SysFont("Comic Sans", 50, bold=False, italic=False)
+                mouse_x, mouse_y = pygame.mouse.get_pos()
+                if 630 <= mouse_x <= 900 and 80 <= mouse_y <= 180:
+                    color = (173, 216, 230)
+                    if pygame.mouse.get_pressed() != (0,0,0):
+
+                        if self.enemies.level != 0:
+                            save.save_game(self.enemies.level, "level")
+                        else:
+                            save_highscore.save_game(self.enemies.score, "highscore")
+                        self.reset()
+                        pause = False
+                        self.title()
+
+                line0 = font8.render("Main Menu", True, color)
+                self.screen.blit(line0, (630, 80))
                 pygame.display.update()
                 for event in pygame.event.get():
                         pygame.key.set_repeat(1, 1)
