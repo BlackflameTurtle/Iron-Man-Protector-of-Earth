@@ -7,6 +7,7 @@ pygame.font.init()
 pygame.mixer.init()
 from PySide6.QtWidgets import QApplication, QPushButton  
 from SaveSystem import SaveandLoad
+from Scrolling_Background import Background
 import os
 from Sin_Wave import sine
 clock = pygame.time.Clock()
@@ -24,12 +25,13 @@ laser = pygame.mixer.Sound(resource_path("Player laser.wav"))
 explosion = pygame.mixer.Sound(resource_path("explosion.wav"))
 laser1 = pygame.mixer.Sound(resource_path("enemy laser.wav"))
 hurt = pygame.mixer.Sound(resource_path("hurt.wav"))
-red = pygame.image.load(resource_path(r"red.png"))
+red = pygame.image.load(resource_path(r"ufo_bakr.png"))
 hit = pygame.mixer.Sound(resource_path("hit.wav"))
 white_barrier = pygame.mixer.Sound(resource_path("white barrier.wav"))
 #Instances of the savesystem I built using a guide
 save = SaveandLoad(".level_data", "Space invaders stuff" )
 save_highscore = SaveandLoad(".high_score", "Space invaders stuff")
+
 #Game over class to call game over when the player's health hits 0
 class GameOver(Exception):
     pass
@@ -55,32 +57,36 @@ class Projectile:
         self.ys = [self.y, self.y1, self.y2, self.y3, self.y4, self.y5, self.y6, self.y7, self.y8, self.y9]
         self.screen = screen
         #Player projectile model
-        self.laser_sideways = pygame.image.load(resource_path("laser.png"))
+        self.laser_sideways = pygame.image.load(resource_path("shot.png"))
         self.laser = pygame.transform.rotate(self.laser_sideways, 90)
     def draw_projectile(self):
-        self.screen.blit(self.laser, (self.four + self.difference, self.ys[self.num]))
+        self.screen.blit(self.laser_sideways, (self.four + self.difference, self.ys[self.num]))
 class Player:
     def __init__(self, x, y, screen):
         #player health
         self.health = 5
         self.screen = screen
+        self.scroll =Background(self.screen)
         #Player model
-        self.shooter = pygame.image.load(resource_path("Space-Invaders-Ship-PNG-Photo.png"))
+        self.shooter = pygame.image.load(resource_path("Iron man.png"))
         self.x = x
         self.y = y
+        self.sky = pygame.image.load("Background.png")
     def draw_shooter(self):
         #Blits the player to the screen. The screen fill also serves to delete all previous instances of all images used in the game
-        self.screen.fill((0, 0, 0))
+        self.scroll.move(4, self.sky)
         self.screen.blit(self.shooter, (self.x, self.y))
+
     def draw_health(self):
         #Draw health and change color when it gets low
-        font1 = pygame.font.SysFont("Comic Sans", 250, bold=False, italic=False)
+        font1 = pygame.font.SysFont("Comic Sans", 70, bold=False, italic=False)
         if self.health <= 2:
-            self.color = (50, 0, 0)
+            self.color = (250, 0, 0)
         else:
             self.color = (50, 50, 50)
         line = font1.render(str(self.health), True, self.color)
-        self.screen.blit(line, (375, sine(100, 1280, 0, 100)))
+        self.screen.blit(line, (800, 10))
+
 class Enemies:
     def __init__(self, screen):
         dimensions = [28, 45]
@@ -116,6 +122,7 @@ class Enemies:
         self.down25 = False
         self.difference = 00
         self.direction = "right"
+
         #Loading the level(chceking if a save exists)
         if save.check_file("level"):
             self.level = save.load("level")
@@ -127,34 +134,37 @@ class Enemies:
         else:
             self.intended_fps = 163
         self.screen = screen
-        self.ship = pygame.image.load(resource_path("Alien.png"))
+
+        self.ship =pygame.image.load(resource_path("ufo.png"))
         #ys of the enemies
-        self.y = 20
+        self.y = 20 
         self.y1 = 20
         self.y2 = 20
         self.y3 = 20
         self.y4 = 20
         self.y5 = 20
-        self.y6 = 50 + 30
-        self.y7 = 20 + 110
-        self.y8 = 20 + 110
+        self.y6 = 50 + 30  +40
+        self.y7 = 20 + 110+40
+        self.y8 = 20 + 110+40
         self.y9 = 20
-        self.y10 = 50 + 30
-        self.y11 = 80 + 50
-        self.y12 = 80 + 50
-        self.y13 = 80
-        self.y14 = 80
-        self.y15 = 80
-        self.y16 = 80
-        self.y17 = 80
-        self.y18 = 80
-        self.y19 = 80
-        self.y20 = 80
-        self.y21 = 80
-        self.y22 = 80
-        self.y23 = 80
-        self.y24 = 80
-        self.y25 = 80
+        self.y10 = 50 + 30+40
+        self.y11 = 80 + 50+40
+        self.y12 = 80 + 50+40
+        self.y13 = 80+40
+        self.y14 = 80+40
+        self.y15 = 80+40
+        self.y16 = 80+40
+        self.y17 = 80+40
+        self.y18 = 80+40
+        self.y19 = 80+40
+        self.y20 = 80+40
+        self.y21 = 80+40
+        self.y22 = 80+40
+        self.y23 = 80+40
+        self.y24 = 80+40
+        self.y25 = 80+40
+        self.sky = pygame.image.load("Background.png")
+        self.ships = [self.ship, self.ship, self.ship, self.ship,self.ship,self.ship, self.ship, self.ship,self.ship,self.ship,self.ship,self.ship,self.ship,self.ship,self.ship,self.ship,self.ship,self.ship,self.ship,self.ship,]
         #xs of the enemies
         self.x = 200 + 50
         self.x1 = 255 + 50
@@ -183,19 +193,19 @@ class Enemies:
         self.x24 =  -400000000000000
         self.x25 =  -400000000000000
         #the xs of enemy projectiles
-        self.laserx = 200 + 50 + 27.5
-        self.laserx1 = 255 + 50 + 27.5
-        self.laserx2 = 310 + 50 + 27.5
-        self.laserx3 = 365 + 50 + 27.5
-        self.laserx4 = 420 + 50 + 27.5
-        self.laserx5 = 475 + 50 + 27.5
-        self.laserx6 = 50 + 200 + 27.5
-        self.laserx7 = 50 + 310 + 27.5
-        self.laserx8 = 50 + 365 + 27.5
+        self.laserx = 200 + 50 + 0
+        self.laserx1 = 255 + 50 + 0
+        self.laserx2 = 310 + 50 + 0
+        self.laserx3 = 365 + 50 + 0
+        self.laserx4 = 420 + 50 + 0
+        self.laserx5 = 475 + 50 + 0
+        self.laserx6 = 50 + 200 + 0
+        self.laserx7 = 50 + 310 + 0
+        self.laserx8 = 50 + 365 + 0
         self.laserx9 = - 400000000
-        self.laserx10 = 475 + 50 + 27.5
-        self.laserx11 = 250 + 27.5
-        self.laserx12 = 525 + 27.5
+        self.laserx10 = 475 + 50 + 0
+        self.laserx11 = 250 + 0
+        self.laserx12 = 525 + 0
         self.laserx13 = -40000000
         self.laserx14 = -40000000
         self.laserx15 = -40000000
@@ -220,6 +230,7 @@ class Enemies:
         self.line2={self.horde_y[13]:True, self.horde_y[14]:True, self.horde_y[15]:True, self.horde_y[16]:True, self.horde_y[17]:True, self.horde_y[18]:True, self.horde_y[19]:True, self.horde_y[20]:True, self.horde_y[21]: True, self.horde_y[22]: True, self.horde_y[23]: True, self.horde_y[24]:True, self.horde_y[25]:True}
         self.list_line1 = []
         self.list_line2 = []
+        self.scroll = Background(self.screen)
         if self.level == 2:
             for i in range(14, 26):
                 self.horde_x[i] = -400000000000
@@ -236,7 +247,7 @@ class Enemies:
                 self.horde_y[i] =140
                 self.horde_x[i] = 450 +(60*(i-11))
             for i in range(0, 14):
-                self.laserxs[i] = self.horde_x[i] + 22.5 
+                self.laserxs[i] = self.horde_x[i] + 0 
         #Loading enemy positions for level 2
         if self.level == 3:  
             if 1 == 1:
@@ -275,7 +286,7 @@ class Enemies:
                 self.shot = False
                 #setting enemy laser xs
                 for i in range(0, 26):
-                    self.laserxs[i] = self.horde_x[i] + 22.5
+                    self.laserxs[i] = self.horde_x[i] + 0
         #Doing the same for level 3
         if self.level ==4:
                 self.horde_x[0] = 100
@@ -311,7 +322,7 @@ class Enemies:
                 self.status = [True, True, True, True, True, True, True, True, True, True, True, True, True, True, True]  
                 self.shot = False
                 for i in range(0, 26):
-                    self.laserxs[i] = self.horde_x[i] + 22.5
+                    self.laserxs[i] = self.horde_x[i] + 0
         #Doing the same for endless mode, which the game recognizes as level 0
         if self.level == 0:
             standard = 80
@@ -328,14 +339,14 @@ class Enemies:
             for i in range(13, 26):
                 self.horde_x[i] = self.horde_x[i - 13]
             for i in range(0, 26):
-                self.laserxs[i] = self.horde_x[i] +22.5
+                self.laserxs[i] = self.horde_x[i] +0
     #functions for drawing all the objects and enemies
     def ship_placement(self, ship, x, y):
         self.screen.blit(ship, (x, y))
     def platform_placement(self, x1, y1, x_extension, y_extension):
         pygame.draw.rect(self.screen, (200, 200, 200), [x1, y1, x_extension, y_extension])
     def green_platform_placement(self, x1, y1, x_extension, y_extension):
-        pygame.draw.rect(self.screen, (0, 150, 0), [x1, y1, x_extension, y_extension])
+        pygame.draw.rect(self.screen, (221,160,221), [x1, y1, x_extension, y_extension])
     def portal_placement(self, color, x1, y1, x_extension, y_extension):
         pygame.draw.rect(self.screen, color , [x1, y1, x_extension, y_extension])
     def level1(self):
@@ -345,18 +356,18 @@ class Enemies:
                 if i ==9:
                     continue
                 if self.horde_y[i] < 900:
-                    self.ship_placement(self.ship, self.horde_x[i], self.horde_y[i])
-            self.platform_placement(200, 300, 90, 5)
-            self.platform_placement(650, 300, 90, 5)
+                    self.ship_placement(self.ships[i], self.horde_x[i], self.horde_y[i])
+            self.platform_placement(200, 320, 90, 5)
+            self.platform_placement(650, 320, 90, 5)
             pygame.display.update()
         #Intermission screen 
         if (self.level/0.5) % 2 == 1:
-            green = (0, 255, 0)
-            self.screen.fill((0,0,0))
+            self.scroll.move(1, self.sky)
+            green = (211, 175, 55)
             y= sine(100, 1280, 10, 50)
             y1 = sine(100, 1280, 10, 220)
             font1 = pygame.font.SysFont("Comic Sans", 100, bold=False, italic=False)
-            line = font1.render("Success", True, (0, 255, 0))
+            line = font1.render("Success", True, (149, 2, 18))
             self.screen.blit(line, (300 - 30, y))
             #Button color changes if you mouse over it. You eneter the next level if you click on it
             mouse_x, mouse_y = pygame.mouse.get_pos()
@@ -416,6 +427,7 @@ class Enemies:
             pygame.display.update()
 class Game:
     def __init__(self):
+
         self.lst = []
         self.lst1 = []
         #Health for enemies which take multiple hits to kill
@@ -437,8 +449,8 @@ class Game:
         self.direction2 = "right"
         self.direction3 = "right"
         #Enemy projectile model
-        self.blastssss = pygame.image.load(resource_path("red laser.png"))
-        self.blast = pygame.transform.rotate(self.blastssss, 270)
+        self.blastssss = pygame.image.load(resource_path("enemy_shot.png"))
+        self.blast = pygame.transform.rotate(self.blastssss, 180)
         self.backup = 0
         #Variable which causes player projectile to move upwards so long as it is true
         self.up = False
@@ -447,13 +459,16 @@ class Game:
         self.screen_y = 600
         #Game window formatting
         self.screen = pygame.display.set_mode((self.screen_x, self.screen_y))
-        icon = pygame.image.load(resource_path("title.png"))
-        pygame.display.set_caption("Space Invaders")
+        icon = pygame.image.load(resource_path("Iron.png"))
+        pygame.display.set_caption("Iron-Man: Protector of Earth")
         pygame.display.set_icon(icon)
+
+        self.scroll = Background(self.screen)
         #Instances of the above classes
         self.player = Player(self.screen_x/2 - 40, self.screen_y - 80, self.screen)
-        self.projectile = Projectile(self.screen, self.player.y - 35)
+        self.projectile = Projectile(self.screen, self.player.y - 10)
         self.enemies = Enemies(self.screen)
+
         #ys of the enemy projectiles
         self.laser_y = self.enemies.horde_y[0] + 30
         self.laser_y1 = self.enemies.horde_y[1] + 30
@@ -483,6 +498,7 @@ class Game:
         self.laser_y25 = self.enemies.horde_y[25]+ 30
         #list of said ys
         self.laser_ys = [self.laser_y, self.laser_y1, self.laser_y2, self.laser_y3, self.laser_y4, self.laser_y5, self.laser_y6, self.laser_y7, self.laser_y8, self.laser_y9, self.laser_y10, self.laser_y11, self.laser_y12, self.laser_y13, self.laser_y14, self.laser_y15, self.laser_y16, self.laser_y17, self.laser_y18, self.laser_y19, self.laser_y20, self.laser_y21, self.laser_y22, self.laser_y23, self.laser_y24, self.laser_y25]
+        self.sky = pygame.image.load("Background.png")
         #Player projectile speed
         if self.enemies.level > 0:
             self.projectile_speed = 4
@@ -490,13 +506,13 @@ class Game:
             self.projectile_speed = 4.5
     #All the collision functions of the game
     def alien_laser_collision(self, x1, y1, x2, y2):
-            if x2 - 20 <= x1 <= x2 + 40:
-                if y1 - 20 <= y2 <= y1 + 20:
+            if x2 - 20 <= x1 <= x2 + 60:
+                if y1 - 25 <= y2 <= y1:
                     return True
             return False
     def red_laser_collision(self, x1, y1, x2, y2):
-            if x1 -25 <= x2 <= x1 + 70:
-                if y1 - 5 <= y2 <= y1 + 70:
+            if x1 -25 <= x2 <= x1 + 39:
+                if y1 - 5 <= y2 <= y1 + 80:
                     return True
             return False
     def red_white_collision(self, x1, y1, x2, y2, extension):
@@ -513,20 +529,25 @@ class Game:
         title = True
         #Title screen
         while title:
-             y = 10
-             y1 = 150
+
+             y= 10
+             image = pygame.image.load(resource_path("Iron.png"))
+             y1 = sine(100, 1280, 5,20)
              y2 = sine(100, 1280, 10, 270)
              y3 = sine(100, 1280, 10, 380)
              if save.check_file("level"):
                 y4 = sine(100, 1280, 10, 490)
              else:
-                y4 = sine(100, 1280, 10, 380)
-             green = (0, 255, 0)
-             color = (0, 255, 0)
-             color1 = (0,255,0)
+                y4 = sine(100, 1280, 5, 380)
+             y5 = sine(100, 1280, 10, 150)
+             green = (149, 2, 18)
+             color = (149, 2, 18) #Yellow
+             color1 = (211, 175, 55)
+             self.scroll.move(2, self.sky)
+             pygame.draw.rect(self.screen,(211, 175, 155), [0, 250, 900, 5] )  
              font1 = pygame.font.SysFont("Comic Sans", 100, bold=False, italic=False)
              font2 = pygame.font.SysFont("Comic Sans", 75, bold=False, italic=False)
-             red = pygame.image.load(resource_path("title1.jpg"))
+
              #These buttons function the same as the ones from before
              mouse_x, mouse_y = pygame.mouse.get_pos()
              #Button collision
@@ -539,11 +560,12 @@ class Game:
                         self.reset()
                     title = False
              else:
-                 green = (0, 255, 0)
-            #The continue butto is only drawn if a save file exists
-             line = font1.render("Space Invaders", True, (0, 255, 0))
+                 green = (211, 175, 55)
+            #The continue button is only drawn if a save file exists
+             line = font1.render("Iron-Man", True, (149, 2, 18))
+             line4 = font2.render("Protector of Earth", True, (211, 175, 55))
              line1 = font2.render("New Game", True, (green))
-             self.screen.fill((0,0,0))
+
              if save.check_file("level"):
                 if 280 <= mouse_x <= 280 + 350 and 400 <= mouse_y <= 500:
                     color= (173, 216, 230)
@@ -568,11 +590,16 @@ class Game:
                         if self.enemies.level != 0:
                             self.enemies.level = 0
                             self.reset()
-                        title = False             
+                        title = False 
+          
+             self.screen.blit(image, (300 + 50 + 100, y1))
+             self.screen.blit(self.enemies.ship, (290, y5))
+             self.screen.blit(red, (650, y5))
              line3 = font2.render("Endless",True, (color1))
              self.screen.blit(line1, (270, y2))
-             self.screen.blit(line, (100, y))
-             self.screen.blit(red, (350, y1))
+             self.screen.blit(line, (240, y))
+             self.screen.blit(line4, (100 + 50, 150))
+
              self.screen.blit(line3, (320, y4))
              for event in pygame.event.get():
                  if event.type == QUIT:
@@ -594,29 +621,30 @@ class Game:
                 self.laser_ys[i] = 625
             for i in range(0, 6):
                 self.enemies.horde_y[i] = 20
-            self.enemies.horde_y[6] = 50 + 30
-            self.enemies.horde_y[7] = 20 + 110
-            self.enemies.horde_y[8] = 20 + 110
+            
+            self.enemies.horde_y[6] = 50 + 30 
+            self.enemies.horde_y[7] = 20 + 110 
+            self.enemies.horde_y[8] = 20 + 110 
             self.enemies.horde_y[10] = 50 + 30
-            self.enemies.horde_y[11] = 80 + 50
-            self.enemies.horde_y[12] = 80 + 50
+            self.enemies.horde_y[11] = 80 + 50 + 40
+            self.enemies.horde_y[12] = 80 + 50+40
             self.enemies.horde_y[13] = 20
             self.enemies.horde_y[14] = 20
-            self.enemies.horde_x[0] = 200 + 50
-            self.enemies.horde_x[1] = 255 + 50
-            self.enemies.horde_x[2] = 310 + 50
-            self.enemies.horde_x[3] = 365 + 50
-            self.enemies.horde_x[4] = 420 + 50
-            self.enemies.horde_x[5] = 475 + 50
-            self.enemies.horde_x[6] = 50 + 200
-            self.enemies.horde_x[7] = 50 + 310
-            self.enemies.horde_x[8] = 50 + 365
-            self.enemies.horde_x[10] = 475 + 50
-            self.enemies.horde_x[11] = 250
-            self.enemies.horde_x[12] = 525
-            self.enemies.horde_x[14] = 50
+            self.enemies.horde_x[0] = 200 + 50 +15
+            self.enemies.horde_x[1] = 255 + 50+15
+            self.enemies.horde_x[2] = 310 + 50+15
+            self.enemies.horde_x[3] = 365 + 50+15
+            self.enemies.horde_x[4] = 420 + 50+15
+            self.enemies.horde_x[5] = 475 + 50+15
+            self.enemies.horde_x[6] = 50 + 200+15
+            self.enemies.horde_x[7] = 50 + 310+15
+            self.enemies.horde_x[8] = 50 + 365+15
+            self.enemies.horde_x[10] = 475 + 50+15
+            self.enemies.horde_x[11] = 250+15
+            self.enemies.horde_x[12] = 525+15
+            self.enemies.horde_x[14] = 50+15
             for i in range(0, 15):
-                self.enemies.laserxs[i] = self.enemies.horde_x[i] + 22.5
+                self.enemies.laserxs[i] = self.enemies.horde_x[i] + 0
         if 1.5 <= self.enemies.level <=2:
             self.shot = False            
             self.status = [True, True, True, True, True, True, True, True, True, True, True, True, True, True, True]  
@@ -626,16 +654,16 @@ class Game:
                 self.enemies.horde_y[i] = 20
                 self.enemies.horde_x[i] = 350 + (60*i)
             for i in range(4, 8):
-                self.enemies.horde_y[i] = 80
+                self.enemies.horde_y[i] = 80 + 40
                 self.enemies.horde_x[i] = 350 + (60*(i-4))
             for i in range(8, 11):
-                self.enemies.horde_y[i] =140
+                self.enemies.horde_y[i] =140 + 80
                 self.enemies.horde_x[i] = 150 + 50 + (60*(i-8))
             for i in range(11, 14):
-                self.enemies.horde_y[i] =140
+                self.enemies.horde_y[i] =140 + 80
                 self.enemies.horde_x[i] = 450 + 50 + 60 + (60*(i-11))
             for i in range(0, 14):
-                self.enemies.laserxs[i] = self.enemies.horde_x[i] + 22.5 
+                self.enemies.laserxs[i] = self.enemies.horde_x[i] + 0 
         if 2.5 <= self.enemies.level <= 3:  
             self.status = [True, True, True, True, True, True, True, True, True, True, True, True, True, True, True]  
             self.shot = False
@@ -668,7 +696,7 @@ class Game:
             self.enemies.horde_y[12] = 20
             self.enemies.horde_y[13] = 80
             for i in range(0, 14):
-                self.enemies.laserxs[i] = self.enemies.horde_x[i] + 22.5
+                self.enemies.laserxs[i] = self.enemies.horde_x[i] + 0
             for i in range(0, 14):
                 self.laser_ys[i] = 625
             self.h0 = 3
@@ -707,7 +735,7 @@ class Game:
                 self.status = [True, True, True, True, True, True, True, True, True, True, True, True, True, True, True]  
                 self.shot = False
                 for i in range(0, 14):
-                    self.enemies.laserxs[i] = self.enemies.horde_x[i] + 22.5
+                    self.enemies.laserxs[i] = self.enemies.horde_x[i] + 0
                 for i in range(0, 14):
                     self.laser_ys[i] = 625
         if self.enemies.level == 0:
@@ -730,7 +758,7 @@ class Game:
             for i in range(13, 26):
                 self.enemies.horde_x[i] = self.enemies.horde_x[i - 13]
             for i in range(0, 26):
-                self.enemies.laserxs[i] = self.enemies.horde_x[i] +22.5
+                self.enemies.laserxs[i] = self.enemies.horde_x[i] +0
         self.player.x = 435
         self.projectile.ys[self.projectile.num] = -25
         pygame.mixer.music.play(-1)
@@ -740,6 +768,7 @@ class Game:
     #This method is where almost everything is called for the game to actually happen. It itself is called at the end of the main while loop
     def play(self):
         self.player.draw_shooter()
+
         self.player.draw_health()
         #Enemy shooting for all levels other than endless mode
         if self.enemies.shot:
@@ -764,6 +793,11 @@ class Game:
                         pygame.mixer.Sound.play(laser1)
                     if self.laser_ys[i] >= 625:
                         self.enemies.downs[i] = False
+                    else:
+                        pass
+
+
+                    
 
             if self.enemies.level == 0:
                 for i in range(0, 13):
@@ -775,6 +809,7 @@ class Game:
                             pygame.mixer.Sound.play(laser1)
                         if self.laser_ys[i] >= 625:
                             self.enemies.downs[i] = False
+
                 for i in range(13, 26):
                     if a == i + 1:
                         if self.enemies.laserxs[i] - l <= self.player.x <= self.enemies.laserxs[i] + l:
@@ -784,16 +819,25 @@ class Game:
                             pygame.mixer.Sound.play(laser1)
                         if self.laser_ys[i] >= 625:
                             self.enemies.downs[i] = False
+
             #Drawing enemy projectiles on the screen if their moving
             for i in range(0, 26):
                 if self.enemies.downs[i]:
                     self.screen.blit(self.blast, (self.enemies.laserxs[i], self.laser_ys[i]))
                 if not self.enemies.downs[i] :
                     self.laser_ys[i] = self.enemies.horde_y[i] + 30
-                    self.enemies.laserxs[i] = self.enemies.horde_x[i] + 22.5
+                    self.enemies.laserxs[i] = self.enemies.horde_x[i] + 0
         #Drawing player projectile if it is moving
         if self.up:
             self.projectile.draw_projectile()
+            if self.projectile.ys[self.projectile.num] > 350:
+            
+                self.player.shooter = pygame.image.load("Iron man_right.png")
+
+
+            else:
+                self.player.shooter = pygame.image.load("Iron man.png")
+
             if self.projectile.ys[self.projectile.num] > -25:
                 self.projectile.ys[self.projectile.num] -= self.projectile_speed
         if self.projectile.num >= 9:
@@ -831,21 +875,21 @@ class Game:
                 for i in range(0,13):
                     if i ==9:
                         continue
-                    if self.red_white_collision(200, 300, self.enemies.laserxs[i], self.laser_ys[i], 90):
+                    if self.red_white_collision(200, 320, self.enemies.laserxs[i], self.laser_ys[i], 90):
                         self.laser_ys[i] = 625
                         pygame.mixer.Sound.play(white_barrier)
                 for i in range(0,13):
                     if i ==9:
                         continue
-                    if self.red_white_collision(650, 300, self.enemies.laserxs[i], self.laser_ys[i], 90):
+                    if self.red_white_collision(650, 320, self.enemies.laserxs[i], self.laser_ys[i], 90):
                         self.laser_ys[i] = 625
                         pygame.mixer.Sound.play(white_barrier)
                 #Player fire on barrier collision
-                if self.blue_light_collision(200, 300, 435 + self.projectile.difference, self.projectile.ys[self.projectile.num], 90):
+                if self.blue_light_collision(200, 320, 435 + self.projectile.difference, self.projectile.ys[self.projectile.num], 90):
                     self.projectile.ys[self.projectile.num] = -25
                     pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("white barrier.wav")))
 
-                if self.blue_light_collision(650, 300, 435 + self.projectile.difference, self.projectile.ys[self.projectile.num], 90):
+                if self.blue_light_collision(650, 320, 435 + self.projectile.difference, self.projectile.ys[self.projectile.num], 90):
                     self.projectile.ys[self.projectile.num] = -25
                     pygame.mixer.Sound.play(pygame.mixer.Sound(resource_path("white barrier.wav")))
                 #Level 1 Player fire on enemy hitboxes
@@ -1298,6 +1342,7 @@ class Game:
                                 pygame.mouse.set_pos(700, 450)
                                 if self.enemies.level > 0:
                                     save.save_game(self.enemies.level, "level")
+                                self.reset()
                                 self.title()
                                 over = False
 
@@ -1352,6 +1397,7 @@ class Game:
             #Calculating current fps
             clock.tick_busy_loop(200)
             fps = clock.get_fps()
+
             #Adjusting the speeds of everything depending on current fps
             if self.up:
                 if fps >0:
